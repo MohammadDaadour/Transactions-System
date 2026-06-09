@@ -1,0 +1,102 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// --- Enums ---
+enum Role {
+  Admin
+  Mod
+  Member
+}
+
+enum UserType {
+  sender
+  receiver
+}
+
+enum TransactionType {
+  debit
+  credit
+  opening_balance
+}
+
+enum Currency {
+  USD
+  AED
+  EGP
+  VOD
+}
+
+// --- Tables ---
+model User {
+  id                  String         @id @default(uuid()) @db.Uuid
+  username            String         @unique
+  password            String
+  role                Role
+  type                UserType
+  phone               String
+  isActive            Boolean        @default(true) @map("is_active")
+  createdAt           DateTime       @default(now()) @map("created_at")
+
+  // Relations
+  balances            UserBalance[]
+  transactions        Transaction[]  @relation("UserTransactions")
+  createdTransactions Transaction[]  @relation("CreatedByTransactions")
+  auditLogs           AuditLog[]
+
+  @@map("users")
+}
+
+model UserBalance {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  currency  Currency
+  balance   Decimal  @default(0) @db.Decimal(18, 4) // Essential for financial accuracy
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Composite unique index from your DBML
+  @@unique([userId, currency])
+  @@map("user_balances")
+}
+
+model Transaction {
+  id         String          @id @default(uuid()) @db.Uuid
+  userId     String          @map("user_id") @db.Uuid
+  type       TransactionType
+  amount     Decimal         @db.Decimal(18, 4)
+  currency   Currency
+  date       DateTime        @db.Date
+  notes      String?
+  createdBy  String          @map("created_by") @db.Uuid
+  createdAt  DateTime        @default(now()) @map("created_at")
+
+  // Relations
+  user       User            @relation("UserTransactions", fields: [userId], references: [id])
+  creator    User            @relation("CreatedByTransactions", fields: [createdBy], references: [id])
+
+  @@map("transactions")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  action    String
+  tableName String   @map("table_name")
+  recordId  String   @map("record_id") @db.Uuid
+  oldValue  Json?    @map("old_value")
+  newValue  Json?    @map("new_value")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
+

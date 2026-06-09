@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+/* ============================================================
+   🎨  HAWALA DESIGN TOKENS  —  Single source of truth
+   Change ANY color here and it propagates everywhere.
+   ============================================================ */
+:root {
+  /* ── Core surfaces ── */
+  --hw-bg: #EBF4DD;
+  /* page / main background        (slate-900)  */
+  --hw-surface: #90AB8B;
+  /* cards, panels, inputs          (slate-950)  */
+  --hw-surface-alt: #1e293b;
+  /* table headers, hover states    (slate-800)  */
+
+  /* ── Borders ── */
+  --hw-border: #1e293b;
+  /* default border color           (slate-800)  */
+  --hw-border-subtle: #334155;
+  /* lighter border for inner areas (slate-700)  */
+
+  /* ── Text ── */
+  --hw-text: #3B4953;
+  /* primary text                   (slate-100)  */
+  --hw-text-secondary: #3B4953;
+  /* labels, descriptions           (slate-400)  */
+  --hw-text-muted: #64748b;
+  /* placeholders, disabled         (slate-500)  */
+  --hw-text-faint: #475569;
+  /* very subtle text               (slate-600)  */
+
+  /* ── Accent / Brand ── */
+  --hw-accent: #3B4953;
+  /* primary accent                 (emerald-400) */
+  --hw-accent-hover: #6ee7b7;
+  /* accent on hover                (emerald-300) */
+  --hw-accent-muted: #065f46;
+  /* accent bg for badges           (emerald-950) */
+  --hw-accent-ring: rgba(16, 185, 129, 0.5);
+  /* focus ring     (emerald-500/50) */
+  --hw-accent-solid: #059669;
+  /* solid accent for buttons       (emerald-600) */
+  --hw-accent-solid-hover: #10b981;
+  /* solid accent hover            (emerald-500) */
+
+  /* ── Danger / Negative ── */
+  --hw-danger: #fb7185;
+  /* danger text                    (rose-400)   */
+  --hw-danger-muted: #4c0519;
+  /* danger bg for badges           (rose-950)   */
+  --hw-danger-border: #881337;
+  /* danger borders                 (rose-900)   */
+  --hw-danger-bg: rgba(76, 5, 25, 0.4);
+  /* danger banner bg               */
+
+  /* ── Info / Neutral accent ── */
+  --hw-info: #38bdf8;
+  /* info text (sky)                (sky-400)    */
+  --hw-info-muted: #082f49;
+  /* info bg for badges             (sky-950)    */
+
+  /* ── Warning ── */
+  --hw-warning: #f59e0b;
+  /* warning text                   (amber-500)  */
+  --hw-warning-bg: rgba(69, 26, 3, 0.1);
+  /* reversal row bg                */
+
+  /* ── Role badge colors ── */
+  --hw-role-admin-bg: rgba(76, 29, 149, 0.6);
+  /* violet-950/60 */
+  --hw-role-admin-text: #c4b5fd;
+  /* violet-300    */
+  --hw-role-admin-border: rgba(91, 33, 182, 0.5);
+  /* violet-800/50 */
+
+  --hw-role-mod-bg: rgba(8, 47, 73, 0.6);
+  /* sky-950/60    */
+  --hw-role-mod-text: #7dd3fc;
+  /* sky-300       */
+  --hw-role-mod-border: rgba(7, 89, 133, 0.5);
+  /* sky-800/50    */
+
+  /* ── Disabled states ── */
+  --hw-disabled-bg: #1e293b;
+  /* disabled button bg             (slate-800)  */
+  --hw-disabled-text: #64748b;
+  /* disabled button text           (slate-500)  */
+
+  /* ── Legacy (kept for body defaults) ── */
+  --background: var(--hw-bg);
+  --foreground: var(--hw-text);
+}
+
+/* ── Map tokens into Tailwind v4 theme so you can use  ──
+   ── `bg-hw-surface`, `text-hw-accent`, etc. in classes ── */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-hw-bg: var(--hw-bg);
+  --color-hw-surface: var(--hw-surface);
+  --color-hw-surface-alt: var(--hw-surface-alt);
+
+  --color-hw-border: var(--hw-border);
+  --color-hw-border-subtle: var(--hw-border-subtle);
+
+  --color-hw-text: var(--hw-text);
+  --color-hw-text-secondary: var(--hw-text-secondary);
+  --color-hw-text-muted: var(--hw-text-muted);
+  --color-hw-text-faint: var(--hw-text-faint);
+
+  --color-hw-accent: var(--hw-accent);
+  --color-hw-accent-hover: var(--hw-accent-hover);
+  --color-hw-accent-muted: var(--hw-accent-muted);
+  --color-hw-accent-ring: var(--hw-accent-ring);
+  --color-hw-accent-solid: var(--hw-accent-solid);
+  --color-hw-accent-solid-hover: var(--hw-accent-solid-hover);
+
+  --color-hw-danger: var(--hw-danger);
+  --color-hw-danger-muted: var(--hw-danger-muted);
+  --color-hw-danger-border: var(--hw-danger-border);
+  --color-hw-danger-bg: var(--hw-danger-bg);
+
+  --color-hw-info: var(--hw-info);
+  --color-hw-info-muted: var(--hw-info-muted);
+
+  --color-hw-warning: var(--hw-warning);
+  --color-hw-warning-bg: var(--hw-warning-bg);
+
+  --color-hw-disabled-bg: var(--hw-disabled-bg);
+  --color-hw-disabled-text: var(--hw-disabled-text);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}

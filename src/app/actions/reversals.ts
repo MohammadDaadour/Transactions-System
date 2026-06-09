@@ -1,0 +1,77 @@
+"use server"
+
+import { auth } from "../../auth";
+import { db } from "../../lib/db";
+import { TransactionType, Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+
+export async function reverseTransaction(transactionId: string, reason: string) {
+    const session = await auth();
+    if (!session || session.user?.role !== "Admin") {
+        throw new Error("Unauthorized: Only Admins can reverse transactions.");
+    }
+
+    try {
+        await db.$transaction(async (tx) => {
+            // 1. Fetch the original transaction
+            const orig = await tx.transaction.findUnique({
+                where: { id: transactionId }
+            });
+
+            if (!orig) throw new Error("Transaction not found.");
+
+            // 2. Fetch current balance
+            const currentBalanceRow = await tx.userBalance.findUnique({
+                where: { userId_currency: { userId: orig.userId, currency: orig.currency } }
+            });
+
+            if (!currentBalanceRow) throw new Error("User balance record not found.");
+
+            const oldBalance = currentBalanceRow.balance;
+            let newBalance = new Prisma.Decimal(oldBalance);
+
+            // 3. Apply OPPOSITE math to reverse the original action
+            if (orig.type === TransactionType.debit) {
+                newBalance = oldBalance.sub(orig.amount); // Undo debit
+            } else if (orig.type === TransactionType.credit) {
+                newBalance = oldBalance.add(orig.amount); // Undo credit
+            }
+
+            // 4. Update the user's balance
+            await tx.userBalance.update({
+                where: { userId_currency: { userId: orig.userId, currency: orig.currency } },
+                data: { balance: newBalance }
+            });
+
+            // 5. Create a counter-balancing transaction record to keep the ledger true
+            await tx.transaction.create({
+                data: {
+                    userId: orig.userId,
+                    type: orig.type === TransactionType.debit ? TransactionType.credit : TransactionType.debit,
+                    amount: orig.amount,
+                    currency: orig.currency,
+                    date: new Date(),
+                    notes: `REVERSAL of Trans ID: ${orig.id}. Reason: ${reason}`,
+                    createdBy: session.user.id,
+                }
+            });
+
+            // 6. Log it in the Audit Trail
+            await tx.auditLog.create({
+                data: {
+                    userId: session.user.id,
+                    action: "REVERSE_TRANSACTION",
+                    tableName: "transactions",
+                    recordId: orig.id,
+                    oldValue: { balance: oldBalance.toNumber() } as Prisma.InputJsonValue,
+                    newValue: { resultingBalance: newBalance.toNumber(), reason } as Prisma.InputJsonValue,
+                }
+            });
+        });
+
+        revalidatePath("/dashboard");
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message || "Reversal failed." };
+    }
+}

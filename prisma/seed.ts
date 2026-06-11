@@ -1,4 +1,4 @@
-import { Prisma, Role, UserType, Currency, TransactionType } from "@prisma/client";
+import { Prisma, Role, UserType, Currency, TransactionType } from "../src/generated/prisma/client";
 import * as bcrypt from "bcryptjs";
 import { db as prisma } from "../src/lib/db";
 

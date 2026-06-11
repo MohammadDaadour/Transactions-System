@@ -90,7 +90,7 @@ export default function ManualTransactionForm({ users, allowOpeningBalance }: Fo
 
             <div>
                 <label className="block text-xs font-medium text-hw-text-secondary mb-1">ملاحظات الدفتر / المراجع</label>
-                <textarea name="notes" rows={2} placeholder="Optional operational descriptions..." className="w-full bg-hw-bg border border-hw-border rounded-md p-2 text-sm text-hw-text focus:border-hw-accent focus:outline-none resize-none"></textarea>
+                <textarea name="notes" rows={2} placeholder="..." className="w-full bg-hw-bg border border-hw-border rounded-md p-2 text-sm text-hw-text focus:border-hw-accent focus:outline-none resize-none"></textarea>
             </div>
 
             {message && (

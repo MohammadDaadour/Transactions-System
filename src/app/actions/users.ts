@@ -33,6 +33,9 @@ export async function createUser(input: CreateUserInput) {
     if (!phone || phone.trim().length < 5) {
         return { success: false, error: "A valid phone number is required." };
     }
+    if (role === Role.Admin) {
+        return { success: false, error: "Cannot assign Admin role." };
+    }
 
     try {
         // 3. Ensure username is not already taken

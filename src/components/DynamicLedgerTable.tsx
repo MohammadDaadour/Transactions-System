@@ -1,6 +1,5 @@
 "use client";
 
-import { Decimal } from "@prisma/client/runtime/client";
 import { reverseTransaction } from "../app/actions/reversals";
 
 interface TransactionRow {
@@ -57,7 +56,7 @@ export default function DynamicLedgerTable({ transactions, showReversalControl }
                             const isReversal = tx.notes?.includes("REVERSAL");
                             return (
                                 <tr key={tx.id} className={`hover:bg-hw-bg/50 transition ${isReversal ? "bg-hw-warning-bg text-hw-text-secondary" : ""}`}>
-                                    <td className="px-4 py-3 font-mono whitespace-nowrap">{new Date(tx.date).toLocaleDateString()}</td>
+                                    <td className="px-4 py-3 font-mono whitespace-nowrap">{new Date(tx.date).toLocaleDateString("ar-EG")}</td>
                                     <td className="px-4 py-3 font-medium text-hw-text">{tx.user.username}</td>
                                     <td className="px-4 py-3">
                                         <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium font-mono uppercase ${tx.type === "debit" ? "bg-hw-accent-muted text-gray-100" :
@@ -67,7 +66,10 @@ export default function DynamicLedgerTable({ transactions, showReversalControl }
                                         </span>
                                     </td>
                                     <td className="px-4 py-3 text-right font-mono font-bold whitespace-nowrap">
-                                        {tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })} <span className="text-xs text-hw-text-muted font-normal">{tx.currency}</span>
+                                        {tx.amount.toLocaleString("ar-EG", {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                        })} <span className="text-xs text-hw-text-muted font-normal">{tx.currency}</span>
                                     </td>
                                     <td className="px-4 py-3 max-w-xs truncate text-xs" title={tx.notes || ""}>{tx.notes || "—"}</td>
                                     <td className="px-4 py-3 text-hw-text-secondary text-xs">{tx.creator.username}</td>

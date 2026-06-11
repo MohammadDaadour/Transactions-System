@@ -122,7 +122,6 @@ export default function CreateUserForm() {
                         >
                             <option value={Role.Member}>موزع</option>
                             <option value={Role.Mod}>مدير</option>
-                            <option value={Role.Admin}>أدمن</option>
                         </select>
                         <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-hw-text-secondary text-xs">▾</span>
                     </div>

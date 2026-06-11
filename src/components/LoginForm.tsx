@@ -22,28 +22,26 @@ export default function LoginForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-            <div className="space-y-4 rounded-md shadow-sm">
-
-                {/* Username Field */}
+        <form onSubmit={handleSubmit} className=" space-y-6 max-w-md mx-auto h-screen flex flex-col justify-center">
+            <div className="space-y-4 rounded-md shadow-sm p-4">
+            <h1 className="text-xl font-bold text-hw-text">تسجيل الدخول</h1>
                 <div>
                     <label htmlFor="username" className="block text-xs font-medium text-hw-text-secondary mb-1">
-                        Operator Username
+                        اسم الحساب
                     </label>
                     <input
                         id="username"
                         name="username"
                         type="text"
                         required
-                        placeholder="e.g., mohammad_admin"
+                        placeholder="e.g., mohammad"
                         className="w-full bg-hw-surface border border-hw-border rounded-md p-3 text-sm text-hw-text placeholder-hw-text-faint focus:border-hw-accent focus:outline-none transition font-mono"
                     />
                 </div>
 
-                {/* Password Field */}
                 <div>
                     <label htmlFor="password" className="block text-xs font-medium text-hw-text-secondary mb-1">
-                        Security Password
+                        كلمة المرور
                     </label>
                     <input
                         id="password"
@@ -70,7 +68,7 @@ export default function LoginForm() {
                     disabled={loading}
                     className="group relative flex w-full justify-center rounded-md bg-hw-accent px-3 py-3 text-sm font-semibold text-hw-surface transition hover:bg-hw-accent-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hw-accent disabled:bg-hw-disabled-bg disabled:text-hw-disabled-text"
                 >
-                    {loading ? "Authenticating Terminal..." : "Sign In to Ledger"}
+                    {loading ? "جارٍ تسجيل الدخول..." : "سجل الدخول"}
                 </button>
             </div>
         </form>

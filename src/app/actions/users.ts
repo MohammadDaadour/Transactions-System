@@ -2,7 +2,7 @@
 
 import { auth } from "../../auth";
 import { db } from "../../lib/db";
-import { Role, UserType } from "@prisma/client";
+import { Role, UserType } from "../../generated/prisma/client";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 

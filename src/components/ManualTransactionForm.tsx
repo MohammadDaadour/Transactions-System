@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createHawalaTransaction } from "../app/actions/transactions";
-import { Currency, TransactionType } from "@prisma/client";
+import { Currency, TransactionType } from "../generated/prisma/enums";
 
 interface UserOption {
     id: string;

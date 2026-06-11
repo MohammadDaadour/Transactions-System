@@ -1,7 +1,7 @@
 import { auth } from "../../../auth";
 import { db } from "../../../lib/db";
 import { redirect } from "next/navigation";
-import { TransactionType, Currency } from "@prisma/client";
+import { TransactionType, Currency } from "../../../generated/prisma/client";
 import ManualTransactionForm from "../../../components/ManualTransactionForm";
 import DynamicLedgerTable from "../../../components/DynamicLedgerTable";
 import TransactionFilterBar from "../../../components/TransactionFilterBar";
@@ -76,12 +76,12 @@ export default async function TransactionsManagementPage({
                         </h3>
                     </div>
 
-                        <TransactionFilterBar
-                            users={activeUsers}
-                            showUserFilter={role !== "Member"}
-                            userId={session.user.id}
-                            agent={role === "Member"}
-                        />
+                    <TransactionFilterBar
+                        users={activeUsers}
+                        showUserFilter={role !== "Member"}
+                        userId={session.user.id}
+                        agent={role === "Member"}
+                    />
 
                     <DynamicLedgerTable
                         transactions={transactions}

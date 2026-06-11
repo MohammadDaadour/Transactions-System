@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
-import { Currency, TransactionType } from "@prisma/client";
+import { Currency, TransactionType } from "../generated/prisma/enums";
 
 interface User { id: string; username: string; }
 
@@ -25,7 +25,7 @@ export default function TransactionFilterBar({ users, showUserFilter, userId, ag
         } else {
             params.delete(key);
         }
-        params.delete("page"); 
+        params.delete("page");
         router.push(`${pathname}?${params.toString()}`);
     }, [searchParams, pathname, router]);
 

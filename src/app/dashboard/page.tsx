@@ -1,7 +1,7 @@
 import { auth } from "../../auth";
 import { db } from "../../lib/db";
 import { getGlobalSystemBalances, getRecentLedger } from "../../lib/queries";
-import { TransactionType, Currency } from "@prisma/client";
+import { TransactionType, Currency } from "../../generated/prisma/client";
 
 import ManualTransactionForm from "../../components/ManualTransactionForm";
 import DynamicLedgerTable from "../../components/DynamicLedgerTable";

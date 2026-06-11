@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from '@prisma/adapter-pg';
 
 // Explicitly declare the type on globalThis to prevent any evaluation overlap

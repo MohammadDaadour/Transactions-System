@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { createUser } from "../app/actions/users";
-import { Role, UserType } from "@prisma/client";
+import { Role, UserType } from "../generated/prisma/enums";
 
 type FormState =
     | { status: "idle" }

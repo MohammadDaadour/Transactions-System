@@ -2,9 +2,9 @@
 
 import { auth } from "../../auth";
 import { db } from "../../lib/db";
-import { Currency, TransactionType } from "@prisma/client";
+import { Currency, TransactionType } from "../../generated/prisma/client";
 import { revalidatePath } from "next/cache";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "../../generated/prisma/client";
 
 interface CreateTransactionInput {
     userId: string;

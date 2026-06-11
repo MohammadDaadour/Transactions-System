@@ -2,7 +2,7 @@
 
 import { auth } from "../../auth";
 import { db } from "../../lib/db";
-import { TransactionType, Prisma } from "@prisma/client";
+import { TransactionType, Prisma } from "../../generated/prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function reverseTransaction(transactionId: string, reason: string) {

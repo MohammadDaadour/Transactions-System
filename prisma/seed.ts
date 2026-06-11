@@ -3,10 +3,10 @@ import * as bcrypt from "bcryptjs";
 import { db as prisma } from "../src/lib/db";
 
 async function main() {
-    await prisma.auditLog.deleteMany();
-    await prisma.transaction.deleteMany();
-    await prisma.userBalance.deleteMany();
-    await prisma.user.deleteMany();
+    // await prisma.auditLog.deleteMany();
+    // await prisma.transaction.deleteMany();
+    // await prisma.userBalance.deleteMany();
+    // await prisma.user.deleteMany();
 
     const salt = await bcrypt.genSalt(10);
     const defaultPasswordHash = await bcrypt.hash("password123", salt);
@@ -22,18 +22,6 @@ async function main() {
     });
 
     const initialUsdAmount = new Prisma.Decimal(10000.0000);
-
-    await prisma.auditLog.createMany({
-        data: [
-            {
-                userId: systemAdmin.id,
-                action: "SYSTEM_SEED_INITIALIZATION",
-                tableName: "users",
-                recordId: systemAdmin.id,
-                newValue: { description: "Root system migration seeding script executed." }
-            },
-        ]
-    });
 
 }
 

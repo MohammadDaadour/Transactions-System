@@ -44,16 +44,20 @@ export async function reverseTransaction(transactionId: string, reason: string) 
             });
 
             // 5. Create a counter-balancing transaction record to keep the ledger true
-            await tx.transaction.create({
-                data: {
-                    userId: orig.userId,
-                    type: orig.type === TransactionType.debit ? TransactionType.credit : TransactionType.debit,
-                    amount: orig.amount,
-                    currency: orig.currency,
-                    date: new Date(),
-                    notes: `REVERSAL of Trans ID: ${orig.id}. Reason: ${reason}`,
-                    createdBy: session.user.id,
-                }
+            // await tx.transaction.create({
+            //     data: {
+            //         userId: orig.userId,
+            //         type: orig.type === TransactionType.debit ? TransactionType.credit : TransactionType.debit,
+            //         amount: orig.amount,
+            //         currency: orig.currency,
+            //         date: new Date(),
+            //         notes: `REVERSAL of Trans ID: ${orig.id}. Reason: ${reason}`,
+            //         createdBy: session.user.id,
+            //     }
+            // });
+            
+            await tx.transaction.delete({
+                where: { id: transactionId }
             });
 
             // 6. Log it in the Audit Trail

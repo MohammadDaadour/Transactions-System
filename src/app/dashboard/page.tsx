@@ -42,7 +42,7 @@ export default async function DashboardOverview() {
                 <p className="text-hw-text-secondary font-bold">عرض تشغيلي مباشر ومراقبة الدفتر</p>
             </div>
 
-            {role === "Admin" || role === "Mod" ? (
+            {role !== "Member" ? (
                 <div>
                     <h3 className="text-xs font-semibold uppercase text-bold tracking-wider text-hw-text-secondary mb-3">إجمالي صافي السيولة </h3>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -54,7 +54,7 @@ export default async function DashboardOverview() {
                                         <span className="ml-2">{currencyIcons[currency]}</span>
                                         <span className="inline-block mb-2"> {currency} رصيد الحساب</span>
                                     </p>
-                                    <p className={`text-2xl font-mono font-bold mt-2 ${netPosition >= 0 ? "text-hw-accent" : "text-hw-danger"}`}>
+                                    <p className={`text-2xl font-mono font-bold mt-2 ${netPosition >= 0 ? "text-hw-accent" : "text-red-800"}`}>
                                         {netPosition.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                                     </p>
                                 </div>
@@ -65,22 +65,31 @@ export default async function DashboardOverview() {
             ) : (
                 <div>
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-hw-text-secondary mb-3">رصيد الحساب</h3>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                        {Object.values(Currency).map((currency) => {
-                            const balance = userBalancesMap.get(currency) || 0;
-                            return (
-                                <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5">
-                                    <p className="text-sm font-medium text-hw-text-secondary flex items-center">
-                                        <span className="ml-2">{currencyIcons[currency]}</span>
-                                        {currency} رصيد الحساب
-                                    </p>
-                                    <p className="text-2xl font-mono font-bold mt-2 text-hw-text">
-                                        {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                                    </p>
-                                </div>
-                            );
-                        })}
-                    </div>
+                    {userBalancesMap.size === 0 ? (
+                        <p className="text-sm text-hw-text-muted">لا يوجد رصيد حالياً</p>
+                    ) : (
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                            {Object.values(Currency)
+                                .filter((currency) => {
+                                    const balance = userBalancesMap.get(currency) || 0;
+                                    return balance !== 0;
+                                })
+                                .map((currency) => {
+                                    const balance = userBalancesMap.get(currency) || 0;
+                                    return (
+                                        <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5">
+                                            <p className="text-sm font-medium text-hw-text-secondary flex items-center">
+                                                <span className="ml-2">{currencyIcons[currency]}</span>
+                                                {currency} رصيد الحساب
+                                            </p>
+                                            <p className="text-2xl font-mono font-bold mt-2 text-hw-text">
+                                                {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                            </p>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                    )}
                 </div>
             )}
 

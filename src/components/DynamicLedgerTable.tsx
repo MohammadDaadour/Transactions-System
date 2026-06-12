@@ -1,6 +1,7 @@
 "use client";
 
 import { reverseTransaction } from "../app/actions/reversals";
+import Swal from "sweetalert2";
 
 interface TransactionRow {
     id: string;
@@ -21,14 +22,35 @@ interface TableProps {
 export default function DynamicLedgerTable({ transactions, showReversalControl }: TableProps) {
 
     async function handleReversal(id: string) {
-        const reason = prompt("Enter the reason for reversing this ledger item:");
-        if (!reason) return;
+        const result = await Swal.fire({
+            title: 'تأكيد العملية',
+            text: 'هل تريد تأكيد مسح العملية؟',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم',
+            cancelButtonText: 'إلغاء',
+            confirmButtonColor: '#90AB8B',
+            cancelButtonColor: '#1e293b'
+        });
 
-        const response = await reverseTransaction(id, reason);
+        if (!result.isConfirmed) return;
+
+        const response = await reverseTransaction(id, "");
+
         if (response.success) {
-            alert("Ledger line cleanly neutralized.");
+            await Swal.fire({
+                title: 'تم بنجاح',
+                text: 'تمت تسوية بند الدفتر بنجاح.',
+                icon: 'success',
+                confirmButtonText: 'موافق'
+            });
         } else {
-            alert(`Error: ${response.error}`);
+            await Swal.fire({
+                title: 'خطأ',
+                text: `حدث خطأ: ${response.error}`,
+                icon: 'error',
+                confirmButtonText: 'موافق'
+            });
         }
     }
 

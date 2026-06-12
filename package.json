@@ -16,7 +16,9 @@
     "next": "16.2.6",
     "next-auth": "^5.0.0-beta.31",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "swal": "^0.1.0",
+    "sweetalert2": "^11.26.25"
   },
   "devDependencies": {
     "@prisma/config": "^7.8.0",

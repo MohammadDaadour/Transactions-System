@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 
 export async function reverseTransaction(transactionId: string, reason: string) {
     const session = await auth();
-    if (!session || session.user?.role !== "Admin") {
+    if (!session || session.user?.role === "Member") {
         throw new Error("Unauthorized: Only Admins can reverse transactions.");
     }
 
@@ -32,9 +32,9 @@ export async function reverseTransaction(transactionId: string, reason: string) 
 
             // 3. Apply OPPOSITE math to reverse the original action
             if (orig.type === TransactionType.debit) {
-                newBalance = oldBalance.sub(orig.amount); // Undo debit
+                newBalance = oldBalance.add(orig.amount); // Undo debit
             } else if (orig.type === TransactionType.credit) {
-                newBalance = oldBalance.add(orig.amount); // Undo credit
+                newBalance = oldBalance.sub(orig.amount); // Undo credit
             }
 
             // 4. Update the user's balance

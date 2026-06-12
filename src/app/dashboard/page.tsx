@@ -48,14 +48,15 @@ export default async function DashboardOverview() {
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                         {Object.values(Currency).map((currency) => {
                             const netPosition = globalBalancesMap.get(currency) || 0;
+                            const inverted = netPosition === 0 ? 0 : netPosition * -1;
                             return (
                                 <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5">
                                     <p className="text-sm font-medium text-hw-text-secondary flex items-center">
                                         <span className="ml-2">{currencyIcons[currency]}</span>
                                         <span className="inline-block mb-2"> {currency} رصيد الحساب</span>
                                     </p>
-                                    <p className={`text-2xl font-mono font-bold mt-2 ${netPosition >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                        {netPosition.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                    <p className={`text-2xl font-mono font-bold mt-2 ${inverted >= 0 ? "text-hw-accent" : "text-red-800"}`}>
+                                        {inverted.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                                     </p>
                                 </div>
                             );

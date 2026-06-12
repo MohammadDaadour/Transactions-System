@@ -64,9 +64,9 @@ export async function createHawalaTransaction(input: CreateTransactionInput) {
             let newBalance = new Prisma.Decimal(oldBalance);
 
             if (type === TransactionType.debit) {
-                newBalance = oldBalance.add(amount);
-            } else if (type === TransactionType.credit) {
                 newBalance = oldBalance.sub(amount);
+            } else if (type === TransactionType.credit) {
+                newBalance = oldBalance.add(amount);
             } else if (type === TransactionType.opening_balance) {
                 newBalance = new Prisma.Decimal(amount);
             }

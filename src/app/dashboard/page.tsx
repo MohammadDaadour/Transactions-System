@@ -82,7 +82,7 @@ export default async function DashboardOverview() {
                                         <div className="border-t border-hw-border/50 pt-3 space-y-1.5">
                                             {users.map((u) => (
                                                 <div key={u.username} className="flex justify-between items-center text-xs">
-                                                    <span className="font-mono text-hw-text-muted text-lg">{u.username}</span>
+                                                    <span className="font-mono text-hw-text text-lg">{u.username}</span>
                                                     <span className={`font-mono font-medium text-lg ${u.balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
                                                         {u.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                                                     </span>

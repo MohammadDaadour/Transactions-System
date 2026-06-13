@@ -3,7 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import UpdateUserForm from "./UpdateUserForm";
-import { Role, UserType } from "../generated/prisma/enums";
+import { Role, UserType, Currency } from "../generated/prisma/enums";
+
+type UserBalance = {
+    currency: Currency;
+    balance: { toNumber: () => number } | number;
+};
 
 type User = {
     id: string;
@@ -13,6 +18,7 @@ type User = {
     phone: string;
     isActive: boolean;
     createdAt: Date;
+    balances: UserBalance[];
 };
 
 export default function UsersTable({ users }: { users: User[] }) {
@@ -28,6 +34,7 @@ export default function UsersTable({ users }: { users: User[] }) {
                             <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">اسم المستخدم</th>
                             <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">الصلاحية</th>
                             <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">النوع</th>
+                            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">الرصيد</th>
                             <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">الهاتف</th>
                             <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">الحالة</th>
                             <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">تاريخ الاضافة</th>
@@ -43,6 +50,29 @@ export default function UsersTable({ users }: { users: User[] }) {
                                 </td>
                                 <td className="px-4 py-3 text-hw-text-secondary capitalize">
                                     {u.type === "receiver" ? "مستورد" : "مورد"}
+                                </td>
+                                <td className="px-4 py-3 text-hw-text-secondary font-mono text-xs">
+                                    <td className="px-4 py-3 text-hw-text-secondary font-mono text-xs">
+                                        {u.balances.length === 0 ? (
+                                            <span className="text-hw-text-faint">—</span>
+                                        ) : (
+                                            <div className="space-y-0.5">
+                                                {u.balances.map((b) => {
+                                                    const amount = typeof b.balance === "number"
+                                                        ? b.balance
+                                                        : b.balance.toNumber();
+                                                    return (
+                                                        <div key={b.currency} className="flex items-center gap-1.5">
+                                                            <span className="text-hw-text">{b.currency}</span>
+                                                            <span className={amount >= 0 ? "text-hw-accent bold text-lg" : "text-red-800 bold text-lg"}>
+                                                                {amount.toLocaleString("ar-EG", { minimumFractionDigits: 2 })}
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </td>
                                 </td>
                                 <td className="px-4 py-3 text-hw-text-secondary font-mono text-xs">{u.phone}</td>
                                 <td className="px-4 py-3">

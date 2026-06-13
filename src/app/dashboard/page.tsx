@@ -20,7 +20,7 @@ export default async function DashboardOverview() {
     const { id: currentUserId, role } = session.user;
 
     // Parallel execution of top-level clean queries outside of JSX
-    const [userBalances, globalBalances, recentTransactions, activeUsers] = await Promise.all([
+    const [userBalances, globalBalances, recentTransactions, activeUsers, allUserBalances] = await Promise.all([
         db.userBalance.findMany({ where: { userId: currentUserId } }),
         getGlobalSystemBalances(),
         getRecentLedger(role === "Member" ? currentUserId : undefined),
@@ -29,11 +29,28 @@ export default async function DashboardOverview() {
                 where: { isActive: true },
                 select: { id: true, username: true }
             })
-            : []
+            : [],
+        role !== "Member"
+            ? db.userBalance.findMany({
+                select: {
+                    currency: true,
+                    balance: true,
+                    user: { select: { username: true } }
+                }
+            })
+            : [],
     ]);
 
     const userBalancesMap = new Map(userBalances.map(b => [b.currency, b.balance.toNumber()]));
     const globalBalancesMap = new Map(globalBalances.map(b => [b.currency, b.netPosition]));
+
+    // Group per-user balances by currency
+    const perCurrencyUsers = new Map<Currency, { username: string; balance: number }[]>();
+    for (const b of allUserBalances) {
+        const list = perCurrencyUsers.get(b.currency) ?? [];
+        list.push({ username: b.user.username, balance: b.balance.toNumber() });
+        perCurrencyUsers.set(b.currency, list);
+    }
 
     return (
         <div className="space-y-8">
@@ -49,15 +66,30 @@ export default async function DashboardOverview() {
                         {Object.values(Currency).map((currency) => {
                             const netPosition = globalBalancesMap.get(currency) || 0;
                             const inverted = netPosition === 0 ? 0 : netPosition * -1;
+                            const users = perCurrencyUsers.get(currency) ?? [];
+
                             return (
-                                <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5">
+                                <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5 space-y-3">
                                     <p className="text-sm font-medium text-hw-text-secondary flex items-center">
                                         <span className="ml-2">{currencyIcons[currency]}</span>
-                                        <span className="inline-block mb-2"> {currency} رصيد الحساب</span>
+                                        <span className="inline-block mb-2">{currency} رصيد الحساب</span>
                                     </p>
-                                    <p className={`text-2xl font-mono font-bold mt-2 ${inverted >= 0 ? "text-hw-accent" : "text-red-800"}`}>
+                                    <p className={`text-2xl font-mono font-bold ${inverted >= 0 ? "text-hw-accent" : "text-red-800"}`}>
                                         {inverted.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                                     </p>
+
+                                    {users.length > 0 && (
+                                        <div className="border-t border-hw-border/50 pt-3 space-y-1.5">
+                                            {users.map((u) => (
+                                                <div key={u.username} className="flex justify-between items-center text-xs">
+                                                    <span className="font-mono text-hw-text-muted text-lg">{u.username}</span>
+                                                    <span className={`font-mono font-medium text-lg ${u.balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
+                                                        {u.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}
@@ -88,10 +120,10 @@ export default async function DashboardOverview() {
                                             </p>
                                         </div>
                                     );
-                                })} 
+                                })}
                         </div>
                     )}
-                </div> 
+                </div>
             )}
 
             <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">

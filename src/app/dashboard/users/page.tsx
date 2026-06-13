@@ -19,8 +19,22 @@ export default async function UsersPage() {
             phone: true,
             isActive: true,
             createdAt: true,
+            balances: {
+                select: {
+                    currency: true,
+                    balance: true,
+                }
+            }
         },
     });
+
+    const serializedUsers = users.map((u) => ({
+        ...u,
+        balances: u.balances.map((b) => ({
+            currency: b.currency,
+            balance: b.balance.toNumber(),
+        })),
+    }));
 
     return (
         <div className="space-y-8">
@@ -46,7 +60,7 @@ export default async function UsersPage() {
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
                         الحسابات ({users.length})
                     </h3>
-                    <UsersTable users={users} />
+                    <UsersTable users={serializedUsers} />
                 </div>
             </div>
         </div>

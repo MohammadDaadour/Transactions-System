@@ -96,9 +96,9 @@ export default function UsersTable({ users }: { users: User[] }) {
                                 <td className="px-4 py-3">
                                     <Link
                                         href={`/dashboard/users/${u.id}`}
-                                        className="text-hw-accent hover:text-hw-accent-hover focus:outline-none bg-hw-accent/10 hover:bg-hw-accent/20 border border-hw-accent/30 px-2 py-1 rounded text-xs font-medium transition-colors"
+                                        className="text-white hover:text-hw-accent-hover focus:outline-none bg-hw-accent hover:bg-hw-accent/20 border border-hw-accent/30 px-2 py-1 rounded text-xs font-medium transition-colors"
                                     >
-                                        عرض الملف
+                                        عرض 
                                     </Link>
                                 </td>
                                 <td className="px-4 py-3">

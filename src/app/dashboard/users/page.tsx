@@ -11,35 +11,47 @@ export default async function UsersPage() {
 
     const activeSession = await db.session.findFirst({ where: { status: "OPEN" } });
 
+    const userSelect: any = {
+        id: true,
+        username: true,
+        role: true,
+        type: true,
+        phone: true,
+        isActive: true,
+        createdAt: true,
+    };
+
+    if (activeSession?.id) {
+        userSelect.balances = {
+            where: {
+                sessionId: activeSession.id
+            },
+            select: {
+                currency: true,
+                balance: true,
+            }
+        };
+    }
+
     const users = await db.user.findMany({
         orderBy: { createdAt: "desc" },
-        select: {
-            id: true,
-            username: true,
-            role: true,
-            type: true,
-            phone: true,
-            isActive: true,
-            createdAt: true,
-            balances: {
-                where: {
-                    sessionId: activeSession?.id || ""
-                },
-                select: {
-                    currency: true,
-                    balance: true,
-                }
-            }
-        },
+        select: userSelect,
     });
 
+    // تحويل البيانات وتعيين النوع كـ any[] ليتوافق مع الـ Props الخاصة بالمكون
     const serializedUsers = users.map((u) => ({
-        ...u,
-        balances: u.balances.map((b) => ({
+        id: u.id,
+        username: u.username,
+        role: u.role,
+        type: u.type,
+        phone: u.phone,
+        isActive: u.isActive,
+        createdAt: u.createdAt,
+        balances: (u.balances || []).map((b: any) => ({
             currency: b.currency,
             balance: b.balance.toNumber(),
         })),
-    }));
+    })) as any[];
 
     return (
         <div className="space-y-8">
@@ -49,7 +61,6 @@ export default async function UsersPage() {
             </div>
 
             <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
-
                 {/* Left: Create Account Form */}
                 <div className="space-y-4">
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">

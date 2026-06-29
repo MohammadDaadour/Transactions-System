@@ -25,16 +25,12 @@ export default async function DashboardOverview() {
         include: { openedByUser: { select: { username: true } } }
     });
 
-    const activeSessionId = activeSession?.id || "";
+    // 1. Setup blank arrays to safely absorb logic state if no session exists
+    let userBalances: any[] = [];
+    let allUserBalances: any[] = [];
 
-    // Parallel execution of top-level clean queries outside of JSX
-    const [userBalances, globalBalances, recentTransactions, activeUsers, allUserBalances] = await Promise.all([
-        db.userBalance.findMany({
-            where: {
-                userId: currentUserId,
-                sessionId: activeSessionId
-            }
-        }),
+    // 2. Fetch non-session-dependent information in parallel first
+    const [globalBalances, recentTransactions, activeUsers] = await Promise.all([
         getGlobalSystemBalances(),
         getRecentLedger(role === "Member" ? currentUserId : undefined),
         role !== "Member"
@@ -43,19 +39,33 @@ export default async function DashboardOverview() {
                 select: { id: true, username: true }
             })
             : [],
-        role !== "Member"
-            ? db.userBalance.findMany({
-                where: {
-                    sessionId: activeSessionId
-                },
-                select: {
-                    currency: true,
-                    balance: true,
-                    user: { select: { username: true } }
-                }
-            })
-            : [],
     ]);
+
+    // 3. Only safely run balance lookups if we have a valid open session UUID
+    if (activeSession?.id) {
+        const [userBalancesData, allUserBalancesData] = await Promise.all([
+            db.userBalance.findMany({
+                where: {
+                    userId: currentUserId,
+                    sessionId: activeSession.id
+                }
+            }),
+            role !== "Member"
+                ? db.userBalance.findMany({
+                    where: {
+                        sessionId: activeSession.id
+                    },
+                    select: {
+                        currency: true,
+                        balance: true,
+                        user: { select: { username: true } }
+                    }
+                })
+                : [],
+        ]);
+        userBalances = userBalancesData;
+        allUserBalances = allUserBalancesData;
+    }
 
     const userBalancesMap = new Map(userBalances.map(b => [b.currency, b.balance.toNumber()]));
     const globalBalancesMap = new Map(globalBalances.map(b => [b.currency, b.netPosition]));

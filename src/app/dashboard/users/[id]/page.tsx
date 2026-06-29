@@ -13,19 +13,13 @@ const currencyIcons: Record<Currency, React.ReactNode> = {
     VOD: <svg fill="#E60000" width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Vodafone</title><path d="M12 0A12 12 0 0 0 0 12A12 12 0 0 0 12 24A12 12 0 0 0 24 12A12 12 0 0 0 12 0M16.25 1.12C16.57 1.12 16.9 1.15 17.11 1.22C14.94 1.67 13.21 3.69 13.22 6C13.22 6.05 13.22 6.11 13.23 6.17C16.87 7.06 18.5 9.25 18.5 12.28C18.54 15.31 16.14 18.64 12.09 18.65C8.82 18.66 5.41 15.86 5.39 11.37C5.38 8.4 7 5.54 9.04 3.85C11.04 2.19 13.77 1.13 16.25 1.12Z" /></svg>,
 };
 
-// 1. Typed params as a Promise to fulfill Next.js 15+ specifications
 export default async function UserDashboardView({ params }: { params: Promise<{ id: string }> }) {
     const session = await auth();
-    // Only Admin can view other users' profiles
     if (!session?.user || session.user.role !== "Admin") redirect("/dashboard");
 
-    // 2. Await the params promise before reading properties
     const { id: targetUserId } = await params;
-
-    // Safety guard if the ID is unexpectedly missing
     if (!targetUserId) return notFound();
 
-    // Fetch user details
     const targetUser = await db.user.findUnique({
         where: { id: targetUserId }
     });
@@ -38,17 +32,27 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
         where: { status: "OPEN" },
     });
 
-    const activeSessionId = activeSession?.id || "";
+    // 1. Initialize variables for conditional query execution
+    let userBalances: any[] = [];
+    let recentTransactions: any[] = [];
 
-    const [userBalances, recentTransactions] = await Promise.all([
-        db.userBalance.findMany({
-            where: {
-                userId: targetUserId,
-                sessionId: activeSessionId
-            }
-        }),
-        getRecentLedger(targetUserId),
-    ]);
+    if (activeSession?.id) {
+        // 2. Query userBalance safely ONLY when a valid session layout is loaded
+        const [balancesData, ledgerData] = await Promise.all([
+            db.userBalance.findMany({
+                where: {
+                    userId: targetUserId,
+                    sessionId: activeSession.id
+                }
+            }),
+            getRecentLedger(targetUserId),
+        ]);
+        userBalances = balancesData;
+        recentTransactions = ledgerData;
+    } else {
+        // 3. Fallback gracefully if no accounting session is open
+        recentTransactions = await getRecentLedger(targetUserId);
+    }
 
     const userBalancesMap = new Map(userBalances.map(b => [b.currency, b.balance.toNumber()]));
 
@@ -66,7 +70,6 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
                 </Link>
             </div>
 
-            {/* Rest of your UI JSX remains completely intact */}
             <div>
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-hw-text-secondary mb-3">رصيد الحساب</h3>
                 {userBalancesMap.size === 0 ? (

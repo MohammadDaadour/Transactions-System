@@ -31,18 +31,33 @@ export default async function SessionsHistoryPage() {
     const sessions = [...rawSessions].sort((a, b) => {
         const statusDiff = (STATUS_ORDER[a.status] ?? 3) - (STATUS_ORDER[b.status] ?? 3);
         if (statusDiff !== 0) return statusDiff;
-        return b.openedAt.getTime() - a.openedAt.getTime();
+        
+        // تأمين تحويل التواريخ إلى أرقام لتفادي مشاكل المقارنة المباشرة
+        const timeA = a.openedAt instanceof Date ? a.openedAt.getTime() : new Date(a.openedAt).getTime();
+        const timeB = b.openedAt instanceof Date ? b.openedAt.getTime() : new Date(b.openedAt).getTime();
+        return timeB - timeA;
     });
 
-    const serialized = sessions.map((s) => ({
-        ...s,
-        openedAt: s.openedAt.toISOString(),
-        closedAt: s.closedAt?.toISOString() ?? null,
-        snapshots: s.snapshots.map((snap) => ({
-            ...snap,
-            balance: snap.balance.toNumber(),
-        })),
-    }));
+    const serialized = sessions.map((s) => {
+        // تحويل آمن لحقول الـ BigInt إذا وجدت في الـ _count
+        const transactionCount = typeof s._count?.transactions === "bigint" 
+            ? Number(s._count.transactions) 
+            : s._count?.transactions || 0;
 
-    return <SessionsHistoryClient sessions={serialized} />;
+        return {
+            ...s,
+            // التأكد من أن القيمة عبارة عن كائن تاريخ قبل استدعاء toISOString
+            openedAt: s.openedAt instanceof Date ? s.openedAt.toISOString() : new Date(s.openedAt).toISOString(),
+            closedAt: s.closedAt instanceof Date ? s.closedAt.toISOString() : s.closedAt ? new Date(s.closedAt).toISOString() : null,
+            _count: {
+                transactions: transactionCount
+            },
+            snapshots: s.snapshots.map((snap) => ({
+                ...snap,
+                balance: typeof snap.balance?.toNumber === "function" ? snap.balance.toNumber() : Number(snap.balance || 0),
+            })),
+        };
+    });
+
+    return <SessionsHistoryClient sessions={serialized as any} />;
 }

@@ -354,9 +354,9 @@ export type SessionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type SessionScalarRelationFilter = {
-  is?: Prisma.SessionWhereInput
-  isNot?: Prisma.SessionWhereInput
+export type SessionNullableScalarRelationFilter = {
+  is?: Prisma.SessionWhereInput | null
+  isNot?: Prisma.SessionWhereInput | null
 }
 
 export type SessionCountOrderByAggregateInput = {
@@ -387,6 +387,11 @@ export type SessionMinOrderByAggregateInput = {
   openedBy?: Prisma.SortOrder
   closedBy?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+}
+
+export type SessionScalarRelationFilter = {
+  is?: Prisma.SessionWhereInput
+  isNot?: Prisma.SessionWhereInput
 }
 
 export type SessionCreateNestedManyWithoutOpenedByUserInput = {
@@ -479,10 +484,12 @@ export type SessionCreateNestedOneWithoutBalancesInput = {
   connect?: Prisma.SessionWhereUniqueInput
 }
 
-export type SessionUpdateOneRequiredWithoutBalancesNestedInput = {
+export type SessionUpdateOneWithoutBalancesNestedInput = {
   create?: Prisma.XOR<Prisma.SessionCreateWithoutBalancesInput, Prisma.SessionUncheckedCreateWithoutBalancesInput>
   connectOrCreate?: Prisma.SessionCreateOrConnectWithoutBalancesInput
   upsert?: Prisma.SessionUpsertWithoutBalancesInput
+  disconnect?: Prisma.SessionWhereInput | boolean
+  delete?: Prisma.SessionWhereInput | boolean
   connect?: Prisma.SessionWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.SessionUpdateToOneWithWhereWithoutBalancesInput, Prisma.SessionUpdateWithoutBalancesInput>, Prisma.SessionUncheckedUpdateWithoutBalancesInput>
 }
@@ -493,10 +500,12 @@ export type SessionCreateNestedOneWithoutTransactionsInput = {
   connect?: Prisma.SessionWhereUniqueInput
 }
 
-export type SessionUpdateOneRequiredWithoutTransactionsNestedInput = {
+export type SessionUpdateOneWithoutTransactionsNestedInput = {
   create?: Prisma.XOR<Prisma.SessionCreateWithoutTransactionsInput, Prisma.SessionUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.SessionCreateOrConnectWithoutTransactionsInput
   upsert?: Prisma.SessionUpsertWithoutTransactionsInput
+  disconnect?: Prisma.SessionWhereInput | boolean
+  delete?: Prisma.SessionWhereInput | boolean
   connect?: Prisma.SessionWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.SessionUpdateToOneWithWhereWithoutTransactionsInput, Prisma.SessionUpdateWithoutTransactionsInput>, Prisma.SessionUncheckedUpdateWithoutTransactionsInput>
 }

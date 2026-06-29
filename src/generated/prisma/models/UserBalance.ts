@@ -181,7 +181,7 @@ export type UserBalanceGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 
 export type UserBalanceGroupByOutputType = {
   id: string
-  sessionId: string
+  sessionId: string | null
   userId: string
   currency: $Enums.Currency
   balance: runtime.Decimal
@@ -212,17 +212,17 @@ export type UserBalanceWhereInput = {
   OR?: Prisma.UserBalanceWhereInput[]
   NOT?: Prisma.UserBalanceWhereInput | Prisma.UserBalanceWhereInput[]
   id?: Prisma.UuidFilter<"UserBalance"> | string
-  sessionId?: Prisma.UuidFilter<"UserBalance"> | string
+  sessionId?: Prisma.UuidNullableFilter<"UserBalance"> | string | null
   userId?: Prisma.UuidFilter<"UserBalance"> | string
   currency?: Prisma.EnumCurrencyFilter<"UserBalance"> | $Enums.Currency
   balance?: Prisma.DecimalFilter<"UserBalance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
+  session?: Prisma.XOR<Prisma.SessionNullableScalarRelationFilter, Prisma.SessionWhereInput> | null
 }
 
 export type UserBalanceOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  sessionId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   balance?: Prisma.SortOrder
@@ -236,17 +236,17 @@ export type UserBalanceWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserBalanceWhereInput | Prisma.UserBalanceWhereInput[]
   OR?: Prisma.UserBalanceWhereInput[]
   NOT?: Prisma.UserBalanceWhereInput | Prisma.UserBalanceWhereInput[]
-  sessionId?: Prisma.UuidFilter<"UserBalance"> | string
+  sessionId?: Prisma.UuidNullableFilter<"UserBalance"> | string | null
   userId?: Prisma.UuidFilter<"UserBalance"> | string
   currency?: Prisma.EnumCurrencyFilter<"UserBalance"> | $Enums.Currency
   balance?: Prisma.DecimalFilter<"UserBalance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
+  session?: Prisma.XOR<Prisma.SessionNullableScalarRelationFilter, Prisma.SessionWhereInput> | null
 }, "id" | "sessionId_userId_currency">
 
 export type UserBalanceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  sessionId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   balance?: Prisma.SortOrder
@@ -262,7 +262,7 @@ export type UserBalanceScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserBalanceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserBalanceScalarWhereWithAggregatesInput | Prisma.UserBalanceScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"UserBalance"> | string
-  sessionId?: Prisma.UuidWithAggregatesFilter<"UserBalance"> | string
+  sessionId?: Prisma.UuidNullableWithAggregatesFilter<"UserBalance"> | string | null
   userId?: Prisma.UuidWithAggregatesFilter<"UserBalance"> | string
   currency?: Prisma.EnumCurrencyWithAggregatesFilter<"UserBalance"> | $Enums.Currency
   balance?: Prisma.DecimalWithAggregatesFilter<"UserBalance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -273,12 +273,12 @@ export type UserBalanceCreateInput = {
   currency: $Enums.Currency
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   user: Prisma.UserCreateNestedOneWithoutBalancesInput
-  session: Prisma.SessionCreateNestedOneWithoutBalancesInput
+  session?: Prisma.SessionCreateNestedOneWithoutBalancesInput
 }
 
 export type UserBalanceUncheckedCreateInput = {
   id?: string
-  sessionId: string
+  sessionId?: string | null
   userId: string
   currency: $Enums.Currency
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -289,12 +289,12 @@ export type UserBalanceUpdateInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   user?: Prisma.UserUpdateOneRequiredWithoutBalancesNestedInput
-  session?: Prisma.SessionUpdateOneRequiredWithoutBalancesNestedInput
+  session?: Prisma.SessionUpdateOneWithoutBalancesNestedInput
 }
 
 export type UserBalanceUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -302,7 +302,7 @@ export type UserBalanceUncheckedUpdateInput = {
 
 export type UserBalanceCreateManyInput = {
   id?: string
-  sessionId: string
+  sessionId?: string | null
   userId: string
   currency: $Enums.Currency
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -316,7 +316,7 @@ export type UserBalanceUpdateManyMutationInput = {
 
 export type UserBalanceUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -424,6 +424,10 @@ export type DecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type UserBalanceCreateNestedManyWithoutSessionInput = {
   create?: Prisma.XOR<Prisma.UserBalanceCreateWithoutSessionInput, Prisma.UserBalanceUncheckedCreateWithoutSessionInput> | Prisma.UserBalanceCreateWithoutSessionInput[] | Prisma.UserBalanceUncheckedCreateWithoutSessionInput[]
   connectOrCreate?: Prisma.UserBalanceCreateOrConnectWithoutSessionInput | Prisma.UserBalanceCreateOrConnectWithoutSessionInput[]
@@ -470,12 +474,12 @@ export type UserBalanceCreateWithoutUserInput = {
   id?: string
   currency: $Enums.Currency
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  session: Prisma.SessionCreateNestedOneWithoutBalancesInput
+  session?: Prisma.SessionCreateNestedOneWithoutBalancesInput
 }
 
 export type UserBalanceUncheckedCreateWithoutUserInput = {
   id?: string
-  sessionId: string
+  sessionId?: string | null
   currency: $Enums.Currency
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -511,7 +515,7 @@ export type UserBalanceScalarWhereInput = {
   OR?: Prisma.UserBalanceScalarWhereInput[]
   NOT?: Prisma.UserBalanceScalarWhereInput | Prisma.UserBalanceScalarWhereInput[]
   id?: Prisma.UuidFilter<"UserBalance"> | string
-  sessionId?: Prisma.UuidFilter<"UserBalance"> | string
+  sessionId?: Prisma.UuidNullableFilter<"UserBalance"> | string | null
   userId?: Prisma.UuidFilter<"UserBalance"> | string
   currency?: Prisma.EnumCurrencyFilter<"UserBalance"> | $Enums.Currency
   balance?: Prisma.DecimalFilter<"UserBalance"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -559,7 +563,7 @@ export type UserBalanceUpdateManyWithWhereWithoutSessionInput = {
 
 export type UserBalanceCreateManyUserInput = {
   id?: string
-  sessionId: string
+  sessionId?: string | null
   currency: $Enums.Currency
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -568,19 +572,19 @@ export type UserBalanceUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  session?: Prisma.SessionUpdateOneRequiredWithoutBalancesNestedInput
+  session?: Prisma.SessionUpdateOneWithoutBalancesNestedInput
 }
 
 export type UserBalanceUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type UserBalanceUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -622,7 +626,7 @@ export type UserBalanceSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   currency?: boolean
   balance?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.UserBalance$sessionArgs<ExtArgs>
 }, ExtArgs["result"]["userBalance"]>
 
 export type UserBalanceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -632,7 +636,7 @@ export type UserBalanceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   currency?: boolean
   balance?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.UserBalance$sessionArgs<ExtArgs>
 }, ExtArgs["result"]["userBalance"]>
 
 export type UserBalanceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -642,7 +646,7 @@ export type UserBalanceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   currency?: boolean
   balance?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.UserBalance$sessionArgs<ExtArgs>
 }, ExtArgs["result"]["userBalance"]>
 
 export type UserBalanceSelectScalar = {
@@ -656,26 +660,26 @@ export type UserBalanceSelectScalar = {
 export type UserBalanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sessionId" | "userId" | "currency" | "balance", ExtArgs["result"]["userBalance"]>
 export type UserBalanceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.UserBalance$sessionArgs<ExtArgs>
 }
 export type UserBalanceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.UserBalance$sessionArgs<ExtArgs>
 }
 export type UserBalanceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.UserBalance$sessionArgs<ExtArgs>
 }
 
 export type $UserBalancePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "UserBalance"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
-    session: Prisma.$SessionPayload<ExtArgs>
+    session: Prisma.$SessionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    sessionId: string
+    sessionId: string | null
     userId: string
     currency: $Enums.Currency
     balance: runtime.Decimal
@@ -1074,7 +1078,7 @@ readonly fields: UserBalanceFieldRefs;
 export interface Prisma__UserBalanceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  session<T extends Prisma.SessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SessionDefaultArgs<ExtArgs>>): Prisma.Prisma__SessionClient<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  session<T extends Prisma.UserBalance$sessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserBalance$sessionArgs<ExtArgs>>): Prisma.Prisma__SessionClient<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1507,6 +1511,25 @@ export type UserBalanceDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many UserBalances to delete.
    */
   limit?: number
+}
+
+/**
+ * UserBalance.session
+ */
+export type UserBalance$sessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Session
+   */
+  select?: Prisma.SessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Session
+   */
+  omit?: Prisma.SessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionInclude<ExtArgs> | null
+  where?: Prisma.SessionWhereInput
 }
 
 /**

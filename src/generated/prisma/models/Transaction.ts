@@ -212,7 +212,7 @@ export type TransactionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 export type TransactionGroupByOutputType = {
   id: string
   userId: string
-  sessionId: string
+  sessionId: string | null
   type: $Enums.TransactionType
   amount: runtime.Decimal
   currency: $Enums.Currency
@@ -248,7 +248,7 @@ export type TransactionWhereInput = {
   NOT?: Prisma.TransactionWhereInput | Prisma.TransactionWhereInput[]
   id?: Prisma.UuidFilter<"Transaction"> | string
   userId?: Prisma.UuidFilter<"Transaction"> | string
-  sessionId?: Prisma.UuidFilter<"Transaction"> | string
+  sessionId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   type?: Prisma.EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalFilter<"Transaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyFilter<"Transaction"> | $Enums.Currency
@@ -258,13 +258,13 @@ export type TransactionWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
+  session?: Prisma.XOR<Prisma.SessionNullableScalarRelationFilter, Prisma.SessionWhereInput> | null
 }
 
 export type TransactionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  sessionId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -283,7 +283,7 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TransactionWhereInput[]
   NOT?: Prisma.TransactionWhereInput | Prisma.TransactionWhereInput[]
   userId?: Prisma.UuidFilter<"Transaction"> | string
-  sessionId?: Prisma.UuidFilter<"Transaction"> | string
+  sessionId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   type?: Prisma.EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalFilter<"Transaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyFilter<"Transaction"> | $Enums.Currency
@@ -293,13 +293,13 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
+  session?: Prisma.XOR<Prisma.SessionNullableScalarRelationFilter, Prisma.SessionWhereInput> | null
 }, "id">
 
 export type TransactionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  sessionId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
@@ -320,7 +320,7 @@ export type TransactionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TransactionScalarWhereWithAggregatesInput | Prisma.TransactionScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Transaction"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"Transaction"> | string
-  sessionId?: Prisma.UuidWithAggregatesFilter<"Transaction"> | string
+  sessionId?: Prisma.UuidNullableWithAggregatesFilter<"Transaction"> | string | null
   type?: Prisma.EnumTransactionTypeWithAggregatesFilter<"Transaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalWithAggregatesFilter<"Transaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyWithAggregatesFilter<"Transaction"> | $Enums.Currency
@@ -340,13 +340,13 @@ export type TransactionCreateInput = {
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   creator: Prisma.UserCreateNestedOneWithoutCreatedTransactionsInput
-  session: Prisma.SessionCreateNestedOneWithoutTransactionsInput
+  session?: Prisma.SessionCreateNestedOneWithoutTransactionsInput
 }
 
 export type TransactionUncheckedCreateInput = {
   id?: string
   userId: string
-  sessionId: string
+  sessionId?: string | null
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: $Enums.Currency
@@ -366,13 +366,13 @@ export type TransactionUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedTransactionsNestedInput
-  session?: Prisma.SessionUpdateOneRequiredWithoutTransactionsNestedInput
+  session?: Prisma.SessionUpdateOneWithoutTransactionsNestedInput
 }
 
 export type TransactionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -385,7 +385,7 @@ export type TransactionUncheckedUpdateInput = {
 export type TransactionCreateManyInput = {
   id?: string
   userId: string
-  sessionId: string
+  sessionId?: string | null
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: $Enums.Currency
@@ -408,7 +408,7 @@ export type TransactionUpdateManyMutationInput = {
 export type TransactionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -563,10 +563,6 @@ export type EnumTransactionTypeFieldUpdateOperationsInput = {
   set?: $Enums.TransactionType
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type TransactionCreateNestedManyWithoutSessionInput = {
   create?: Prisma.XOR<Prisma.TransactionCreateWithoutSessionInput, Prisma.TransactionUncheckedCreateWithoutSessionInput> | Prisma.TransactionCreateWithoutSessionInput[] | Prisma.TransactionUncheckedCreateWithoutSessionInput[]
   connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutSessionInput | Prisma.TransactionCreateOrConnectWithoutSessionInput[]
@@ -618,12 +614,12 @@ export type TransactionCreateWithoutUserInput = {
   notes?: string | null
   createdAt?: Date | string
   creator: Prisma.UserCreateNestedOneWithoutCreatedTransactionsInput
-  session: Prisma.SessionCreateNestedOneWithoutTransactionsInput
+  session?: Prisma.SessionCreateNestedOneWithoutTransactionsInput
 }
 
 export type TransactionUncheckedCreateWithoutUserInput = {
   id?: string
-  sessionId: string
+  sessionId?: string | null
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: $Enums.Currency
@@ -652,13 +648,13 @@ export type TransactionCreateWithoutCreatorInput = {
   notes?: string | null
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
-  session: Prisma.SessionCreateNestedOneWithoutTransactionsInput
+  session?: Prisma.SessionCreateNestedOneWithoutTransactionsInput
 }
 
 export type TransactionUncheckedCreateWithoutCreatorInput = {
   id?: string
   userId: string
-  sessionId: string
+  sessionId?: string | null
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: $Enums.Currency
@@ -699,7 +695,7 @@ export type TransactionScalarWhereInput = {
   NOT?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
   id?: Prisma.UuidFilter<"Transaction"> | string
   userId?: Prisma.UuidFilter<"Transaction"> | string
-  sessionId?: Prisma.UuidFilter<"Transaction"> | string
+  sessionId?: Prisma.UuidNullableFilter<"Transaction"> | string | null
   type?: Prisma.EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalFilter<"Transaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyFilter<"Transaction"> | $Enums.Currency
@@ -777,7 +773,7 @@ export type TransactionUpdateManyWithWhereWithoutSessionInput = {
 
 export type TransactionCreateManyUserInput = {
   id?: string
-  sessionId: string
+  sessionId?: string | null
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: $Enums.Currency
@@ -790,7 +786,7 @@ export type TransactionCreateManyUserInput = {
 export type TransactionCreateManyCreatorInput = {
   id?: string
   userId: string
-  sessionId: string
+  sessionId?: string | null
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: $Enums.Currency
@@ -808,12 +804,12 @@ export type TransactionUpdateWithoutUserInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   creator?: Prisma.UserUpdateOneRequiredWithoutCreatedTransactionsNestedInput
-  session?: Prisma.SessionUpdateOneRequiredWithoutTransactionsNestedInput
+  session?: Prisma.SessionUpdateOneWithoutTransactionsNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -825,7 +821,7 @@ export type TransactionUncheckedUpdateWithoutUserInput = {
 
 export type TransactionUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -844,13 +840,13 @@ export type TransactionUpdateWithoutCreatorInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
-  session?: Prisma.SessionUpdateOneRequiredWithoutTransactionsNestedInput
+  session?: Prisma.SessionUpdateOneWithoutTransactionsNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutCreatorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -862,7 +858,7 @@ export type TransactionUncheckedUpdateWithoutCreatorInput = {
 export type TransactionUncheckedUpdateManyWithoutCreatorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
@@ -934,7 +930,7 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.Transaction$sessionArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -950,7 +946,7 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.Transaction$sessionArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -966,7 +962,7 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.Transaction$sessionArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectScalar = {
@@ -986,17 +982,17 @@ export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.Transaction$sessionArgs<ExtArgs>
 }
 export type TransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.Transaction$sessionArgs<ExtArgs>
 }
 export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  session?: boolean | Prisma.Transaction$sessionArgs<ExtArgs>
 }
 
 export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1004,12 +1000,12 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs>
-    session: Prisma.$SessionPayload<ExtArgs>
+    session: Prisma.$SessionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
-    sessionId: string
+    sessionId: string | null
     type: $Enums.TransactionType
     amount: runtime.Decimal
     currency: $Enums.Currency
@@ -1413,7 +1409,7 @@ export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  session<T extends Prisma.SessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SessionDefaultArgs<ExtArgs>>): Prisma.Prisma__SessionClient<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  session<T extends Prisma.Transaction$sessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$sessionArgs<ExtArgs>>): Prisma.Prisma__SessionClient<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1851,6 +1847,25 @@ export type TransactionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many Transactions to delete.
    */
   limit?: number
+}
+
+/**
+ * Transaction.session
+ */
+export type Transaction$sessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Session
+   */
+  select?: Prisma.SessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Session
+   */
+  omit?: Prisma.SessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionInclude<ExtArgs> | null
+  where?: Prisma.SessionWhereInput
 }
 
 /**

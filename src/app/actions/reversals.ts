@@ -21,12 +21,21 @@ export async function reverseTransaction(transactionId: string, reason: string) 
 
             if (!orig) throw new Error("Transaction not found.");
 
+            // FIXED: Guard clause checking if session is null or undefined
+            if (!orig.session) {
+                throw new Error("Transaction is not linked to a valid accounting session.");
+            }
+
             // Verify that the session is OPEN
             if (orig.session.status !== "OPEN") {
                 throw new Error("Cannot reverse a transaction in a closed or closing session.");
             }
 
             // 2. Fetch current balance for this session
+            if (!orig.sessionId) {
+                throw new Error("Transaction missing session ID reference.");
+            }
+
             const currentBalanceRow = await tx.userBalance.findUnique({
                 where: {
                     sessionId_userId_currency: {
@@ -61,19 +70,7 @@ export async function reverseTransaction(transactionId: string, reason: string) 
                 data: { balance: newBalance }
             });
 
-            // 5. Create a counter-balancing transaction record to keep the ledger true
-            // await tx.transaction.create({
-            //     data: {
-            //         userId: orig.userId,
-            //         type: orig.type === TransactionType.debit ? TransactionType.credit : TransactionType.debit,
-            //         amount: orig.amount,
-            //         currency: orig.currency,
-            //         date: new Date(),
-            //         notes: `REVERSAL of Trans ID: ${orig.id}. Reason: ${reason}`,
-            //         createdBy: session.user.id,
-            //     }
-            // });
-            
+            // 5. Delete original transaction record
             await tx.transaction.delete({
                 where: { id: transactionId }
             });

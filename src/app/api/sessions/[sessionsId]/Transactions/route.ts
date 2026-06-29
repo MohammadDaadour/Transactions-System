@@ -5,10 +5,11 @@ import { auth } from "../../../../../auth";
 import { db } from "../../../../../lib/db";
 
 export async function GET(
-    req: NextRequest,
-    { params }: { params: { sessionsId: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ sessionsId: string }> }
 ) {
-    const session = await auth();
+  const session = await auth();
+  const { sessionsId } = await params;
     if (!session || session.user?.role !== "Admin") {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -17,7 +18,7 @@ export async function GET(
     const page     = Math.max(1, parseInt(searchParams.get("page")     ?? "1"));
     const pageSize = Math.min(50, parseInt(searchParams.get("pageSize") ?? "10"));
 
-    const where = { sessionId: params.sessionsId };
+    const where = { sessionId: sessionsId };
 
     const [transactions, total] = await Promise.all([
         db.transaction.findMany({

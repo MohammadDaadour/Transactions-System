@@ -69,14 +69,14 @@ model User {
 
 model UserBalance {
   id        String   @id @default(uuid()) @db.Uuid
-  sessionId String   @map("session_id") @db.Uuid
+  sessionId String?   @map("session_id") @db.Uuid
   userId    String   @map("user_id") @db.Uuid
   currency  Currency
   balance   Decimal  @default(0) @db.Decimal(18, 4) // Essential for financial accuracy
 
   // Relations
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  session   Session?  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   // Composite unique index
   @@unique([sessionId, userId, currency])
@@ -86,7 +86,7 @@ model UserBalance {
 model Transaction {
   id         String          @id @default(uuid()) @db.Uuid
   userId     String          @map("user_id") @db.Uuid
-  sessionId  String          @map("session_id") @db.Uuid
+  sessionId  String?          @map("session_id") @db.Uuid
   type       TransactionType
   amount     Decimal         @db.Decimal(18, 4)
   currency   Currency
@@ -98,7 +98,7 @@ model Transaction {
   // Relations
   user       User            @relation("UserTransactions", fields: [userId], references: [id])
   creator    User            @relation("CreatedByTransactions", fields: [createdBy], references: [id])
-  session    Session         @relation(fields: [sessionId], references: [id])
+  session    Session?         @relation(fields: [sessionId], references: [id])
 
   @@map("transactions")
 }

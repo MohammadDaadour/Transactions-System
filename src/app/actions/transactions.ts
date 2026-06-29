@@ -35,6 +35,14 @@ export async function createHawalaTransaction(input: CreateTransactionInput) {
 
     try {
         const result = await db.$transaction(async (tx) => {
+            // Find current active session
+            const activeSession = await tx.session.findFirst({
+                where: { status: "OPEN" }
+            });
+
+            if (!activeSession) {
+                throw new Error("No open accounting session found. Please start a session first.");
+            }
 
             const transaction = await tx.transaction.create({
                 data: {
@@ -45,15 +53,21 @@ export async function createHawalaTransaction(input: CreateTransactionInput) {
                     date: new Date(date),
                     notes,
                     createdBy: creatorId,
+                    sessionId: activeSession.id,
                 },
             });
 
             const currentBalanceRow = await tx.userBalance.upsert({
                 where: {
-                    userId_currency: { userId, currency }
+                    sessionId_userId_currency: {
+                        sessionId: activeSession.id,
+                        userId,
+                        currency
+                    }
                 },
                 update: {},
                 create: {
+                    sessionId: activeSession.id,
                     userId,
                     currency,
                     balance: new Prisma.Decimal(0),
@@ -73,7 +87,11 @@ export async function createHawalaTransaction(input: CreateTransactionInput) {
 
             await tx.userBalance.update({
                 where: {
-                    userId_currency: { userId, currency }
+                    sessionId_userId_currency: {
+                        sessionId: activeSession.id,
+                        userId,
+                        currency
+                    }
                 },
                 data: {
                     balance: newBalance

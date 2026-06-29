@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import UpdateUserForm from "./UpdateUserForm";
 import { Role, UserType, Currency } from "../generated/prisma/enums";
 
@@ -38,6 +39,7 @@ export default function UsersTable({ users }: { users: User[] }) {
                             <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">الهاتف</th>
                             <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">الحالة</th>
                             <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">تاريخ الاضافة</th>
+                            <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">عرض</th>
                             <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">تعديل</th>
                         </tr>
                     </thead>
@@ -52,7 +54,7 @@ export default function UsersTable({ users }: { users: User[] }) {
                                     {u.type === "receiver" ? "مستورد" : "مورد"}
                                 </td>
                                 <td className="px-4 py-3 text-hw-text-secondary font-mono text-xs">
-                                    <td className="px-4 py-3 text-hw-text-secondary font-mono text-xs">
+                                    <div className="px-4 py-3 text-hw-text-secondary font-mono text-xs">
                                         {u.balances.length === 0 ? (
                                             <span className="text-hw-text-faint">—</span>
                                         ) : (
@@ -72,7 +74,7 @@ export default function UsersTable({ users }: { users: User[] }) {
                                                 })}
                                             </div>
                                         )}
-                                    </td>
+                                    </div>
                                 </td>
                                 <td className="px-4 py-3 text-hw-text-secondary font-mono text-xs">{u.phone}</td>
                                 <td className="px-4 py-3">
@@ -90,6 +92,14 @@ export default function UsersTable({ users }: { users: User[] }) {
                                 </td>
                                 <td className="px-4 py-3 text-white text-xs font-mono">
                                     {new Date(u.createdAt).toLocaleDateString("ar-EG")}
+                                </td>
+                                <td className="px-4 py-3">
+                                    <Link
+                                        href={`/dashboard/users/${u.id}`}
+                                        className="text-hw-accent hover:text-hw-accent-hover focus:outline-none bg-hw-accent/10 hover:bg-hw-accent/20 border border-hw-accent/30 px-2 py-1 rounded text-xs font-medium transition-colors"
+                                    >
+                                        عرض الملف
+                                    </Link>
                                 </td>
                                 <td className="px-4 py-3">
                                     <button

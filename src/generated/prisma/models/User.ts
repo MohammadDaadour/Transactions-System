@@ -210,6 +210,9 @@ export type UserWhereInput = {
   transactions?: Prisma.TransactionListRelationFilter
   createdTransactions?: Prisma.TransactionListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  sessionsOpened?: Prisma.SessionListRelationFilter
+  sessionsClosed?: Prisma.SessionListRelationFilter
+  sessionBalances?: Prisma.SessionBalanceListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -225,6 +228,9 @@ export type UserOrderByWithRelationInput = {
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
   createdTransactions?: Prisma.TransactionOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  sessionsOpened?: Prisma.SessionOrderByRelationAggregateInput
+  sessionsClosed?: Prisma.SessionOrderByRelationAggregateInput
+  sessionBalances?: Prisma.SessionBalanceOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -243,6 +249,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   transactions?: Prisma.TransactionListRelationFilter
   createdTransactions?: Prisma.TransactionListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  sessionsOpened?: Prisma.SessionListRelationFilter
+  sessionsClosed?: Prisma.SessionListRelationFilter
+  sessionBalances?: Prisma.SessionBalanceListRelationFilter
 }, "id" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -286,6 +295,9 @@ export type UserCreateInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   createdTransactions?: Prisma.TransactionCreateNestedManyWithoutCreatorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -301,6 +313,9 @@ export type UserUncheckedCreateInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   createdTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCreatorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionUncheckedCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -316,6 +331,9 @@ export type UserUpdateInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   createdTransactions?: Prisma.TransactionUpdateManyWithoutCreatorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -331,6 +349,9 @@ export type UserUncheckedUpdateInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   createdTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutCreatorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUncheckedUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -404,6 +425,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -466,6 +492,50 @@ export type UserUpdateOneRequiredWithoutCreatedTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedTransactionsInput, Prisma.UserUpdateWithoutCreatedTransactionsInput>, Prisma.UserUncheckedUpdateWithoutCreatedTransactionsInput>
 }
 
+export type UserCreateNestedOneWithoutSessionsOpenedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsOpenedInput, Prisma.UserUncheckedCreateWithoutSessionsOpenedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsOpenedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutSessionsClosedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsClosedInput, Prisma.UserUncheckedCreateWithoutSessionsClosedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsClosedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSessionsOpenedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsOpenedInput, Prisma.UserUncheckedCreateWithoutSessionsOpenedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsOpenedInput
+  upsert?: Prisma.UserUpsertWithoutSessionsOpenedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsOpenedInput, Prisma.UserUpdateWithoutSessionsOpenedInput>, Prisma.UserUncheckedUpdateWithoutSessionsOpenedInput>
+}
+
+export type UserUpdateOneWithoutSessionsClosedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsClosedInput, Prisma.UserUncheckedCreateWithoutSessionsClosedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsClosedInput
+  upsert?: Prisma.UserUpsertWithoutSessionsClosedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsClosedInput, Prisma.UserUpdateWithoutSessionsClosedInput>, Prisma.UserUncheckedUpdateWithoutSessionsClosedInput>
+}
+
+export type UserCreateNestedOneWithoutSessionBalancesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSessionBalancesInput, Prisma.UserUncheckedCreateWithoutSessionBalancesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionBalancesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSessionBalancesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSessionBalancesInput, Prisma.UserUncheckedCreateWithoutSessionBalancesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionBalancesInput
+  upsert?: Prisma.UserUpsertWithoutSessionBalancesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionBalancesInput, Prisma.UserUpdateWithoutSessionBalancesInput>, Prisma.UserUncheckedUpdateWithoutSessionBalancesInput>
+}
+
 export type UserCreateNestedOneWithoutAuditLogsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
@@ -492,6 +562,9 @@ export type UserCreateWithoutBalancesInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   createdTransactions?: Prisma.TransactionCreateNestedManyWithoutCreatorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBalancesInput = {
@@ -506,6 +579,9 @@ export type UserUncheckedCreateWithoutBalancesInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   createdTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCreatorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionUncheckedCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBalancesInput = {
@@ -536,6 +612,9 @@ export type UserUpdateWithoutBalancesInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   createdTransactions?: Prisma.TransactionUpdateManyWithoutCreatorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBalancesInput = {
@@ -550,6 +629,9 @@ export type UserUncheckedUpdateWithoutBalancesInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   createdTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutCreatorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUncheckedUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -564,6 +646,9 @@ export type UserCreateWithoutTransactionsInput = {
   balances?: Prisma.UserBalanceCreateNestedManyWithoutUserInput
   createdTransactions?: Prisma.TransactionCreateNestedManyWithoutCreatorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -578,6 +663,9 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   balances?: Prisma.UserBalanceUncheckedCreateNestedManyWithoutUserInput
   createdTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCreatorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionUncheckedCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -597,6 +685,9 @@ export type UserCreateWithoutCreatedTransactionsInput = {
   balances?: Prisma.UserBalanceCreateNestedManyWithoutUserInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTransactionsInput = {
@@ -611,6 +702,9 @@ export type UserUncheckedCreateWithoutCreatedTransactionsInput = {
   balances?: Prisma.UserBalanceUncheckedCreateNestedManyWithoutUserInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionUncheckedCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTransactionsInput = {
@@ -641,6 +735,9 @@ export type UserUpdateWithoutTransactionsInput = {
   balances?: Prisma.UserBalanceUpdateManyWithoutUserNestedInput
   createdTransactions?: Prisma.TransactionUpdateManyWithoutCreatorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -655,6 +752,9 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   balances?: Prisma.UserBalanceUncheckedUpdateManyWithoutUserNestedInput
   createdTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutCreatorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUncheckedUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutCreatedTransactionsInput = {
@@ -680,6 +780,9 @@ export type UserUpdateWithoutCreatedTransactionsInput = {
   balances?: Prisma.UserBalanceUpdateManyWithoutUserNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTransactionsInput = {
@@ -694,6 +797,261 @@ export type UserUncheckedUpdateWithoutCreatedTransactionsInput = {
   balances?: Prisma.UserBalanceUncheckedUpdateManyWithoutUserNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUncheckedUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSessionsOpenedInput = {
+  id?: string
+  username: string
+  password: string
+  role: $Enums.Role
+  type: $Enums.UserType
+  phone: string
+  isActive?: boolean
+  createdAt?: Date | string
+  balances?: Prisma.UserBalanceCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  createdTransactions?: Prisma.TransactionCreateNestedManyWithoutCreatorInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSessionsOpenedInput = {
+  id?: string
+  username: string
+  password: string
+  role: $Enums.Role
+  type: $Enums.UserType
+  phone: string
+  isActive?: boolean
+  createdAt?: Date | string
+  balances?: Prisma.UserBalanceUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  createdTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCreatorInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSessionsOpenedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSessionsOpenedInput, Prisma.UserUncheckedCreateWithoutSessionsOpenedInput>
+}
+
+export type UserCreateWithoutSessionsClosedInput = {
+  id?: string
+  username: string
+  password: string
+  role: $Enums.Role
+  type: $Enums.UserType
+  phone: string
+  isActive?: boolean
+  createdAt?: Date | string
+  balances?: Prisma.UserBalanceCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  createdTransactions?: Prisma.TransactionCreateNestedManyWithoutCreatorInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionCreateNestedManyWithoutOpenedByUserInput
+  sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSessionsClosedInput = {
+  id?: string
+  username: string
+  password: string
+  role: $Enums.Role
+  type: $Enums.UserType
+  phone: string
+  isActive?: boolean
+  createdAt?: Date | string
+  balances?: Prisma.UserBalanceUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  createdTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCreatorInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionUncheckedCreateNestedManyWithoutOpenedByUserInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSessionsClosedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSessionsClosedInput, Prisma.UserUncheckedCreateWithoutSessionsClosedInput>
+}
+
+export type UserUpsertWithoutSessionsOpenedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSessionsOpenedInput, Prisma.UserUncheckedUpdateWithoutSessionsOpenedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSessionsOpenedInput, Prisma.UserUncheckedCreateWithoutSessionsOpenedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSessionsOpenedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSessionsOpenedInput, Prisma.UserUncheckedUpdateWithoutSessionsOpenedInput>
+}
+
+export type UserUpdateWithoutSessionsOpenedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  balances?: Prisma.UserBalanceUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  createdTransactions?: Prisma.TransactionUpdateManyWithoutCreatorNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSessionsOpenedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  balances?: Prisma.UserBalanceUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  createdTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutCreatorNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutSessionsClosedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSessionsClosedInput, Prisma.UserUncheckedUpdateWithoutSessionsClosedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSessionsClosedInput, Prisma.UserUncheckedCreateWithoutSessionsClosedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSessionsClosedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSessionsClosedInput, Prisma.UserUncheckedUpdateWithoutSessionsClosedInput>
+}
+
+export type UserUpdateWithoutSessionsClosedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  balances?: Prisma.UserBalanceUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  createdTransactions?: Prisma.TransactionUpdateManyWithoutCreatorNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUpdateManyWithoutOpenedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSessionsClosedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  balances?: Prisma.UserBalanceUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  createdTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutCreatorNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUncheckedUpdateManyWithoutOpenedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSessionBalancesInput = {
+  id?: string
+  username: string
+  password: string
+  role: $Enums.Role
+  type: $Enums.UserType
+  phone: string
+  isActive?: boolean
+  createdAt?: Date | string
+  balances?: Prisma.UserBalanceCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  createdTransactions?: Prisma.TransactionCreateNestedManyWithoutCreatorInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
+}
+
+export type UserUncheckedCreateWithoutSessionBalancesInput = {
+  id?: string
+  username: string
+  password: string
+  role: $Enums.Role
+  type: $Enums.UserType
+  phone: string
+  isActive?: boolean
+  createdAt?: Date | string
+  balances?: Prisma.UserBalanceUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  createdTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCreatorInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionUncheckedCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
+}
+
+export type UserCreateOrConnectWithoutSessionBalancesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSessionBalancesInput, Prisma.UserUncheckedCreateWithoutSessionBalancesInput>
+}
+
+export type UserUpsertWithoutSessionBalancesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSessionBalancesInput, Prisma.UserUncheckedUpdateWithoutSessionBalancesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSessionBalancesInput, Prisma.UserUncheckedCreateWithoutSessionBalancesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSessionBalancesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSessionBalancesInput, Prisma.UserUncheckedUpdateWithoutSessionBalancesInput>
+}
+
+export type UserUpdateWithoutSessionBalancesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  balances?: Prisma.UserBalanceUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  createdTransactions?: Prisma.TransactionUpdateManyWithoutCreatorNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSessionBalancesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  balances?: Prisma.UserBalanceUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  createdTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutCreatorNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUncheckedUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -708,6 +1066,9 @@ export type UserCreateWithoutAuditLogsInput = {
   balances?: Prisma.UserBalanceCreateNestedManyWithoutUserInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   createdTransactions?: Prisma.TransactionCreateNestedManyWithoutCreatorInput
+  sessionsOpened?: Prisma.SessionCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -722,6 +1083,9 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   balances?: Prisma.UserBalanceUncheckedCreateNestedManyWithoutUserInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   createdTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCreatorInput
+  sessionsOpened?: Prisma.SessionUncheckedCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -752,6 +1116,9 @@ export type UserUpdateWithoutAuditLogsInput = {
   balances?: Prisma.UserBalanceUpdateManyWithoutUserNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   createdTransactions?: Prisma.TransactionUpdateManyWithoutCreatorNestedInput
+  sessionsOpened?: Prisma.SessionUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -766,6 +1133,9 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   balances?: Prisma.UserBalanceUncheckedUpdateManyWithoutUserNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   createdTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutCreatorNestedInput
+  sessionsOpened?: Prisma.SessionUncheckedUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -778,6 +1148,9 @@ export type UserCountOutputType = {
   transactions: number
   createdTransactions: number
   auditLogs: number
+  sessionsOpened: number
+  sessionsClosed: number
+  sessionBalances: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -785,6 +1158,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
   createdTransactions?: boolean | UserCountOutputTypeCountCreatedTransactionsArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
+  sessionsOpened?: boolean | UserCountOutputTypeCountSessionsOpenedArgs
+  sessionsClosed?: boolean | UserCountOutputTypeCountSessionsClosedArgs
+  sessionBalances?: boolean | UserCountOutputTypeCountSessionBalancesArgs
 }
 
 /**
@@ -825,6 +1201,27 @@ export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.AuditLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSessionsOpenedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SessionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSessionsClosedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SessionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSessionBalancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SessionBalanceWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -839,6 +1236,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
   createdTransactions?: boolean | Prisma.User$createdTransactionsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
+  sessionsOpened?: boolean | Prisma.User$sessionsOpenedArgs<ExtArgs>
+  sessionsClosed?: boolean | Prisma.User$sessionsClosedArgs<ExtArgs>
+  sessionBalances?: boolean | Prisma.User$sessionBalancesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -881,6 +1281,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
   createdTransactions?: boolean | Prisma.User$createdTransactionsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
+  sessionsOpened?: boolean | Prisma.User$sessionsOpenedArgs<ExtArgs>
+  sessionsClosed?: boolean | Prisma.User$sessionsClosedArgs<ExtArgs>
+  sessionBalances?: boolean | Prisma.User$sessionBalancesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -893,6 +1296,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     transactions: Prisma.$TransactionPayload<ExtArgs>[]
     createdTransactions: Prisma.$TransactionPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    sessionsOpened: Prisma.$SessionPayload<ExtArgs>[]
+    sessionsClosed: Prisma.$SessionPayload<ExtArgs>[]
+    sessionBalances: Prisma.$SessionBalancePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1301,6 +1707,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   transactions<T extends Prisma.User$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdTransactions<T extends Prisma.User$createdTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessionsOpened<T extends Prisma.User$sessionsOpenedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsOpenedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessionsClosed<T extends Prisma.User$sessionsClosedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsClosedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessionBalances<T extends Prisma.User$sessionBalancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionBalancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionBalancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1824,6 +2233,78 @@ export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * User.sessionsOpened
+ */
+export type User$sessionsOpenedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Session
+   */
+  select?: Prisma.SessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Session
+   */
+  omit?: Prisma.SessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionInclude<ExtArgs> | null
+  where?: Prisma.SessionWhereInput
+  orderBy?: Prisma.SessionOrderByWithRelationInput | Prisma.SessionOrderByWithRelationInput[]
+  cursor?: Prisma.SessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
+}
+
+/**
+ * User.sessionsClosed
+ */
+export type User$sessionsClosedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Session
+   */
+  select?: Prisma.SessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Session
+   */
+  omit?: Prisma.SessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionInclude<ExtArgs> | null
+  where?: Prisma.SessionWhereInput
+  orderBy?: Prisma.SessionOrderByWithRelationInput | Prisma.SessionOrderByWithRelationInput[]
+  cursor?: Prisma.SessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
+}
+
+/**
+ * User.sessionBalances
+ */
+export type User$sessionBalancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SessionBalance
+   */
+  select?: Prisma.SessionBalanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SessionBalance
+   */
+  omit?: Prisma.SessionBalanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionBalanceInclude<ExtArgs> | null
+  where?: Prisma.SessionBalanceWhereInput
+  orderBy?: Prisma.SessionBalanceOrderByWithRelationInput | Prisma.SessionBalanceOrderByWithRelationInput[]
+  cursor?: Prisma.SessionBalanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SessionBalanceScalarFieldEnum | Prisma.SessionBalanceScalarFieldEnum[]
 }
 
 /**

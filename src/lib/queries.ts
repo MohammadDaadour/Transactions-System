@@ -7,6 +7,7 @@ export interface TransactionFilters {
     currency?: Currency;
     dateFrom?: string;
     dateTo?: string;
+    sessionId?: string;
 }
 
 // Add the missing fields to match the 'TransactionRow' shape
@@ -37,7 +38,14 @@ export async function getPaginatedTransactions(
     page: number,
     pageSize: number
 ) {
+    let targetSessionId = filters.sessionId;
+    if (!targetSessionId) {
+        const active = await db.session.findFirst({ where: { status: "OPEN" } });
+        targetSessionId = active?.id;
+    }
+
     const where = {
+        ...(targetSessionId && { sessionId: targetSessionId }),
         ...(filters.userId && { userId: filters.userId }),
         ...(filters.type && { type: filters.type }),
         ...(filters.currency && { currency: filters.currency }),
@@ -104,8 +112,14 @@ export async function getPaginatedTransactions(
 }
 
 export async function getRecentLedger(userId?: string) {
+    const activeSession = await db.session.findFirst({ where: { status: "OPEN" } });
+    if (!activeSession) return [];
+
     const transactions = await db.transaction.findMany({
-        where: userId ? { userId } : undefined,
+        where: {
+            sessionId: activeSession.id,
+            ...(userId && { userId })
+        },
         take: 50,
         orderBy: { createdAt: "desc" },
         select: {
@@ -151,8 +165,14 @@ export async function getRecentLedger(userId?: string) {
 }
 
 export async function getGlobalSystemBalances() {
+    const activeSession = await db.session.findFirst({ where: { status: "OPEN" } });
+    if (!activeSession) return [];
+
     const aggregates = await db.userBalance.groupBy({
         by: ['currency'],
+        where: {
+            sessionId: activeSession.id
+        },
         _sum: {
             balance: true,
         },

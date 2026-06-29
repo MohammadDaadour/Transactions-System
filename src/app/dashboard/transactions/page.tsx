@@ -17,6 +17,7 @@ interface SearchParams {
     currency?: string;
     dateFrom?: string;
     dateTo?: string;
+    sessionId?: string;
 }
 
 export default async function TransactionsManagementPage({
@@ -41,12 +42,17 @@ export default async function TransactionsManagementPage({
         }),
         ...(params.dateFrom && { dateFrom: params.dateFrom }),
         ...(params.dateTo && { dateTo: params.dateTo }),
+        ...(params.sessionId && { sessionId: params.sessionId }),
     };
 
-    const [activeUsers, { transactions, total, pageCount }] = await Promise.all([
+    const [activeUsers, allSessions, { transactions, total, pageCount }] = await Promise.all([
         db.user.findMany({
             where: { isActive: true },
             select: { id: true, username: true },
+        }),
+        db.session.findMany({
+            orderBy: { openedAt: "desc" },
+            select: { id: true, openedAt: true, status: true },
         }),
         getPaginatedTransactions(filters, page, PAGE_SIZE),
     ]);
@@ -81,6 +87,7 @@ export default async function TransactionsManagementPage({
                         showUserFilter={role !== "Member"}
                         userId={session.user.id}
                         agent={role === "Member"}
+                        sessions={role !== "Member" ? allSessions : undefined}
                     />
 
                     <DynamicLedgerTable

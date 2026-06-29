@@ -43,3 +43,21 @@ export const Currency = {
 } as const
 
 export type Currency = (typeof Currency)[keyof typeof Currency]
+
+
+export const SessionStatus = {
+  OPEN: 'OPEN',
+  CLOSING: 'CLOSING',
+  CLOSED: 'CLOSED'
+} as const
+
+export type SessionStatus = (typeof SessionStatus)[keyof typeof SessionStatus]
+
+
+export const BalanceStatus = {
+  POSITIVE: 'POSITIVE',
+  NEGATIVE: 'NEGATIVE',
+  ZERO: 'ZERO'
+} as const
+
+export type BalanceStatus = (typeof BalanceStatus)[keyof typeof BalanceStatus]

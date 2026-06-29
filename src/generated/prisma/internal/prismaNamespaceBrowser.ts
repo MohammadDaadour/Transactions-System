@@ -54,6 +54,8 @@ export const ModelName = {
   User: 'User',
   UserBalance: 'UserBalance',
   Transaction: 'Transaction',
+  Session: 'Session',
+  SessionBalance: 'SessionBalance',
   AuditLog: 'AuditLog'
 } as const
 
@@ -89,6 +91,7 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const UserBalanceScalarFieldEnum = {
   id: 'id',
+  sessionId: 'sessionId',
   userId: 'userId',
   currency: 'currency',
   balance: 'balance'
@@ -100,6 +103,7 @@ export type UserBalanceScalarFieldEnum = (typeof UserBalanceScalarFieldEnum)[key
 export const TransactionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  sessionId: 'sessionId',
   type: 'type',
   amount: 'amount',
   currency: 'currency',
@@ -110,6 +114,31 @@ export const TransactionScalarFieldEnum = {
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  openedAt: 'openedAt',
+  closedAt: 'closedAt',
+  openedBy: 'openedBy',
+  closedBy: 'closedBy',
+  notes: 'notes'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const SessionBalanceScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  userId: 'userId',
+  currency: 'currency',
+  balance: 'balance',
+  balanceStatus: 'balanceStatus'
+} as const
+
+export type SessionBalanceScalarFieldEnum = (typeof SessionBalanceScalarFieldEnum)[keyof typeof SessionBalanceScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {

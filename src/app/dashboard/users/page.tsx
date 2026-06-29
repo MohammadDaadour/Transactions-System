@@ -9,6 +9,8 @@ export default async function UsersPage() {
     const session = await auth();
     if (!session || session.user?.role !== "Admin") redirect("/dashboard");
 
+    const activeSession = await db.session.findFirst({ where: { status: "OPEN" } });
+
     const users = await db.user.findMany({
         orderBy: { createdAt: "desc" },
         select: {
@@ -20,6 +22,9 @@ export default async function UsersPage() {
             isActive: true,
             createdAt: true,
             balances: {
+                where: {
+                    sessionId: activeSession?.id || ""
+                },
                 select: {
                     currency: true,
                     balance: true,

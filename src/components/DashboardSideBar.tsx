@@ -96,6 +96,16 @@ export default function DashboardSidebar({
                             إدارة الدفتر
                         </Link>
 
+                        {role !== "Member" && (
+                            <Link
+                                href="/dashboard/sessions"
+                                className={linkClass("/dashboard/sessions")}
+                                onClick={() => setOpen(false)}
+                            >
+                                سجل الجلسات
+                            </Link>
+                        )}
+
                         {/* {role === "Admin" && (
                             <Link
                                 href="/dashboard/audits"

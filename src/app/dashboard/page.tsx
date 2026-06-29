@@ -5,6 +5,7 @@ import { TransactionType, Currency } from "../../generated/prisma/client";
 
 import ManualTransactionForm from "../../components/ManualTransactionForm";
 import DynamicLedgerTable from "../../components/DynamicLedgerTable";
+import SessionControl from "../../components/SessionControl";
 
 const currencyIcons: Record<Currency, React.ReactNode> = {
     USD: <svg width="48" height="48" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" fill="#6cde07" r="16" /><path d="M22.5 19.154c0 2.57-2.086 4.276-5.166 4.533V26h-2.11v-2.336A11.495 11.495 0 019.5 21.35l1.552-2.126c1.383 1.075 2.692 1.776 4.269 2.01v-4.58c-3.541-.888-5.19-2.173-5.19-4.813 0-2.523 2.061-4.252 5.093-4.486V6h2.11v1.402a9.49 9.49 0 014.56 1.776l-1.359 2.196c-1.067-.771-2.158-1.262-3.298-1.495v4.439c3.687.888 5.263 2.313 5.263 4.836zm-7.18-5.327V9.715c-1.527.117-2.327.935-2.327 1.963 0 .98.46 1.612 2.328 2.15zm4.318 5.49c0-1.05-.51-1.681-2.401-2.219v4.23c1.528-.118 2.401-.889 2.401-2.01z" fill="#ffffff" /></svg>,
@@ -19,9 +20,21 @@ export default async function DashboardOverview() {
 
     const { id: currentUserId, role } = session.user;
 
+    const activeSession = await db.session.findFirst({
+        where: { status: "OPEN" },
+        include: { openedByUser: { select: { username: true } } }
+    });
+
+    const activeSessionId = activeSession?.id || "";
+
     // Parallel execution of top-level clean queries outside of JSX
     const [userBalances, globalBalances, recentTransactions, activeUsers, allUserBalances] = await Promise.all([
-        db.userBalance.findMany({ where: { userId: currentUserId } }),
+        db.userBalance.findMany({
+            where: {
+                userId: currentUserId,
+                sessionId: activeSessionId
+            }
+        }),
         getGlobalSystemBalances(),
         getRecentLedger(role === "Member" ? currentUserId : undefined),
         role !== "Member"
@@ -32,6 +45,9 @@ export default async function DashboardOverview() {
             : [],
         role !== "Member"
             ? db.userBalance.findMany({
+                where: {
+                    sessionId: activeSessionId
+                },
                 select: {
                     currency: true,
                     balance: true,
@@ -126,7 +142,7 @@ export default async function DashboardOverview() {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
                 <div className="rounded-xl border border-hw-border bg-hw-surface p-5">
                     <p className="text-sm font-medium text-hw-text-secondary">
                         <span className="mr-2">👤</span>
@@ -142,6 +158,20 @@ export default async function DashboardOverview() {
                         نوع الحساب: {session.user.type === "sender" ? "مورد" : "مستورد"}
                     </p>
                 </div>
+
+                {activeSession && (
+                    <div className="xl:col-span-2">
+                        <SessionControl
+                            activeSession={{
+                                id: activeSession.id,
+                                openedAt: activeSession.openedAt,
+                                openedByUser: { username: activeSession.openedByUser.username },
+                                status: activeSession.status,
+                            }}
+                            isAdmin={role === "Admin"}
+                        />
+                    </div>
+                )}
             </div>
 
             <hr className="border-hw-border" />

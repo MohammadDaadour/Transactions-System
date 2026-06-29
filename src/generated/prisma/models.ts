@@ -11,5 +11,7 @@
 export type * from './models/User'
 export type * from './models/UserBalance'
 export type * from './models/Transaction'
+export type * from './models/Session'
+export type * from './models/SessionBalance'
 export type * from './models/AuditLog'
 export type * from './commonInputTypes'

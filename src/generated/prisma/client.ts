@@ -57,6 +57,16 @@ export type UserBalance = Prisma.UserBalanceModel
  */
 export type Transaction = Prisma.TransactionModel
 /**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel
+/**
+ * Model SessionBalance
+ * 
+ */
+export type SessionBalance = Prisma.SessionBalanceModel
+/**
  * Model AuditLog
  * 
  */

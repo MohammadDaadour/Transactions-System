@@ -13,16 +13,28 @@ export async function reverseTransaction(transactionId: string, reason: string) 
 
     try {
         await db.$transaction(async (tx) => {
-            // 1. Fetch the original transaction
+            // 1. Fetch the original transaction with its session
             const orig = await tx.transaction.findUnique({
-                where: { id: transactionId }
+                where: { id: transactionId },
+                include: { session: true }
             });
 
             if (!orig) throw new Error("Transaction not found.");
 
-            // 2. Fetch current balance
+            // Verify that the session is OPEN
+            if (orig.session.status !== "OPEN") {
+                throw new Error("Cannot reverse a transaction in a closed or closing session.");
+            }
+
+            // 2. Fetch current balance for this session
             const currentBalanceRow = await tx.userBalance.findUnique({
-                where: { userId_currency: { userId: orig.userId, currency: orig.currency } }
+                where: {
+                    sessionId_userId_currency: {
+                        sessionId: orig.sessionId,
+                        userId: orig.userId,
+                        currency: orig.currency
+                    }
+                }
             });
 
             if (!currentBalanceRow) throw new Error("User balance record not found.");
@@ -37,9 +49,15 @@ export async function reverseTransaction(transactionId: string, reason: string) 
                 newBalance = oldBalance.sub(orig.amount); // Undo credit
             }
 
-            // 4. Update the user's balance
+            // 4. Update the user's balance in this session
             await tx.userBalance.update({
-                where: { userId_currency: { userId: orig.userId, currency: orig.currency } },
+                where: {
+                    sessionId_userId_currency: {
+                        sessionId: orig.sessionId,
+                        userId: orig.userId,
+                        currency: orig.currency
+                    }
+                },
                 data: { balance: newBalance }
             });
 

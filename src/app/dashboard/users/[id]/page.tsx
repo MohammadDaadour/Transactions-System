@@ -28,31 +28,30 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
         return <div className="text-center py-16 text-hw-text-muted">User not found</div>;
     }
 
-    const activeSession = await db.session.findFirst({
-        where: { status: "OPEN" },
-    });
+    // const activeSession = await db.session.findFirst({
+    //     where: { status: "OPEN" },
+    // });
 
     // 1. Initialize variables for conditional query execution
     let userBalances: any[] = [];
     let recentTransactions: any[] = [];
 
-    if (activeSession?.id) {
+    // if (activeSession?.id) {
         // 2. Query userBalance safely ONLY when a valid session layout is loaded
         const [balancesData, ledgerData] = await Promise.all([
             db.userBalance.findMany({
                 where: {
                     userId: targetUserId,
-                    sessionId: activeSession.id
                 }
             }),
             getRecentLedger(targetUserId),
         ]);
         userBalances = balancesData;
         recentTransactions = ledgerData;
-    } else {
-        // 3. Fallback gracefully if no accounting session is open
-        recentTransactions = await getRecentLedger(targetUserId);
-    }
+    // } else {
+    //     // 3. Fallback gracefully if no accounting session is open
+    //     recentTransactions = await getRecentLedger(targetUserId);
+    // }
 
     const userBalancesMap = new Map(userBalances.map(b => [b.currency, b.balance.toNumber()]));
 

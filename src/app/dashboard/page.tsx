@@ -174,14 +174,16 @@ export default async function DashboardOverview() {
                         <SessionControl
                             activeSession={{
                                 id: activeSession.id,
-                                openedAt: activeSession.openedAt,
+                                openedAt: (activeSession.openedAt instanceof Date 
+                                    ? activeSession.openedAt.toISOString() 
+                                    : new Date(activeSession.openedAt).toISOString()) as unknown as Date,
                                 openedByUser: { username: activeSession.openedByUser.username },
                                 status: activeSession.status,
                             }}
                             isAdmin={role === "Admin"}
                         />
                     </div>
-                )}
+)}
             </div>
 
             <hr className="border-hw-border" />

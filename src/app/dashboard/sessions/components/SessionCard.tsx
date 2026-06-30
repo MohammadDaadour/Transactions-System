@@ -5,15 +5,15 @@ import { Session } from "./types";
 import { TransactionPanel } from "./TransactionPanel";
 
 const statusConfig: Record<string, { label: string; color: string; dot: string }> = {
-    OPEN:    { label: "نشطة",        color: "bg-green-900/40 text-green-400 border-green-800",   dot: "bg-green-500 animate-pulse" },
+    OPEN: { label: "نشطة", color: "bg-green-900/40 text-green-400 border-green-800", dot: "bg-green-500 animate-pulse" },
     CLOSING: { label: "جار الإغلاق", color: "bg-yellow-900/40 text-yellow-400 border-yellow-800", dot: "bg-yellow-500 animate-pulse" },
-    CLOSED:  { label: "مغلقة",       color: "bg-hw-bg text-hw-text-secondary border-hw-border",   dot: "bg-hw-text-muted" },
+    CLOSED: { label: "مغلقة", color: "bg-hw-bg text-hw-text-secondary border-hw-border", dot: "bg-hw-text-muted" },
 };
 
 const balanceStatusColors: Record<string, string> = {
     POSITIVE: "text-hw-accent",
-    NEGATIVE: "text-red-400",
-    ZERO:     "text-hw-text-muted",
+    NEGATIVE: "text-red-800",
+    ZERO: "text-hw-text-muted",
 };
 
 export function SessionCard({ s, rates, ratesReady }: { s: Session; rates: { usd: number; aed: number; vod: number }; ratesReady: boolean }) {
@@ -25,7 +25,7 @@ export function SessionCard({ s, rates, ratesReady }: { s: Session; rates: { usd
     const duration = s.closedAt
         ? (() => {
             const diffMs = new Date(s.closedAt).getTime() - new Date(s.openedAt).getTime();
-            const hrs  = Math.floor(diffMs / 3_600_000);
+            const hrs = Math.floor(diffMs / 3_600_000);
             const mins = Math.floor((diffMs % 3_600_000) / 60_000);
             return `${hrs}س ${mins}د`;
         })()
@@ -37,8 +37,8 @@ export function SessionCard({ s, rates, ratesReady }: { s: Session; rates: { usd
             case "USD": return acc + bal * rates.usd;
             case "AED": return acc + bal * rates.aed;
             case "EGP": return acc + bal;
-            case "VOD": return acc - bal * rates.vod;
-            default:    return acc;
+            case "VOD": return acc + (bal - (bal * rates.vod));
+            default: return acc;
         }
     }, 0);
 
@@ -83,7 +83,7 @@ export function SessionCard({ s, rates, ratesReady }: { s: Session; rates: { usd
                         <span className={`font-mono font-bold px-2 py-0.5 rounded border text-xs
                             ${sessionTotal >= 0
                                 ? "text-hw-accent border-hw-accent/30 bg-hw-accent/5"
-                                : "text-red-400 border-red-800 bg-red-900/10"}`}>
+                                : "text-red-800 border-red-800 bg-red-900/10"}`}>
                             {sessionTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} جنيه
                         </span>
                     )}
@@ -118,33 +118,50 @@ export function SessionCard({ s, rates, ratesReady }: { s: Session; rates: { usd
                             <p className="text-sm text-gray-800-muted italic">
                                 {s.status === "OPEN" ? "الجلسة لا تزال نشطة — لا توجد لقطة ختامية بعد." : "لا توجد أرصدة مسجلة."}
                             </p>
+                        ) : !ratesReady ? (
+                            <p className="text-sm text-hw-text-muted italic">أدخل أسعار الصرف لعرض الإجمالي بالجنيه لكل مستخدم.</p>
                         ) : (
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm text-right">
                                     <thead>
-                                        <tr className="text-xs uppercase tracking-wider text-gray-800-muted border-b border-hw-border">
+                                        <tr className="text-xs uppercase tracking-wider text-hw-text-muted border-b border-hw-border">
                                             <th className="pb-2 font-medium">الحساب</th>
-                                            <th className="pb-2 font-medium">العملة</th>
-                                            <th className="pb-2 font-medium text-left">الرصيد الختامي</th>
+                                            <th className="pb-2 font-medium text-left">الإجمالي بالجنيه</th>
                                             <th className="pb-2 font-medium text-center">الوضع</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-hw-border/50">
-                                        {s.snapshots.map((snap) => (
-                                            <tr key={snap.id} className="hover:bg-hw-bg/30 transition">
-                                                <td className="py-2.5 font-medium text-hw-text">{snap.user.username}</td>
-                                                <td className="py-2.5">
-                                                    <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-hw-bg border border-hw-border">
-                                                        {snap.currency}
-                                                    </span>
-                                                </td>
-                                                <td className={`py-2.5 font-mono font-bold text-left ${balanceStatusColors[snap.balanceStatus]}`}>
-                                                    {snap.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        {Object.values(
+                                            s.snapshots.reduce((acc, snap) => {
+                                                const egp = (() => {
+                                                    const bal = snap.balance;
+                                                    switch (snap.currency.toUpperCase()) {
+                                                        case "USD": return bal * rates.usd;
+                                                        case "AED": return bal * rates.aed;
+                                                        case "EGP": return bal;
+                                                        case "VOD": return bal - bal * rates.vod;
+                                                        default: return 0;
+                                                    }
+                                                })();
+
+                                                const key = snap.user.username;
+                                                if (!acc[key]) {
+                                                    acc[key] = { username: snap.user.username, total: 0 };
+                                                }
+                                                acc[key].total += egp;
+                                                return acc;
+                                            }, {} as Record<string, { username: string; total: number }>)
+                                        ).map((u) => (
+                                            <tr key={u.username} className="hover:bg-hw-bg/30 transition">
+                                                <td className="py-2.5 font-medium text-hw-text">{u.username}</td>
+                                                <td className={`py-2.5 font-mono font-bold text-left ${u.total > 0 ? "text-hw-accent" : u.total < 0 ? "text-red-400" : "text-hw-text-muted"
+                                                    }`}>
+                                                    {u.total.toLocaleString("ar-EG", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </td>
                                                 <td className="py-2.5 text-center">
-                                                    <span className={`text-xs font-semibold ${balanceStatusColors[snap.balanceStatus]}`}>
-                                                        {snap.balanceStatus === "POSITIVE" ? "▲ دائن" :
-                                                            snap.balanceStatus === "NEGATIVE" ? "▼ مدين" : "— متعادل"}
+                                                    <span className={`text-xs font-semibold ${u.total > 0 ? "text-hw-accent" : u.total < 0 ? "text-red-400" : "text-hw-text-muted"
+                                                        }`}>
+                                                        {u.total > 0 ? "▲ دائن" : u.total < 0 ? "▼ مدين" : "— متعادل"}
                                                     </span>
                                                 </td>
                                             </tr>

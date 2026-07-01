@@ -55,25 +55,31 @@ export default function UsersTable({ users }: { users: User[] }) {
                                 </td>
                                 <td className="px-4 py-3 text-hw-text-secondary font-mono text-xs">
                                     <div className="px-4 py-3 text-hw-text-secondary font-mono text-xs">
-                                        {u.balances.length === 0 ? (
-                                            <span className="text-hw-text-faint">—</span>
-                                        ) : (
-                                            <div className="space-y-0.5">
-                                                {u.balances.map((b) => {
-                                                    const amount = typeof b.balance === "number"
-                                                        ? b.balance
-                                                        : b.balance.toNumber();
-                                                    return (
-                                                        <div key={b.currency} className="flex items-center gap-1.5">
-                                                            <span className="text-hw-text">{b.currency}</span>
+                                        {(() => {
+                                            const totals = new Map<Currency, number>();
+                                            for (const b of u.balances) {
+                                                const amount = typeof b.balance === "number"
+                                                    ? b.balance
+                                                    : b.balance.toNumber();
+                                                totals.set(b.currency, (totals.get(b.currency) ?? 0) + amount);
+                                            }
+                                            const entries = Array.from(totals.entries());
+
+                                            return entries.length === 0 ? (
+                                                <span className="text-hw-text-faint">—</span>
+                                            ) : (
+                                                <div className="space-y-0.5">
+                                                    {entries.map(([currency, amount]) => (
+                                                        <div key={currency} className="flex items-center gap-1.5">
+                                                            <span className="text-hw-text">{currency}</span>
                                                             <span className={amount >= 0 ? "text-hw-accent bold text-lg" : "text-red-800 bold text-lg"}>
                                                                 {amount.toLocaleString("ar-EG", { minimumFractionDigits: 2 })}
                                                             </span>
                                                         </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
+                                                    ))}
+                                                </div>
+                                            );
+                                        })()}
                                     </div>
                                 </td>
                                 <td className="px-4 py-3 text-hw-text-secondary font-mono text-xs">{u.phone}</td>
@@ -98,7 +104,7 @@ export default function UsersTable({ users }: { users: User[] }) {
                                         href={`/dashboard/users/${u.id}`}
                                         className="text-white hover:text-hw-accent-hover focus:outline-none bg-hw-accent hover:bg-hw-accent/20 border border-hw-accent/30 px-2 py-1 rounded text-xs font-medium transition-colors"
                                     >
-                                        عرض 
+                                        عرض
                                     </Link>
                                 </td>
                                 <td className="px-4 py-3">

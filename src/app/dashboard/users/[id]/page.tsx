@@ -37,24 +37,27 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
     let recentTransactions: any[] = [];
 
     // if (activeSession?.id) {
-        // 2. Query userBalance safely ONLY when a valid session layout is loaded
-        const [balancesData, ledgerData] = await Promise.all([
-            db.userBalance.findMany({
-                where: {
-                    userId: targetUserId,
-                }
-            }),
-            getRecentLedger(targetUserId),
-        ]);
-        userBalances = balancesData;
-        recentTransactions = ledgerData;
+    // 2. Query userBalance safely ONLY when a valid session layout is loaded
+    const [balancesData, ledgerData] = await Promise.all([
+        db.userBalance.findMany({
+            where: {
+                userId: targetUserId,
+            }
+        }),
+        getRecentLedger(targetUserId),
+    ]);
+    userBalances = balancesData;
+    recentTransactions = ledgerData;
     // } else {
     //     // 3. Fallback gracefully if no accounting session is open
     //     recentTransactions = await getRecentLedger(targetUserId);
     // }
 
-    const userBalancesMap = new Map(userBalances.map(b => [b.currency, b.balance.toNumber()]));
-
+    const userBalancesMap = new Map<Currency, number>();
+    for (const b of userBalances) {
+        const amount = b.balance.toNumber();
+        userBalancesMap.set(b.currency, (userBalancesMap.get(b.currency) ?? 0) + amount);
+    }
     return (
         <div className="space-y-8">
             <div className="flex justify-between items-center border-b border-hw-border pb-5">

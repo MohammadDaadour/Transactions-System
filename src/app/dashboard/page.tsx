@@ -30,7 +30,7 @@ export default async function DashboardOverview() {
     let allUserBalances: any[] = [];
 
     // 2. Fetch non-session-dependent information in parallel first
-    const [globalBalances, recentTransactions, activeUsers] = await Promise.all([
+    const [globalBalances, recentTransactions, activeUsers, totalUserBalancesRaw, totalAllBalancesRaw] = await Promise.all([
         getGlobalSystemBalances(),
         getRecentLedger(role === "Member" ? currentUserId : undefined),
         role !== "Member"
@@ -39,7 +39,43 @@ export default async function DashboardOverview() {
                 select: { id: true, username: true }
             })
             : [],
+        // Total balance for the current user, summed across ALL sessions
+        db.userBalance.groupBy({
+            by: ["currency"],
+            where: { userId: currentUserId },
+            _sum: { balance: true },
+        }),
+        // Total balance per user per currency, summed across ALL sessions (non-Member only)
+        role !== "Member"
+            ? db.userBalance.groupBy({
+                by: ["userId", "currency"],
+                _sum: { balance: true },
+            })
+            : [],
     ]);
+
+    const totalUserBalancesMap = new Map(
+        totalUserBalancesRaw.map((b) => [b.currency, b._sum.balance?.toNumber() ?? 0])
+    );
+
+    // Resolve usernames for the total-across-sessions per-user breakdown
+    const totalPerCurrencyUsers = new Map<Currency, { username: string; balance: number }[]>();
+    if (role !== "Member" && totalAllBalancesRaw.length > 0) {
+        const userIds = [...new Set(totalAllBalancesRaw.map((b) => b.userId))];
+        const usersById = new Map(
+            (await db.user.findMany({
+                where: { id: { in: userIds } },
+                select: { id: true, username: true },
+            })).map((u) => [u.id, u.username])
+        );
+        for (const b of totalAllBalancesRaw) {
+            const amount = b._sum.balance?.toNumber() ?? 0;
+            const username = usersById.get(b.userId) ?? "—";
+            const list = totalPerCurrencyUsers.get(b.currency) ?? [];
+            list.push({ username, balance: amount });
+            totalPerCurrencyUsers.set(b.currency, list);
+        }
+    }
 
     // 3. Only safely run balance lookups if we have a valid open session UUID
     if (activeSession?.id) {
@@ -124,7 +160,7 @@ export default async function DashboardOverview() {
             ) : (
                 <div>
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-hw-text-secondary mb-3">رصيد الحساب</h3>
-                    {userBalancesMap.size === 0 ? (
+                    {/* {userBalancesMap.size === 0 ? (
                         <p className="text-sm text-hw-text-muted">لا يوجد رصيد حالياً</p>
                     ) : (
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -148,7 +184,67 @@ export default async function DashboardOverview() {
                                     );
                                 })}
                         </div>
-                    )}
+                    )} */}
+
+                    <div>
+                        {/* <h3 className="text-xs font-semibold uppercase text-bold tracking-wider text-hw-text-secondary mb-3">
+                            {role !== "Member" ? "إجمالي الرصيد الكلي (كل الجلسات)" : "إجمالي رصيدك (كل الجلسات)"}
+                        </h3> */}
+                        {role !== "Member" ? (
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                {Object.values(Currency).map((currency) => {
+                                    const users = totalPerCurrencyUsers.get(currency) ?? [];
+                                    const total = users.reduce((sum, u) => sum + u.balance, 0);
+                                    if (total === 0 && users.length === 0) return null;
+
+                                    return (
+                                        <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5 space-y-3">
+                                            <p className="text-sm font-medium text-hw-text-secondary flex items-center">
+                                                <span className="ml-2">{currencyIcons[currency]}</span>
+                                                <span className="inline-block mb-2">{currency} إجمالي</span>
+                                            </p>
+                                            <p className={`text-2xl font-mono font-bold ${total >= 0 ? "text-hw-accent" : "text-red-800"}`}>
+                                                {total.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                            </p>
+                                            {users.length > 0 && (
+                                                <div className="border-t border-hw-border/50 pt-3 space-y-1.5">
+                                                    {users.map((u) => (
+                                                        <div key={u.username} className="flex justify-between items-center text-xs">
+                                                            <span className="font-mono text-hw-text text-lg">{u.username}</span>
+                                                            <span className={`font-mono font-medium text-lg ${u.balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
+                                                                {u.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : totalUserBalancesMap.size === 0 ? (
+                            <p className="text-sm text-hw-text-muted">لا يوجد رصيد حالياً</p>
+                        ) : (
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                {Object.values(Currency)
+                                    .filter((currency) => (totalUserBalancesMap.get(currency) || 0) !== 0)
+                                    .map((currency) => {
+                                        const balance = totalUserBalancesMap.get(currency) || 0;
+                                        return (
+                                            <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5">
+                                                <p className="text-sm font-medium text-hw-text-secondary flex items-center">
+                                                    <span className="ml-2">{currencyIcons[currency]}</span>
+                                                    {currency} إجمالي
+                                                </p>
+                                                <p className="text-2xl font-mono font-bold mt-2 text-hw-text">
+                                                    {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                                </p>
+                                            </div>
+                                        );
+                                    })}
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
 
@@ -174,8 +270,8 @@ export default async function DashboardOverview() {
                         <SessionControl
                             activeSession={{
                                 id: activeSession.id,
-                                openedAt: (activeSession.openedAt instanceof Date 
-                                    ? activeSession.openedAt.toISOString() 
+                                openedAt: (activeSession.openedAt instanceof Date
+                                    ? activeSession.openedAt.toISOString()
                                     : new Date(activeSession.openedAt).toISOString()) as unknown as Date,
                                 openedByUser: { username: activeSession.openedByUser.username },
                                 status: activeSession.status,
@@ -183,7 +279,7 @@ export default async function DashboardOverview() {
                             isAdmin={role === "Admin"}
                         />
                     </div>
-)}
+                )}
             </div>
 
             <hr className="border-hw-border" />

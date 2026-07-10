@@ -39,13 +39,13 @@ export async function getPaginatedTransactions(
     pageSize: number
 ) {
     let targetSessionId = filters.sessionId;
-    if (!targetSessionId) {
+    if (targetSessionId === undefined) {
         const active = await db.session.findFirst({ where: { status: "OPEN" } });
         targetSessionId = active?.id;
     }
 
     const where = {
-        ...(targetSessionId && { sessionId: targetSessionId }),
+        ...(targetSessionId && targetSessionId !== "ALL" && { sessionId: targetSessionId }),
         ...(filters.userId && { userId: filters.userId }),
         ...(filters.type && { type: filters.type }),
         ...(filters.currency && { currency: filters.currency }),

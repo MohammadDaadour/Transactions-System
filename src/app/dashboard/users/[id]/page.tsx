@@ -3,7 +3,7 @@ import { db } from "../../../../lib/db";
 import { getRecentLedger } from "../../../../lib/queries";
 import { Currency } from "../../../../generated/prisma/client";
 import { redirect, notFound } from "next/navigation";
-import DynamicLedgerTable from "../../../../components/DynamicLedgerTable";
+import { UserTransactionPanel } from "../../../../components/UserTransactionPanel";
 import Link from "next/link";
 
 const currencyIcons: Record<Currency, React.ReactNode> = {
@@ -128,9 +128,9 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
                 <div className="space-y-4">
                     <h3 className="text-lg font-medium text-hw-text font-bold">سجل التحويلات</h3>
                     <div className="overflow-y-auto max-h-[400px]">
-                        <DynamicLedgerTable
-                            transactions={recentTransactions}
-                            showReversalControl={false}
+                        <UserTransactionPanel
+                            userId={targetUserId}
+                            showReversalControl={session.user.role === "Admin"}
                         />
                     </div>
                 </div>

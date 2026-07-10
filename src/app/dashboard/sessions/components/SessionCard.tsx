@@ -1,25 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
 import { Session } from "./types";
-import { TransactionPanel } from "./TransactionPanel";
 
 const statusConfig: Record<string, { label: string; color: string; dot: string }> = {
-    OPEN: { label: "نشطة", color: "bg-green-900/40 text-green-400 border-green-800", dot: "bg-green-500 animate-pulse" },
+    OPEN:    { label: "نشطة",        color: "bg-green-900/40 text-green-400 border-green-800",    dot: "bg-green-500 animate-pulse" },
     CLOSING: { label: "جار الإغلاق", color: "bg-yellow-900/40 text-yellow-400 border-yellow-800", dot: "bg-yellow-500 animate-pulse" },
-    CLOSED: { label: "مغلقة", color: "bg-hw-bg text-hw-text-secondary border-hw-border", dot: "bg-hw-text-muted" },
+    CLOSED:  { label: "مغلقة",       color: "bg-hw-bg text-hw-text-secondary border-hw-border",   dot: "bg-hw-text-muted" },
 };
 
-const balanceStatusColors: Record<string, string> = {
-    POSITIVE: "text-hw-accent",
-    NEGATIVE: "text-red-800",
-    ZERO: "text-hw-text-muted",
+const CURRENCY_LABELS: Record<string, string> = {
+    EGP: "جنيه",
+    USD: "دولار",
+    AED: "درهم",
+    VOD: "فودافون",
 };
 
-export function SessionCard({ s, rates, ratesReady }: { s: Session; rates: { usd: number; aed: number; vod: number }; ratesReady: boolean }) {
-    const [expanded, setExpanded] = useState(s.status === "OPEN");
-    const [tab, setTab] = useState<"balances" | "transactions">("balances");
-
+export function SessionCard({
+    s,
+    rates,
+    ratesReady,
+}: {
+    s: Session;
+    rates: { usd: number; aed: number; vod: number };
+    ratesReady: boolean;
+}) {
     const cfg = statusConfig[s.status];
 
     const duration = s.closedAt
@@ -31,43 +36,49 @@ export function SessionCard({ s, rates, ratesReady }: { s: Session; rates: { usd
         })()
         : "جارية";
 
+    // EGP-converted total for the summary chip
     const sessionTotal = s.snapshots.reduce((acc, snap) => {
         const bal = snap.balance;
         switch (snap.currency.toUpperCase()) {
             case "USD": return acc + bal * rates.usd;
             case "AED": return acc + bal * rates.aed;
             case "EGP": return acc + bal;
-            case "VOD": return acc + (bal - (bal * rates.vod));
-            default: return acc;
+            case "VOD": return acc + (bal - bal * rates.vod);
+            default:    return acc;
         }
     }, 0);
 
-    return (
-        <div className={`rounded-xl border overflow-hidden transition-all
-            ${expanded ? "border-hw-accent/40 shadow-sm shadow-hw-accent/10" : "border-hw-border"}
-            bg-hw-surface`}>
+    // Per-currency native totals for the balance chips
+    const currencyTotals: Record<string, number> = {};
+    for (const snap of s.snapshots) {
+        const cur = snap.currency.toUpperCase();
+        currencyTotals[cur] = (currencyTotals[cur] ?? 0) + snap.balance;
+    }
 
-            {/* ── Header (always visible, clickable) ── */}
-            <button
-                onClick={() => setExpanded(e => !e)}
-                className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-4
-                           border-b border-hw-border bg-hw-bg/40 hover:bg-hw-bg/60 transition text-right"
-            >
+    return (
+        <Link
+            href={`/dashboard/sessions/${s.id}`}
+            className={`group block rounded-xl border overflow-hidden transition-all hover:border-hw-accent/40 hover:shadow-sm hover:shadow-hw-accent/10
+                ${s.status === "OPEN" ? "border-hw-accent/30" : "border-hw-border"}
+                bg-hw-surface`}
+        >
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-4
+                            border-b border-hw-border bg-hw-bg/40 group-hover:bg-hw-bg/60 transition text-right">
+
+                {/* Left: status dot + id + date */}
                 <div className="flex items-center gap-3">
                     <span className={`h-2.5 w-2.5 rounded-full flex-shrink-0 ${cfg.dot}`} />
                     <div>
                         <p className="text-xs font-mono text-hw-text-muted">{s.id.substring(0, 8).toUpperCase()}</p>
                         <p className="text-sm font-medium text-hw-text">
-                            {new Date(s.openedAt).toLocaleString("ar-EG", { dateStyle: "medium", timeStyle: "short" })}
+                            {new Date(s.openedAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}
                         </p>
                     </div>
                 </div>
 
+                {/* Right: badges + arrow */}
                 <div className="flex flex-wrap items-center gap-2 text-xs">
                     <span className={`px-2.5 py-1 rounded-full border font-semibold ${cfg.color}`}>{cfg.label}</span>
-                    {/* <span className="text-hw-text-secondary">
-                        <span className="font-medium text-hw-text">{s._count.transactions}</span> قيود
-                    </span> */}
                     <span className="text-hw-text-secondary">
                         المدة: <span className="font-mono text-hw-text">{duration}</span>
                     </span>
@@ -87,103 +98,35 @@ export function SessionCard({ s, rates, ratesReady }: { s: Session; rates: { usd
                             {sessionTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} جنيه
                         </span>
                     )}
-                    {/* Expand chevron */}
-                    <span className={`text-hw-text-muted transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}>▾</span>
+                    {/* Arrow */}
+                    <span className="text-hw-text-muted group-hover:text-hw-accent group-hover:translate-x-[-4px] transition-all duration-150 text-base mr-1">
+                        ←
+                    </span>
                 </div>
-            </button>
+            </div>
 
-            {/* ── Expandable body ── */}
-            {expanded && (
-                <div className="px-5 py-4 space-y-4">
-                    {/* Tab switcher */}
-                    <div className="flex gap-1 border-b border-hw-border pb-3">
-                        {(["balances", "transactions"] as const).map((t) => (
-                            <button
-                                key={t}
-                                onClick={() => setTab(t)}
-                                className={`px-3 py-1.5 rounded-lg text-s font-medium transition
-                                    ${tab === t
-                                        ? "bg-hw-accent/10 text-hw-accent border border-hw-accent/30"
-                                        : "text-hw-text-secondary hover:text-hw-text hover:bg-hw-bg border border-transparent"}`}
+            {/* Currency balance chips */}
+            {Object.keys(currencyTotals).length > 0 && (
+                <div className="px-5 py-3 flex flex-wrap gap-2">
+                    {Object.entries(currencyTotals)
+                        .sort(([a], [b]) => a.localeCompare(b))
+                        .map(([cur, total]) => (
+                            <span
+                                key={cur}
+                                className="inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-full
+                                           border border-hw-border bg-hw-bg text-hw-text-secondary"
                             >
-                                {/* `القيود (${s._count.transactions})` */}
-                                {t === "balances" ? "الأرصدة الختامية" : ""}
-                            </button>
+                                <span className={`${total >= 0 ? "text-hw-accent" : "text-red-800"} font-bold`}>
+                                    {total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </span>
+                                <span className="text-hw-text-muted">{CURRENCY_LABELS[cur] ?? cur}</span>
+                            </span>
                         ))}
-                    </div>
-
-                    {/* Balances tab */}
-                    {tab === "balances" && (
-                        s.snapshots.length === 0 ? (
-                            <p className="text-sm text-gray-800-muted italic">
-                                {s.status === "OPEN" ? "الجلسة لا تزال نشطة — لا توجد لقطة ختامية بعد." : "لا توجد أرصدة مسجلة."}
-                            </p>
-                        ) : !ratesReady ? (
-                            <p className="text-sm text-hw-text-muted italic">أدخل أسعار الصرف لعرض الإجمالي بالجنيه لكل مستخدم.</p>
-                        ) : (
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-sm text-right">
-                                    <thead>
-                                        <tr className="text-xs uppercase tracking-wider text-hw-text-muted border-b border-hw-border">
-                                            <th className="pb-2 font-medium">الحساب</th>
-                                            <th className="pb-2 font-medium text-left">الإجمالي بالجنيه</th>
-                                            <th className="pb-2 font-medium text-center">الوضع</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-hw-border/50">
-                                        {Object.values(
-                                            s.snapshots.reduce((acc, snap) => {
-                                                const egp = (() => {
-                                                    const bal = snap.balance;
-                                                    switch (snap.currency.toUpperCase()) {
-                                                        case "USD": return bal * rates.usd;
-                                                        case "AED": return bal * rates.aed;
-                                                        case "EGP": return bal;
-                                                        case "VOD": return bal - bal * rates.vod;
-                                                        default: return 0;
-                                                    }
-                                                })();
-
-                                                const key = snap.user.username;
-                                                if (!acc[key]) {
-                                                    acc[key] = { username: snap.user.username, total: 0 };
-                                                }
-                                                acc[key].total += egp;
-                                                return acc;
-                                            }, {} as Record<string, { username: string; total: number }>)
-                                        ).map((u) => (
-                                            <tr key={u.username} className="hover:bg-hw-bg/30 transition">
-                                                <td className="py-2.5 font-medium text-hw-text">{u.username}</td>
-                                                <td className={`py-2.5 font-mono font-bold text-left ${u.total > 0 ? "text-hw-accent" : u.total < 0 ? "text-red-400" : "text-hw-text-muted"
-                                                    }`}>
-                                                    {u.total.toLocaleString("ar-EG", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                </td>
-                                                <td className="py-2.5 text-center">
-                                                    <span className={`text-xs font-semibold ${u.total > 0 ? "text-hw-accent" : u.total < 0 ? "text-red-400" : "text-hw-text-muted"
-                                                        }`}>
-                                                        {u.total > 0 ? "▲ دائن" : u.total < 0 ? "▼ مدين" : "— متعادل"}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )
-                    )}
-
-                    {/* Transactions tab */}
-                    {tab === "transactions" && (
-                        <TransactionPanel sessionId={s.id} totalCount={s._count.transactions} />
-                    )}
-
-                    {s.notes && (
-                        <p className="text-xs text-hw-text-secondary italic border-t border-hw-border/50 pt-3">
-                            📝 {s.notes}
-                        </p>
-                    )}
+                    {/* <span className="inline-flex items-center text-xs text-hw-text-muted italic mr-auto">
+                        {s._count.transactions} قيد
+                    </span> */}
                 </div>
             )}
-        </div>
+        </Link>
     );
 }

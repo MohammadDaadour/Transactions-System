@@ -5,6 +5,7 @@ import { TransactionType, Currency } from "../../generated/prisma/client";
 
 import ManualTransactionForm from "../../components/ManualTransactionForm";
 import DynamicLedgerTable from "../../components/DynamicLedgerTable";
+import { UserTransactionPanel } from "../../components/UserTransactionPanel";
 import SessionControl from "../../components/SessionControl";
 
 const currencyIcons: Record<Currency, React.ReactNode> = {
@@ -288,10 +289,17 @@ export default async function DashboardOverview() {
                 <div className={role !== "Member" ? "xl:col-span-2 space-y-4" : "xl:col-span-3 space-y-4"}>
                     <h3 className="text-lg font-medium text-hw-text">سجل التحويلات</h3>
                     <div className="overflow-y-auto max-h-[400px]">
-                        <DynamicLedgerTable
-                            transactions={recentTransactions}
-                            showReversalControl={role !== "Member"}
-                        />
+                        {role === "Member" ? (
+                            <UserTransactionPanel
+                                userId={currentUserId}
+                                showReversalControl={false}
+                            />
+                        ) : (
+                            <DynamicLedgerTable
+                                transactions={recentTransactions}
+                                showReversalControl={true}
+                            />
+                        )}
                     </div>
                 </div>
 

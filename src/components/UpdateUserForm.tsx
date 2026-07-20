@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useTransition } from "react";
-import { updateUser } from "../app/actions/users";
+import { updateUser, deleteUser, resetUserBalances } from "../app/actions/users";
 import { Role, UserType } from "../generated/prisma/enums";
 
 interface UpdateUserFormProps {
@@ -23,6 +23,9 @@ type FormState =
 
 export default function UpdateUserForm({ user, onSuccess }: UpdateUserFormProps) {
     const [isPending, startTransition] = useTransition();
+    const [isDeleting, startDeleteTransition] = useTransition();
+    const [isResetting, startResetTransition] = useTransition();
+    
     const [formState, setFormState] = useState<FormState>({ status: "idle" });
 
     const [fields, setFields] = useState({
@@ -68,6 +71,34 @@ export default function UpdateUserForm({ user, onSuccess }: UpdateUserFormProps)
             if (result.success) {
                 setFormState({ status: "success", username: result.data!.username });
                 setFields((prev) => ({ ...prev, password: "", confirmPassword: "" }));
+                onSuccess?.();
+            } else {
+                setFormState({ status: "error", message: result.error! });
+            }
+        });
+    }
+
+    function handleDelete() {
+        if (!confirm("هل أنت متأكد من رغبتك في حذف هذا الحساب؟ إذا كان لديه معاملات سابقة، سيتم تعطيله فقط بدلاً من حذفه نهائياً.")) return;
+        
+        startDeleteTransition(async () => {
+            const result = await deleteUser(user.id);
+            if (result.success) {
+                alert(result.message);
+                onSuccess?.();
+            } else {
+                setFormState({ status: "error", message: result.error! });
+            }
+        });
+    }
+
+    function handleResetBalance() {
+        if (!confirm("هل أنت متأكد من رغبتك في تصفير جميع أرصدة هذا الحساب؟ سيتم إنشاء معاملات تصفير لجميع العملات التي تحتوي على رصيد.")) return;
+
+        startResetTransition(async () => {
+            const result = await resetUserBalances(user.id);
+            if (result.success) {
+                alert(result.message);
                 onSuccess?.();
             } else {
                 setFormState({ status: "error", message: result.error! });
@@ -213,14 +244,37 @@ export default function UpdateUserForm({ user, onSuccess }: UpdateUserFormProps)
                 </div>
             )}
 
-            {/* Submit */}
             <button
                 type="submit"
-                disabled={isPending}
+                disabled={isPending || isDeleting || isResetting}
                 className="w-full rounded-lg bg-hw-accent-solid hover:bg-hw-accent-solid-hover disabled:bg-hw-accent-solid/30 disabled:text-hw-accent-solid/50 disabled:cursor-not-allowed px-4 py-2.5 text-sm font-semibold text-white transition-colors"
             >
                 {isPending ? "جارٍ الحفظ…" : "حفظ التعديلات"}
             </button>
+
+            {/* Admin Danger Zone */}
+            <div className="border-t border-hw-border-subtle pt-4 mt-6 space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-red-700">منطقة الإدارة (إجراءات خطرة)</p>
+                <div className="flex gap-3">
+                    <button
+                        type="button"
+                        disabled={isResetting || isPending || isDeleting}
+                        onClick={handleResetBalance}
+                        className="flex-1 rounded-lg bg-orange-600/10 hover:bg-orange-600/20 border border-orange-600/30 text-orange-800 hover:text-orange-700 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-sm font-semibold transition-colors"
+                    >
+                        {isResetting ? "جارٍ التصفير..." : "تصفير الرصيد الكلي"}
+                    </button>
+                    
+                    <button
+                        type="button"
+                        disabled={isDeleting || isPending || isResetting}
+                        onClick={handleDelete}
+                        className="flex-1 rounded-lg bg-red-600/10 hover:bg-red-600/20 border border-red-600/30 text-red-800 hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-sm font-semibold transition-colors"
+                    >
+                        {isDeleting ? "جارٍ الحذف..." : "حذف / تعطيل الحساب"}
+                    </button>
+                </div>
+            </div>
         </form>
     );
 }

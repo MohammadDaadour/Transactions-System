@@ -183,3 +183,17 @@ export async function getGlobalSystemBalances() {
         netPosition: item._sum.balance ? item._sum.balance.toNumber() : 0,
     }));
 }
+
+export async function getAllSessionsBalances() {
+    const aggregates = await db.userBalance.groupBy({
+        by: ['currency'],
+        _sum: {
+            balance: true,
+        },
+    });
+
+    return aggregates.map((item) => ({
+        currency: item.currency,
+        netPosition: item._sum.balance ? item._sum.balance.toNumber() : 0,
+    }));
+}

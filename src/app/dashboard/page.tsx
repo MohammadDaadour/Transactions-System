@@ -1,6 +1,6 @@
 import { auth } from "../../auth";
 import { db } from "../../lib/db";
-import { getGlobalSystemBalances, getRecentLedger } from "../../lib/queries";
+import { getAllSessionsBalances, getGlobalSystemBalances, getRecentLedger } from "../../lib/queries";
 import { TransactionType, Currency } from "../../generated/prisma/client";
 
 import ManualTransactionForm from "../../components/ManualTransactionForm";
@@ -32,7 +32,7 @@ export default async function DashboardOverview() {
 
     // 2. Fetch non-session-dependent information in parallel first
     const [globalBalances, recentTransactions, activeUsers, totalUserBalancesRaw, totalAllBalancesRaw] = await Promise.all([
-        getGlobalSystemBalances(),
+        getAllSessionsBalances(),
         getRecentLedger(role === "Member" ? currentUserId : undefined),
         role !== "Member"
             ? db.user.findMany({
@@ -129,7 +129,7 @@ export default async function DashboardOverview() {
                         {Object.values(Currency).map((currency) => {
                             const netPosition = globalBalancesMap.get(currency) || 0;
                             const inverted = netPosition === 0 ? 0 : netPosition * -1;
-                            const users = perCurrencyUsers.get(currency) ?? [];
+                            const users = totalPerCurrencyUsers.get(currency) ?? [];
 
                             return (
                                 <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5 space-y-3">
@@ -138,16 +138,15 @@ export default async function DashboardOverview() {
                                         <span className="inline-block mb-2">{currency} رصيد الحساب</span>
                                     </p>
                                     <p className={`text-2xl font-mono font-bold ${inverted >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                        {inverted.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                        {inverted.toLocaleString(undefined, { minimumFractionDigits: 0 })}
                                     </p>
-
-                                    {users.length > 0 && (
+                                    {users.filter((u) => u.balance !== 0).length > 0 && (
                                         <div className="border-t border-hw-border/50 pt-3 space-y-1.5">
-                                            {users.map((u) => (
+                                            {users.filter((u) => u.balance !== 0).map((u) => (
                                                 <div key={u.username} className="flex justify-between items-center text-xs">
                                                     <span className="font-mono text-hw-text text-lg">{u.username}</span>
                                                     <span className={`font-mono font-medium text-lg ${u.balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                                        {u.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                                        {u.balance.toLocaleString(undefined, { minimumFractionDigits: 0 })}
                                                     </span>
                                                 </div>
                                             ))}
@@ -205,7 +204,7 @@ export default async function DashboardOverview() {
                                                 <span className="inline-block mb-2">{currency} إجمالي</span>
                                             </p>
                                             <p className={`text-2xl font-mono font-bold ${total >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                                {total.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                                {total.toLocaleString(undefined, { minimumFractionDigits: 0 })}
                                             </p>
                                             {users.length > 0 && (
                                                 <div className="border-t border-hw-border/50 pt-3 space-y-1.5">
@@ -213,7 +212,7 @@ export default async function DashboardOverview() {
                                                         <div key={u.username} className="flex justify-between items-center text-xs">
                                                             <span className="font-mono text-hw-text text-lg">{u.username}</span>
                                                             <span className={`font-mono font-medium text-lg ${u.balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                                                {u.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                                                {u.balance.toLocaleString(undefined, { minimumFractionDigits: 0 })}
                                                             </span>
                                                         </div>
                                                     ))}
@@ -238,7 +237,7 @@ export default async function DashboardOverview() {
                                                     {currency} إجمالي
                                                 </p>
                                                 <p className="text-2xl font-mono font-bold mt-2 text-hw-text">
-                                                    {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                                    {balance.toLocaleString(undefined, { minimumFractionDigits: 0 })}
                                                 </p>
                                             </div>
                                         );

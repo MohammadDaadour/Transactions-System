@@ -13,8 +13,8 @@ export async function GET(
 
     const { userId } = await params;
 
-    // Security check: Only Admins can see other users' transactions
-    if (session.user.role !== "Admin" && session.user.id !== userId) {
+    // Security check: Only Admins and Moderators can see other users' transactions
+    if (session.user.role !== "Admin" && session.user.role !== "Mod" && session.user.id !== userId) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

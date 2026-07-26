@@ -4,6 +4,7 @@ import { getRecentLedger } from "../../../../lib/queries";
 import { Currency } from "../../../../generated/prisma/client";
 import { redirect, notFound } from "next/navigation";
 import { UserTransactionPanel } from "../../../../components/UserTransactionPanel";
+import UpdateUserForm from "../../../../components/UpdateUserForm";
 import Link from "next/link";
 
 const currencyIcons: Record<Currency, React.ReactNode> = {
@@ -15,7 +16,7 @@ const currencyIcons: Record<Currency, React.ReactNode> = {
 
 export default async function UserDashboardView({ params }: { params: Promise<{ id: string }> }) {
     const session = await auth();
-    if (!session?.user || session.user.role !== "Admin") redirect("/dashboard");
+    if (!session?.user || session.user.role === "Member") redirect("/dashboard");
 
     const { id: targetUserId } = await params;
     if (!targetUserId) return notFound();
@@ -102,23 +103,32 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
             </div>
 
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
-                <div className="rounded-xl border border-hw-border bg-hw-surface p-5">
+                <div className="rounded-xl border border-hw-border bg-hw-surface p-5 h-fit">
                     <p className="text-sm font-medium text-hw-text-secondary">
                         <span className="mr-2">👤</span>
                         معلومات الحساب
                     </p>
-                    <p className="text-xl font-mono font-bold mt-2 text-hw-text">
-                        اسم الحساب : {targetUser.username}
+                    <div className="mt-4 space-y-2">
+                        <p className="text-base font-mono font-bold text-hw-text">
+                            اسم الحساب : {targetUser.username}
+                        </p>
+                        <p className="text-base font-mono font-bold text-hw-text">
+                            رتبة الحساب: {targetUser.role === "Member" ? "موزع" : targetUser.role === "Mod" ? "مدير" : "أدمن"}
+                        </p>
+                        <p className="text-base font-mono font-bold text-hw-text">
+                            نوع الحساب: {targetUser.type === "sender" ? "مورد" : "مستورد"}
+                        </p>
+                        <p className="text-base font-mono font-bold text-hw-text">
+                            رقم الهاتف: {targetUser.phone || "لا يوجد"}
+                        </p>
+                    </div>
+                </div>
+
+                <div className="rounded-xl border border-hw-border bg-hw-surface p-5 xl:col-span-2">
+                    <p className="text-sm font-medium text-hw-text-secondary mb-4">
+                        تعديل بيانات الحساب
                     </p>
-                    <p className="text-xl font-mono font-bold mt-2 text-hw-text">
-                        رتبة الحساب: {targetUser.role === "Member" ? "موزع" : targetUser.role === "Mod" ? "مدير" : "أدمن"}
-                    </p>
-                    <p className="text-xl font-mono font-bold mt-2 text-hw-text">
-                        نوع الحساب: {targetUser.type === "sender" ? "مورد" : "مستورد"}
-                    </p>
-                    <p className="text-xl font-mono font-bold mt-2 text-hw-text">
-                        رقم الهاتف: {targetUser.phone || "لا يوجد"}
-                    </p>
+                    <UpdateUserForm user={targetUser} viewerRole={session.user.role as any} />
                 </div>
             </div>
 
@@ -130,7 +140,7 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
                     <div className="overflow-y-auto max-h-[400px]">
                         <UserTransactionPanel
                             userId={targetUserId}
-                            showReversalControl={session.user.role === "Admin"}
+                            showReversalControl={session.user.role !== "Member"}
                         />
                     </div>
                 </div>

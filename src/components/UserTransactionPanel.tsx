@@ -68,7 +68,7 @@ export function UserTransactionPanel({ userId, showReversalControl }: Props) {
                 icon: 'success',
                 confirmButtonText: 'موافق'
             });
-            fetchTx(txPage); // Refresh the current page
+            fetchTx(txPage); 
         } else {
             await Swal.fire({
                 title: 'خطأ',

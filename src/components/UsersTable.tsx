@@ -25,24 +25,28 @@ type User = {
 interface UsersTableProps {
     activeUsers: User[];
     inactiveUsers: User[];
+    viewerRole: Role;
 }
 
-export default function UsersTable({ activeUsers, inactiveUsers }: UsersTableProps) {
+export default function UsersTable({ activeUsers, inactiveUsers, viewerRole }: UsersTableProps) {
     const router = useRouter();
     const [editingUser, setEditingUser] = useState<User | null>(null);
     const [showInactive, setShowInactive] = useState(false);
+
+    const visibleActive = viewerRole === "Mod" ? activeUsers.filter((u) => u.role === "Member") : activeUsers;
+    const visibleInactive = viewerRole === "Mod" ? inactiveUsers.filter((u) => u.role === "Member") : inactiveUsers;
 
     return (
         <>
             {/* Active Users Table */}
             <UserTableSection
-                users={activeUsers}
+                users={visibleActive}
                 emptyMessage="لا يوجد حسابات نشطة"
                 onEdit={setEditingUser}
             />
 
             {/* Deactivated Accounts Toggle */}
-            {inactiveUsers.length > 0 && (
+            {visibleInactive.length > 0 && (
                 <div className="mt-6 space-y-3">
                     <button
                         onClick={() => setShowInactive((v) => !v)}
@@ -55,7 +59,7 @@ export default function UsersTable({ activeUsers, inactiveUsers }: UsersTablePro
                         </span>
                         الحسابات المعطلة
                         <span className="inline-flex items-center justify-center px-2 py-1 rounded-full bg-red-900/30 text-red-800 text-[20px] font-bold min-w-[18px]">
-                            {inactiveUsers.length}
+                            {visibleInactive.length}
                         </span>
                     </button>
 
@@ -66,7 +70,7 @@ export default function UsersTable({ activeUsers, inactiveUsers }: UsersTablePro
                                 <span className="text-xs font-medium text-red-500">حسابات معطلة — للعرض فقط</span>
                             </div>
                             <UserTableSection
-                                users={inactiveUsers}
+                                users={visibleInactive}
                                 emptyMessage="لا يوجد حسابات معطلة"
                                 onEdit={undefined}
                                 dimmed
@@ -96,6 +100,7 @@ export default function UsersTable({ activeUsers, inactiveUsers }: UsersTablePro
                         </div>
                         <UpdateUserForm
                             user={editingUser}
+                            viewerRole={viewerRole}
                             onSuccess={() => {
                                 setEditingUser(null);
                                 router.refresh();

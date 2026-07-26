@@ -98,8 +98,8 @@ export interface UpdateUserInput {
 export async function updateUser(input: UpdateUserInput) {
 
    const session = await auth();
-    if (!session || session.user?.role !== "Admin") {
-        return { success: false, error: "Unauthorized: Only Admins can update accounts." };
+    if (!session || (session.user?.role !== "Admin" && session.user?.role !== "Mod")) {
+        return { success: false, error: "Unauthorized: Only Admins and Moderators can update accounts." };
     }
 
     const { userId, username, password, role, type, phone } = input;
@@ -109,9 +109,17 @@ export async function updateUser(input: UpdateUserInput) {
         if (!existing)
             return { success: false, error: "User not found." };
 
-        // Prevent demoting/modifying other admins
+        // Prevent modifying Admin accounts by non-admins
+        if (existing.role === Role.Admin && session.user.role !== "Admin")
+            return { success: false, error: "Cannot modify an Admin account." };
+
+        // Prevent demoting/modifying other admins (for Admin user themselves)
         if (existing.role === Role.Admin && session.user.id !== userId)
             return { success: false, error: "Cannot modify another Admin account." };
+
+        // Prevent non-admins from assigning Admin role
+        if (role === Role.Admin && session.user.role !== "Admin")
+            return { success: false, error: "Cannot assign Admin role." };
 
         // Check username uniqueness if changing it
         if (username && username.trim() !== existing.username) {
@@ -158,6 +166,7 @@ export async function updateUser(input: UpdateUserInput) {
         });
 
         revalidatePath("/dashboard/users");
+        revalidatePath(`/dashboard/users/${userId}`);
         revalidatePath("/dashboard");
 
         return { success: true, data: { id: updatedUser.id, username: updatedUser.username } };
@@ -305,8 +314,13 @@ export async function deleteUser(userId: string) {
 
 export async function resetUserBalances(userId: string) {
     const session = await auth();
-    if (!session || session.user?.role !== "Admin") {
-        return { success: false, error: "Unauthorized: Only Admins can reset balances." };
+    if (!session || (session.user?.role !== "Admin" && session.user?.role !== "Mod")) {
+        return { success: false, error: "Unauthorized: Only Admins and Moderators can reset balances." };
+    }
+
+    const targetUser = await db.user.findUnique({ where: { id: userId } });
+    if (targetUser?.role === Role.Admin && session.user?.role !== "Admin") {
+        return { success: false, error: "Unauthorized: Cannot reset Admin balances." };
     }
 
     const result = await _resetBalancesCore(userId, session.user.id);

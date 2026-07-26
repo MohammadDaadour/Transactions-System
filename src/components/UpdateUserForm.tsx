@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { updateUser, deleteUser, resetUserBalances } from "../app/actions/users";
 import { Role, UserType } from "../generated/prisma/enums";
 
@@ -13,6 +14,7 @@ interface UpdateUserFormProps {
         phone: string;
         isActive: boolean;
     };
+    viewerRole: Role;
     onSuccess?: () => void;
 }
 
@@ -21,7 +23,8 @@ type FormState =
     | { status: "success"; username: string }
     | { status: "error"; message: string };
 
-export default function UpdateUserForm({ user, onSuccess }: UpdateUserFormProps) {
+export default function UpdateUserForm({ user, viewerRole, onSuccess }: UpdateUserFormProps) {
+    const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [isDeleting, startDeleteTransition] = useTransition();
     const [isResetting, startResetTransition] = useTransition();
@@ -71,6 +74,7 @@ export default function UpdateUserForm({ user, onSuccess }: UpdateUserFormProps)
             if (result.success) {
                 setFormState({ status: "success", username: result.data!.username });
                 setFields((prev) => ({ ...prev, password: "", confirmPassword: "" }));
+                router.refresh();
                 onSuccess?.();
             } else {
                 setFormState({ status: "error", message: result.error! });
@@ -85,6 +89,7 @@ export default function UpdateUserForm({ user, onSuccess }: UpdateUserFormProps)
             const result = await deleteUser(user.id);
             if (result.success) {
                 alert(result.message);
+                router.refresh();
                 onSuccess?.();
             } else {
                 setFormState({ status: "error", message: result.error! });
@@ -99,6 +104,7 @@ export default function UpdateUserForm({ user, onSuccess }: UpdateUserFormProps)
             const result = await resetUserBalances(user.id);
             if (result.success) {
                 alert(result.message);
+                router.refresh();
                 onSuccess?.();
             } else {
                 setFormState({ status: "error", message: result.error! });
@@ -254,7 +260,7 @@ export default function UpdateUserForm({ user, onSuccess }: UpdateUserFormProps)
 
             {/* Admin Danger Zone */}
             <div className="border-t border-hw-border-subtle pt-4 mt-6 space-y-3">
-                <p className="text-xs font-semibold uppercase tracking-wider text-red-700">منطقة الإدارة (إجراءات خطرة)</p>
+                {/* <p className="text-xs font-semibold uppercase tracking-wider text-red-700">منطقة الإدارة (إجراءات خطرة)</p> */}
                 <div className="flex gap-3">
                     <button
                         type="button"
@@ -265,14 +271,16 @@ export default function UpdateUserForm({ user, onSuccess }: UpdateUserFormProps)
                         {isResetting ? "جارٍ التصفير..." : "تصفير الرصيد الكلي"}
                     </button>
                     
-                    <button
-                        type="button"
-                        disabled={isDeleting || isPending || isResetting}
-                        onClick={handleDelete}
-                        className="flex-1 rounded-lg bg-red-600/10 hover:bg-red-600/20 border border-red-600/30 text-red-800 hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-sm font-semibold transition-colors"
-                    >
-                        {isDeleting ? "جارٍ الحذف..." : "حذف / تعطيل الحساب"}
-                    </button>
+                    {viewerRole === "Admin" && (
+                        <button
+                            type="button"
+                            disabled={isDeleting || isPending || isResetting}
+                            onClick={handleDelete}
+                            className="flex-1 rounded-lg bg-red-600/10 hover:bg-red-600/20 border border-red-600/30 text-red-800 hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-sm font-semibold transition-colors"
+                        >
+                            {isDeleting ? "جارٍ الحذف..." : "حذف / تعطيل الحساب"}
+                        </button>
+                    )}
                 </div>
             </div>
         </form>

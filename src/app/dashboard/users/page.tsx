@@ -6,7 +6,7 @@ import UsersTable from "@/src/components/UsersTable";
 
 export default async function UsersPage() {
     const session = await auth();
-    if (!session || session.user?.role !== "Admin") redirect("/dashboard");
+    if (!session || session.user?.role === "Member") redirect("/dashboard");
 
     const userSelect: any = {
         id: true,
@@ -64,21 +64,20 @@ export default async function UsersPage() {
 
             <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
                 {/* Left: Create Account Form */}
-                <div className="space-y-4">
+                {session.user?.role === "Admin" && <div className="space-y-4">
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
                         حساب جديد
                     </h3>
                     <div className="rounded-xl border border-hw-border bg-hw-surface p-6">
                         <CreateUserForm />
                     </div>
-                </div>
-
+                </div>}
                 {/* Right: Existing Users Table */}
                 <div className="xl:col-span-2 space-y-4">
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
                         الحسابات النشطة ({activeUsers.length})
                     </h3>
-                    <UsersTable activeUsers={activeUsers} inactiveUsers={inactiveUsers} />
+                    <UsersTable activeUsers={activeUsers} inactiveUsers={inactiveUsers} viewerRole={session.user?.role as any} />
                 </div>
             </div>
         </div>

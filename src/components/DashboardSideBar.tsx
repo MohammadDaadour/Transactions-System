@@ -96,7 +96,7 @@ export default function DashboardSidebar({
                             إدارة الدفتر
                         </Link>
 
-                        {role !== "Member" && (
+                        {role === "Admin" && (
                             <Link
                                 href="/dashboard/sessions"
                                 className={linkClass("/dashboard/sessions")}
@@ -116,7 +116,7 @@ export default function DashboardSidebar({
                             </Link>
                         )} */}
 
-                        {role === "Admin" && (
+                        {role !== "Member" && (
                             <Link
                                 href="/dashboard/users"
                                 className={linkClass("/dashboard/users")}

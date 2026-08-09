@@ -16,6 +16,7 @@ interface UpdateUserFormProps {
     };
     viewerRole: Role;
     onSuccess?: () => void;
+    hideUpdateFields?: boolean;
 }
 
 type FormState =
@@ -23,7 +24,7 @@ type FormState =
     | { status: "success"; username: string }
     | { status: "error"; message: string };
 
-export default function UpdateUserForm({ user, viewerRole, onSuccess }: UpdateUserFormProps) {
+export default function UpdateUserForm({ user, viewerRole, onSuccess, hideUpdateFields }: UpdateUserFormProps) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [isDeleting, startDeleteTransition] = useTransition();
@@ -121,121 +122,110 @@ export default function UpdateUserForm({ user, viewerRole, onSuccess }: UpdateUs
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
 
-            {/* Username */}
-            <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
-                    اسم الحساب
-                </label>
-                <input
-                    name="username"
-                    type="text"
-                    required
-                    autoComplete="off"
-                    value={fields.username}
-                    onChange={handleChange}
-                    className={inputCls}
-                />
-            </div>
-
-            {/* Phone */}
-            <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
-                    رقم الهاتف
-                </label>
-                <input
-                    name="phone"
-                    type="tel"
-                    required
-                    value={fields.phone}
-                    onChange={handleChange}
-                    className={inputCls}
-                />
-            </div>
-
-            {/* Role + Type row */}
-            <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
-                        الرتبة
-                    </label>
-                    <div className="relative">
-                        <select
-                            name="role"
-                            value={fields.role}
+            {!hideUpdateFields && (
+                <>
+                    {/* Username */}
+                    <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
+                            اسم الحساب
+                        </label>
+                        <input
+                            name="username"
+                            type="text"
+                            required
+                            autoComplete="off"
+                            value={fields.username}
                             onChange={handleChange}
-                            className={selectCls}
-                        >
-                            <option value={Role.Member}>موزع</option>
-                            <option value={Role.Mod}>مدير</option>
-                        </select>
-                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-hw-text-secondary text-xs">▾</span>
+                            className={inputCls}
+                        />
                     </div>
-                </div>
 
-                <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
-                        نوع الحساب
-                    </label>
-                    <div className="relative">
-                        <select
-                            name="type"
-                            value={fields.type}
+                    {/* Phone */}
+                    <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
+                            رقم الهاتف
+                        </label>
+                        <input
+                            name="phone"
+                            type="tel"
+                            required
+                            value={fields.phone}
                             onChange={handleChange}
-                            className={selectCls}
-                        >
-                            <option value={UserType.receiver}>مستورد</option>
-                            <option value={UserType.sender}>مورد</option>
-                        </select>
-                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-hw-text-secondary text-xs">▾</span>
+                            className={inputCls}
+                        />
                     </div>
-                </div>
-            </div>
 
-            {/* Active toggle */}
-            {/* <div className="flex items-center gap-3">
-                <input
-                    id="isActive"
-                    name="isActive"
-                    type="checkbox"
-                    // checked={fields.isActive}
-                    onChange={handleChange}
-                    className="h-4 w-4 rounded border-hw-border-subtle accent-hw-accent-solid"
-                />
-                <label htmlFor="isActive" className="text-sm text-hw-text-secondary">
-                    الحساب نشط
-                </label>
-            </div> */}
+                    {/* Role + Type row */}
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1.5">
+                            <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
+                                الرتبة
+                            </label>
+                            <div className="relative">
+                                <select
+                                    name="role"
+                                    value={fields.role}
+                                    onChange={handleChange}
+                                    className={selectCls}
+                                >
+                                    <option value={Role.Member}>موزع</option>
+                                    <option value={Role.Mod}>مدير</option>
+                                </select>
+                                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-hw-text-secondary text-xs">▾</span>
+                            </div>
+                        </div>
 
-            {/* New Password (optional) */}
-            <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
-                    كلمة مرور جديدة <span className="normal-case font-normal text-hw-text-muted">(اختياري)</span>
-                </label>
-                <input
-                    name="password"
-                    type="password"
-                    placeholder="اتركه فارغاً للإبقاء على كلمة المرور الحالية"
-                    value={fields.password}
-                    onChange={handleChange}
-                    className={inputCls}
-                />
-            </div>
+                        <div className="space-y-1.5">
+                            <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
+                                نوع الحساب
+                            </label>
+                            <div className="relative">
+                                <select
+                                    name="type"
+                                    value={fields.type}
+                                    onChange={handleChange}
+                                    className={selectCls}
+                                >
+                                    <option value={UserType.receiver}>مستورد</option>
+                                    <option value={UserType.sender}>مورد</option>
+                                </select>
+                                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-hw-text-secondary text-xs">▾</span>
+                            </div>
+                        </div>
+                    </div>
 
-            {/* Confirm Password */}
-            {fields.password && (
-                <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
-                        تأكيد كلمة المرور
-                    </label>
-                    <input
-                        name="confirmPassword"
-                        type="password"
-                        placeholder="تأكد من كتابة نفس كلمة المرور"
-                        value={fields.confirmPassword}
-                        onChange={handleChange}
-                        className={inputCls}
-                    />
-                </div>
+                    {/* New Password (optional) */}
+                    <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
+                            كلمة مرور جديدة <span className="normal-case font-normal text-hw-text-muted">(اختياري)</span>
+                        </label>
+                        <input
+                            name="password"
+                            type="password"
+                            placeholder="اتركه فارغاً للإبقاء على كلمة المرور الحالية"
+                            value={fields.password}
+                            onChange={handleChange}
+                            className={inputCls}
+                        />
+                    </div>
+
+                    {/* Confirm Password */}
+                    {fields.password && (
+                        <div className="space-y-1.5">
+                            <label className="block text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
+                                تأكيد كلمة المرور
+                            </label>
+                            <input
+                                name="confirmPassword"
+                                type="password"
+                                placeholder="تأكد من كتابة نفس كلمة المرور"
+                                value={fields.confirmPassword}
+                                onChange={handleChange}
+                                className={inputCls}
+                            />
+                        </div>
+                    )}
+                </>
             )}
 
             {/* Feedback */}
@@ -244,23 +234,24 @@ export default function UpdateUserForm({ user, viewerRole, onSuccess }: UpdateUs
                     {formState.message}
                 </div>
             )}
-            {formState.status === "success" && (
+            {!hideUpdateFields && formState.status === "success" && (
                 <div className="rounded-lg bg-hw-accent-muted/40 border border-hw-accent-muted px-4 py-3 text-sm text-hw-accent">
                     ✓ تم تحديث الحساب <span className="font-mono font-bold">{formState.username}</span> بنجاح.
                 </div>
             )}
 
-            <button
-                type="submit"
-                disabled={isPending || isDeleting || isResetting}
-                className="w-full rounded-lg bg-hw-accent-solid hover:bg-hw-accent-solid-hover disabled:bg-hw-accent-solid/30 disabled:text-hw-accent-solid/50 disabled:cursor-not-allowed px-4 py-2.5 text-sm font-semibold text-white transition-colors"
-            >
-                {isPending ? "جارٍ الحفظ…" : "حفظ التعديلات"}
-            </button>
+            {!hideUpdateFields && (
+                <button
+                    type="submit"
+                    disabled={isPending || isDeleting || isResetting}
+                    className="w-full rounded-lg bg-hw-accent-solid hover:bg-hw-accent-solid-hover disabled:bg-hw-accent-solid/30 disabled:text-hw-accent-solid/50 disabled:cursor-not-allowed px-4 py-2.5 text-sm font-semibold text-white transition-colors"
+                >
+                    {isPending ? "جارٍ الحفظ…" : "حفظ التعديلات"}
+                </button>
+            )}
 
             {/* Admin Danger Zone */}
-            <div className="border-t border-hw-border-subtle pt-4 mt-6 space-y-3">
-                {/* <p className="text-xs font-semibold uppercase tracking-wider text-red-700">منطقة الإدارة (إجراءات خطرة)</p> */}
+            <div className={`${!hideUpdateFields ? 'border-t border-hw-border-subtle pt-4 mt-6' : ''} space-y-3`}>
                 <div className="flex gap-3">
                     <button
                         type="button"
@@ -285,4 +276,4 @@ export default function UpdateUserForm({ user, viewerRole, onSuccess }: UpdateUs
             </div>
         </form>
     );
-}
+}

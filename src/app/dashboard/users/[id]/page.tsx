@@ -126,9 +126,9 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
 
                 <div className="rounded-xl border border-hw-border bg-hw-surface p-5 xl:col-span-2">
                     <p className="text-sm font-medium text-hw-text-secondary mb-4">
-                        تعديل بيانات الحساب
+                        إدارة الحساب
                     </p>
-                    <UpdateUserForm user={targetUser} viewerRole={session.user.role as any} />
+                    <UpdateUserForm user={targetUser} viewerRole={session.user.role as any} hideUpdateFields={true} />
                 </div>
             </div>
 

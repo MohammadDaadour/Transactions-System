@@ -71,7 +71,7 @@ export function SessionCard({
                     <div>
                         <p className="text-xs font-mono text-hw-text-muted">{s.id.substring(0, 8).toUpperCase()}</p>
                         <p className="text-sm font-medium text-hw-text">
-                            {new Date(s.openedAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}
+                            {new Date(s.openedAt).toLocaleString('en-US', { dateStyle: "medium", timeStyle: "short" })}
                         </p>
                     </div>
                 </div>
@@ -95,7 +95,7 @@ export function SessionCard({
                             ${sessionTotal >= 0
                                 ? "text-hw-accent border-hw-accent/30 bg-hw-accent/5"
                                 : "text-red-800 border-red-800 bg-red-900/10"}`}>
-                            {sessionTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} جنيه
+                            {sessionTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} جنيه
                         </span>
                     )}
                     {/* Arrow */}
@@ -117,7 +117,7 @@ export function SessionCard({
                                            border border-hw-border bg-hw-bg text-hw-text-secondary"
                             >
                                 <span className={`${total >= 0 ? "text-hw-accent" : "text-red-800"} font-bold`}>
-                                    {total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    {total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </span>
                                 <span className="text-hw-text-muted">{CURRENCY_LABELS[cur] ?? cur}</span>
                             </span>

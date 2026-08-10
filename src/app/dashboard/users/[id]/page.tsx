@@ -94,7 +94,7 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
                                             {currency} رصيد الحساب
                                         </p>
                                         <p className={`text-2xl font-mono font-bold mt-2 ${balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                            {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                            {balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                                         </p>
                                     </div>
                                 );

@@ -257,7 +257,7 @@ export default function UpdateUserForm({ user, viewerRole, onSuccess, hideUpdate
                         type="button"
                         disabled={isResetting || isPending || isDeleting}
                         onClick={handleResetBalance}
-                        className="flex-1 rounded-lg bg-orange-600/10 hover:bg-orange-600/20 border border-orange-600/30 text-orange-800 hover:text-orange-700 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-sm font-semibold transition-colors"
+                        className="flex-1 rounded-lg bg-orange-800 hover:bg-orange-600/20 border border-orange-600/30 text-white hover:text-orange-700 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-sm font-semibold transition-colors"
                     >
                         {isResetting ? "جارٍ التصفير..." : "تصفير الرصيد الكلي"}
                     </button>
@@ -267,7 +267,7 @@ export default function UpdateUserForm({ user, viewerRole, onSuccess, hideUpdate
                             type="button"
                             disabled={isDeleting || isPending || isResetting}
                             onClick={handleDelete}
-                            className="flex-1 rounded-lg bg-red-600/10 hover:bg-red-600/20 border border-red-600/30 text-red-800 hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-sm font-semibold transition-colors"
+                            className="flex-1 rounded-lg bg-red-800 hover:bg-red-600/20 border border-red-600/30 text-white hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-sm font-semibold transition-colors"
                         >
                             {isDeleting ? "جارٍ الحذف..." : "حذف / تعطيل الحساب"}
                         </button>
@@ -276,4 +276,4 @@ export default function UpdateUserForm({ user, viewerRole, onSuccess, hideUpdate
             </div>
         </form>
     );
-}
+}

@@ -213,7 +213,7 @@ function BalanceCell({ balances }: { balances: UserBalance[] }) {
                 <div key={currency} className="flex items-center gap-1.5">
                     <span className="text-hw-text">{currency}</span>
                     <span className={amount >= 0 ? "text-hw-accent bold text-lg" : "text-red-800 bold text-lg"}>
-                        {amount.toLocaleString("ar-EG", { minimumFractionDigits: 2 })}
+                        {amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </span>
                 </div>
             ))}

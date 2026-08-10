@@ -170,7 +170,7 @@ export default function SessionsHistoryClient({
                 <div className="text-left">
                     {ratesReady ? (
                         <p className={`text-3xl font-bold font-mono ${grandTotal >= 0 ? "text-hw-accent" : "text-red-500"}`}>
-                            {grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            {grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             <span className="text-sm font-normal text-hw-text-muted mr-2">جنيه</span>
                         </p>
                     ) : (
@@ -205,7 +205,7 @@ export default function SessionsHistoryClient({
                                 ${balanceGrandTotal >= 0
                                     ? "text-hw-accent border-hw-accent/30 bg-hw-accent/5"
                                     : "text-red-800 border-red-800 bg-red-900/10"}`}>
-                                {balanceGrandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} جنيه
+                                {balanceGrandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} جنيه
                             </span>
                         )}
                     </div>
@@ -254,7 +254,7 @@ export default function SessionsHistoryClient({
                                                             {bal !== undefined ? (
                                                                 <span className={`font-mono font-bold
                                                                     ${bal > 0 ? "text-hw-accent" : bal < 0 ? "text-red-800" : "text-hw-text-muted"}`}>
-                                                                    {bal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                                    {bal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                                     <span className="text-xs font-normal text-black mx-2 mr-1">{cur}</span>
                                                                 </span>
                                                             ) : (
@@ -266,7 +266,7 @@ export default function SessionsHistoryClient({
                                                 {ratesReady && (
                                                     <td className={`px-4 py-3 font-mono font-bold text-left
                                                         ${egpTotal > 0 ? "text-hw-accent" : egpTotal < 0 ? "text-red-800" : "text-black"}`}>
-                                                        {egpTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        {egpTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                         <span className="text-xs font-normal text-black mr-1">ج</span>
                                                     </td>
                                                 )}
@@ -285,7 +285,7 @@ export default function SessionsHistoryClient({
                                                 <td key={cur} className="px-4 py-3 text-center">
                                                     <span className={`font-mono font-bold
                                                         ${total > 0 ? "text-hw-accent" : total < 0 ? "text-red-800" : "text-black"}`}>
-                                                        {total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        {total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                         <span className="text-xs font-normal text-black mx-2 mr-1">{cur}</span>
                                                     </span>
                                                 </td>
@@ -294,7 +294,7 @@ export default function SessionsHistoryClient({
                                         {ratesReady && (
                                             <td className={`px-4 py-3 font-mono font-bold text-left
                                                 ${balanceGrandTotal > 0 ? "text-hw-accent" : balanceGrandTotal < 0 ? "text-red-800" : "text-hw-text-muted"}`}>
-                                                {balanceGrandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                {balanceGrandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 <span className="text-xs font-normal text-hw-text-muted mr-1">ج</span>
                                             </td>
                                         )}

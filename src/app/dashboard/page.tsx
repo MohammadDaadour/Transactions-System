@@ -141,7 +141,7 @@ export default async function DashboardOverview() {
                                         <span className="inline-block mb-2">{currency} رصيد الحساب</span>
                                     </p>
                                     <p className={`text-2xl font-mono font-bold ${inverted >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                        {inverted.toLocaleString(undefined, { minimumFractionDigits: 0 })}
+                                        {inverted.toLocaleString('en-US', { minimumFractionDigits: 0 })}
                                     </p>
                                     {users.filter((u) => u.balance !== 0).length > 0 && (
                                         <div className="border-t border-hw-border/50 pt-3 space-y-1.5">
@@ -150,7 +150,7 @@ export default async function DashboardOverview() {
                                                     <div className="flex justify-between items-center text-xs hover:bg-hw-accent/50 rounded-lg p-2">
                                                         <span className="font-mono text-hw-text text-lg">{u.username}</span>
                                                         <span className={`font-mono font-medium text-lg ${u.balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                                            {u.balance.toLocaleString(undefined, { minimumFractionDigits: 0 })}
+                                                            {u.balance.toLocaleString('en-US', { minimumFractionDigits: 0 })}
                                                         </span>
                                                     </div>
                                                 </Link>
@@ -183,7 +183,7 @@ export default async function DashboardOverview() {
                                                 {currency} رصيد الحساب
                                             </p>
                                             <p className="text-2xl font-mono font-bold mt-2 text-hw-text">
-                                                {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                                {balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                                             </p>
                                         </div>
                                     );
@@ -209,7 +209,7 @@ export default async function DashboardOverview() {
                                                 <span className="inline-block mb-2">{currency} إجمالي</span>
                                             </p>
                                             <p className={`text-2xl font-mono font-bold ${total >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                                {total.toLocaleString(undefined, { minimumFractionDigits: 0 })}
+                                                {total.toLocaleString('en-US', { minimumFractionDigits: 0 })}
                                             </p>
                                             {users.length > 0 && (
                                                 <div className="border-t border-hw-border/50 pt-3 space-y-1.5">
@@ -217,7 +217,7 @@ export default async function DashboardOverview() {
                                                         <div key={u.username} className="flex justify-between items-center text-xs">
                                                             <span className="font-mono text-hw-text text-lg">{u.username}</span>
                                                             <span className={`font-mono font-medium text-lg ${u.balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                                                {u.balance.toLocaleString(undefined, { minimumFractionDigits: 0 })}
+                                                                {u.balance.toLocaleString('en-US', { minimumFractionDigits: 0 })}
                                                             </span>
                                                         </div>
                                                     ))}
@@ -242,7 +242,7 @@ export default async function DashboardOverview() {
                                                     {currency} إجمالي
                                                 </p>
                                                 <p className="text-2xl font-mono font-bold mt-2 text-hw-text">
-                                                    {balance.toLocaleString(undefined, { minimumFractionDigits: 0 })}
+                                                    {balance.toLocaleString('en-US', { minimumFractionDigits: 0 })}
                                                 </p>
                                             </div>
                                         );

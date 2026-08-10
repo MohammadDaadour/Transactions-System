@@ -55,7 +55,7 @@ export default function SessionControl({ activeSession, isAdmin }: SessionContro
         }
     }
 
-    const formattedDate = new Date(activeSession.openedAt).toLocaleString("ar-EG", {
+    const formattedDate = new Date(activeSession.openedAt).toLocaleString('en-US', {
         dateStyle: "medium",
         timeStyle: "short",
     });

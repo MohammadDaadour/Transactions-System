@@ -131,7 +131,7 @@ export function UserTransactionPanel({ userId, showReversalControl }: Props) {
                                             </span>
                                         </td>
                                         <td className="px-4 py-3 text-right font-mono font-bold whitespace-nowrap">
-                                            {tx.amount.toLocaleString("ar-EG", {
+                                            {tx.amount.toLocaleString('en-US', {
                                                 minimumFractionDigits: 2,
                                                 maximumFractionDigits: 2,
                                             })} <span className="text-xs text-hw-text-muted font-normal">{tx.currency}</span>

@@ -82,7 +82,7 @@ export function TransactionPanel({ sessionId, totalCount }: { sessionId: string;
                                     </td>
                                     <td className={`py-2.5 font-mono font-bold text-left
                                         ${tx.type === "CREDIT" ? "text-hw-accent" : "text-red-400"}`}>
-                                        {tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        {tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </td>
                                     <td className="py-2.5">
                                         <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-hw-bg border border-hw-border">

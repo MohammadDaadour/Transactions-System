@@ -148,7 +148,7 @@ export function SessionDetailClient({ session: s }: { session: Session }) {
                             </p>
                             <h1 className="text-lg font-bold text-hw-text mt-0.5">
                                 جلسة{" "}
-                                {new Date(s.openedAt).toLocaleString("ar-EG", {
+                                {new Date(s.openedAt).toLocaleString('en-US', {
                                     dateStyle: "full",
                                     timeStyle: "short",
                                 })}
@@ -165,7 +165,7 @@ export function SessionDetailClient({ session: s }: { session: Session }) {
                         { label: "فُتحت بواسطة",  value: s.openedByUser.username },
                         { label: "أُغلقت بواسطة", value: s.closedByUser?.username ?? "—" },
                         { label: "المدة",          value: duration },
-                        { label: "عدد القيود",    value: s._count.transactions.toLocaleString() },
+                        { label: "عدد القيود",    value: s._count.transactions.toLocaleString('en-US') },
                     ].map(({ label, value }) => (
                         <div key={label} className="py-4 px-3">
                             <p className="text-xs text-hw-text-muted">{label}</p>
@@ -202,7 +202,7 @@ export function SessionDetailClient({ session: s }: { session: Session }) {
                                     </span>
                                 </div>
                                 <p className={`text-2xl font-bold font-mono ${total >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                    {total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    {total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </p>
                                 <p className="text-xs text-black">{cur}</p>
                             </div>
@@ -230,7 +230,7 @@ export function SessionDetailClient({ session: s }: { session: Session }) {
                     <div className="text-left">
                         {ratesReady ? (
                             <p className={`text-3xl font-bold font-mono ${sessionTotal >= 0 ? "text-hw-accent" : "text-red-800"}`}>
-                                {sessionTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                {sessionTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 <span className="text-sm font-normal text-hw-text-muted mr-2">جنيه</span>
                             </p>
                         ) : (
@@ -264,14 +264,14 @@ export function SessionDetailClient({ session: s }: { session: Session }) {
                                                             key={cur}
                                                             className="text-xs font-mono px-2 py-0.5 rounded border border-hw-border bg-hw-bg text-hw-text-secondary whitespace-nowrap"
                                                         >
-                                                            {bal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {cur}
+                                                            {bal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {cur}
                                                         </span>
                                                     ))}
                                                 </div>
                                             </td>
                                             <td className={`px-4 py-3 font-mono font-bold text-left
                                                 ${u.total > 0 ? "text-hw-accent" : u.total < 0 ? "text-red-800" : "text-hw-text-muted"}`}>
-                                                {u.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                {u.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </td>
                                             <td className="px-4 py-3 text-center">
                                                 <span className={`text-xs font-semibold
@@ -297,7 +297,7 @@ export function SessionDetailClient({ session: s }: { session: Session }) {
             {/* ── Transactions ── */}
             {/* <div className="space-y-3">
                 <h2 className="text-sm font-semibold text-hw-text-secondary uppercase tracking-wider">
-                    القيود ({s._count.transactions.toLocaleString()})
+                    القيود ({s._count.transactions.toLocaleString('en-US')})
                 </h2>
                 <div className="rounded-xl border border-hw-border bg-hw-surface p-5">
                     {s._count.transactions === 0 ? (

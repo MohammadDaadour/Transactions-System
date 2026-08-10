@@ -5,6 +5,7 @@ import { Currency } from "../../../../generated/prisma/client";
 import { redirect, notFound } from "next/navigation";
 import { UserTransactionPanel } from "../../../../components/UserTransactionPanel";
 import UpdateUserForm from "../../../../components/UpdateUserForm";
+import ManualTransactionForm from "../../../../components/ManualTransactionForm";
 import Link from "next/link";
 
 const currencyIcons: Record<Currency, React.ReactNode> = {
@@ -124,7 +125,19 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
                     </div>
                 </div>
 
-                <div className="rounded-xl border border-hw-border bg-hw-surface p-5 xl:col-span-2">
+                <div className="rounded-xl border border-hw-border bg-hw-surface p-5 h-fit">
+                    <p className="text-sm font-medium text-hw-text-secondary mb-4">
+                        إضافة معاملة
+                    </p>
+                    <ManualTransactionForm 
+                        users={[{ id: targetUser.id, username: targetUser.username }]} 
+                        allowOpeningBalance={session.user.role === "Admin"}
+                        preselectedUserId={targetUser.id}
+                        lockUserSelect={true}
+                    />
+                </div>
+
+                <div className="rounded-xl border border-hw-border bg-hw-surface p-5 h-fit">
                     <p className="text-sm font-medium text-hw-text-secondary mb-4">
                         إدارة الحساب
                     </p>

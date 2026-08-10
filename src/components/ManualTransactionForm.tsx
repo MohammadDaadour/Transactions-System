@@ -12,9 +12,11 @@ interface UserOption {
 interface FormProps {
     users: UserOption[];
     allowOpeningBalance: boolean;
+    preselectedUserId?: string;
+    lockUserSelect?: boolean;
 }
 
-export default function ManualTransactionForm({ users, allowOpeningBalance }: FormProps) {
+export default function ManualTransactionForm({ users, allowOpeningBalance, preselectedUserId, lockUserSelect }: FormProps) {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ success: boolean; text: string } | null>(null);
 
@@ -47,15 +49,19 @@ export default function ManualTransactionForm({ users, allowOpeningBalance }: Fo
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-                <label className="block text-xs font-medium text-hw-text-secondary mb-1">الحساب المستهدف</label>
-                <select name="userId" required className="w-full bg-hw-bg border border-hw-border rounded-md p-2 text-sm text-hw-text focus:border-hw-accent focus:outline-none">
-                    <option value="">-- اختر الحساب --</option>
-                    {users.map((u) => (
-                        <option key={u.id} value={u.id}>{u.username}</option>
-                    ))}
-                </select>
-            </div>
+            {lockUserSelect && preselectedUserId ? (
+                <input type="hidden" name="userId" value={preselectedUserId} />
+            ) : (
+                <div>
+                    <label className="block text-xs font-medium text-hw-text-secondary mb-1">الحساب المستهدف</label>
+                    <select name="userId" required defaultValue={preselectedUserId} className="w-full bg-hw-bg border border-hw-border rounded-md p-2 text-sm text-hw-text focus:border-hw-accent focus:outline-none">
+                        <option value="">-- اختر الحساب --</option>
+                        {users.map((u) => (
+                            <option key={u.id} value={u.id}>{u.username}</option>
+                        ))}
+                    </select>
+                </div>
+            )}
 
             <div className="grid grid-cols-2 gap-4">
                 <div>

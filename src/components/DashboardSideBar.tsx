@@ -25,7 +25,6 @@ export default function DashboardSidebar({
 
     return (
         <>
-            {/* ADDED: Mobile menu button */}
             <button
                 onClick={() => setOpen(!open)}
                 className="md:hidden fixed top-4 left-4 z-50 px-3 py-2 rounded bg-hw-surface border border-hw-border"
@@ -33,7 +32,6 @@ export default function DashboardSidebar({
                 ☰
             </button>
 
-            {/* ADDED: Mobile overlay */}
             {open && (
                 <div
                     className="fixed inset-0 bg-black/50 z-40 md:hidden"
@@ -41,7 +39,6 @@ export default function DashboardSidebar({
                 />
             )}
 
-            {/* CHANGED: Sidebar is hidden on mobile unless menu is open */}
             <div className="w-0 md:w-64"></div>
             <aside
                 className={`
@@ -96,6 +93,22 @@ export default function DashboardSidebar({
                             إدارة الدفتر
                         </Link>
 
+                        <Link
+                            href="/dashboard/transfers"
+                            className={linkClass("/dashboard/transfers")}
+                            onClick={() => setOpen(false)}
+                        >
+                            التحويلات
+                        </Link>
+
+                        <Link
+                            href="/dashboard/transfers/history"
+                            className={linkClass("/dashboard/transfers/history")}
+                            onClick={() => setOpen(false)}
+                        >
+                            سجل التحويلات
+                        </Link>
+
                         {role === "Admin" && (
                             <Link
                                 href="/dashboard/sessions"
@@ -105,16 +118,6 @@ export default function DashboardSidebar({
                                 سجل الجلسات
                             </Link>
                         )}
-
-                        {/* {role === "Admin" && (
-                            <Link
-                                href="/dashboard/audits"
-                                className={linkClass("/dashboard/audits")}
-                                onClick={() => setOpen(false)}
-                            >
-                                سجلات التدقيق
-                            </Link>
-                        )} */}
 
                         {role !== "Member" && (
                             <Link

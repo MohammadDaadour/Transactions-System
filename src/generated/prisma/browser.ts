@@ -47,3 +47,8 @@ export type SessionBalance = Prisma.SessionBalanceModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model TransferOrder
+ * 
+ */
+export type TransferOrder = Prisma.TransferOrderModel

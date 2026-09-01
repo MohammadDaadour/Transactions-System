@@ -389,7 +389,8 @@ export const ModelName = {
   Transaction: 'Transaction',
   Session: 'Session',
   SessionBalance: 'SessionBalance',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  TransferOrder: 'TransferOrder'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userBalance" | "transaction" | "session" | "sessionBalance" | "auditLog"
+    modelProps: "user" | "userBalance" | "transaction" | "session" | "sessionBalance" | "auditLog" | "transferOrder"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +854,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TransferOrder: {
+      payload: Prisma.$TransferOrderPayload<ExtArgs>
+      fields: Prisma.TransferOrderFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TransferOrderFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TransferOrderFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload>
+        }
+        findFirst: {
+          args: Prisma.TransferOrderFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TransferOrderFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload>
+        }
+        findMany: {
+          args: Prisma.TransferOrderFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload>[]
+        }
+        create: {
+          args: Prisma.TransferOrderCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload>
+        }
+        createMany: {
+          args: Prisma.TransferOrderCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TransferOrderCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload>[]
+        }
+        delete: {
+          args: Prisma.TransferOrderDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload>
+        }
+        update: {
+          args: Prisma.TransferOrderUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload>
+        }
+        deleteMany: {
+          args: Prisma.TransferOrderDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TransferOrderUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TransferOrderUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload>[]
+        }
+        upsert: {
+          args: Prisma.TransferOrderUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderPayload>
+        }
+        aggregate: {
+          args: Prisma.TransferOrderAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransferOrder>
+        }
+        groupBy: {
+          args: Prisma.TransferOrderGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferOrderGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TransferOrderCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferOrderCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -970,6 +1045,24 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const TransferOrderScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  amount: 'amount',
+  number: 'number',
+  currency: 'currency',
+  status: 'status',
+  version: 'version',
+  receiverId: 'receiverId',
+  senderId: 'senderId',
+  takenAt: 'takenAt',
+  doneAt: 'doneAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TransferOrderScalarFieldEnum = (typeof TransferOrderScalarFieldEnum)[keyof typeof TransferOrderScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1167,6 +1260,34 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'TransferCurrency'
+ */
+export type EnumTransferCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferCurrency'>
+    
+
+
+/**
+ * Reference to a field of type 'TransferCurrency[]'
+ */
+export type ListEnumTransferCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferCurrency[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TransferStatus'
+ */
+export type EnumTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TransferStatus[]'
+ */
+export type ListEnumTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1177,6 +1298,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -1295,6 +1430,7 @@ export type GlobalOmitConfig = {
   session?: Prisma.SessionOmit
   sessionBalance?: Prisma.SessionBalanceOmit
   auditLog?: Prisma.AuditLogOmit
+  transferOrder?: Prisma.TransferOrderOmit
 }
 
 /* Types for Logging */

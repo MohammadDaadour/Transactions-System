@@ -61,3 +61,27 @@ export const BalanceStatus = {
 } as const
 
 export type BalanceStatus = (typeof BalanceStatus)[keyof typeof BalanceStatus]
+
+
+export const TransferCurrency = {
+  VODAFONE_CASH: 'VODAFONE_CASH',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  CASH_EGP: 'CASH_EGP',
+  AED: 'AED',
+  KWD: 'KWD',
+  SWIFT_CHINA: 'SWIFT_CHINA',
+  SWIFT_KOREA: 'SWIFT_KOREA',
+  SWIFT_AUSTRALIA: 'SWIFT_AUSTRALIA'
+} as const
+
+export type TransferCurrency = (typeof TransferCurrency)[keyof typeof TransferCurrency]
+
+
+export const TransferStatus = {
+  PENDING: 'PENDING',
+  TAKEN: 'TAKEN',
+  DONE: 'DONE',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type TransferStatus = (typeof TransferStatus)[keyof typeof TransferStatus]

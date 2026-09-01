@@ -33,50 +33,65 @@ CREATE TABLE "session_balances" (
 ALTER TABLE "transactions" ADD COLUMN "session_id" UUID;
 ALTER TABLE "user_balances" ADD COLUMN "session_id" UUID;
 
--- Create one CLOSED historical session
--- Using a subquery to find an admin ID
-INSERT INTO "sessions" ("id", "status", "opened_at", "closed_at", "opened_by", "closed_by", "notes")
-VALUES (
-    '00000000-0000-0000-0000-000000000001'::UUID,
-    'CLOSED',
-    NOW() - INTERVAL '1 day',
-    NOW(),
-    (SELECT id FROM users WHERE role = 'Admin' LIMIT 1),
-    (SELECT id FROM users WHERE role = 'Admin' LIMIT 1),
-    'Historical transactions migration session'
-);
+-- Create one CLOSED historical session (only if an Admin user exists — guards shadow DB replay)
+DO $$
+DECLARE
+  admin_id UUID;
+BEGIN
+  SELECT id INTO admin_id FROM users WHERE role = 'Admin' LIMIT 1;
+  IF admin_id IS NOT NULL THEN
+    INSERT INTO "sessions" ("id", "status", "opened_at", "closed_at", "opened_by", "closed_by", "notes")
+    VALUES (
+        '00000000-0000-0000-0000-000000000001'::UUID,
+        'CLOSED',
+        NOW() - INTERVAL '1 day',
+        NOW(),
+        admin_id,
+        admin_id,
+        'Historical transactions migration session'
+    );
 
--- Assign all existing transactions to the historical session
-UPDATE "transactions" SET "session_id" = '00000000-0000-0000-0000-000000000001'::UUID WHERE "session_id" IS NULL;
+    -- Assign all existing transactions to the historical session
+    UPDATE "transactions" SET "session_id" = '00000000-0000-0000-0000-000000000001'::UUID WHERE "session_id" IS NULL;
 
--- Assign all existing user balances to the historical session
-UPDATE "user_balances" SET "session_id" = '00000000-0000-0000-0000-000000000001'::UUID WHERE "session_id" IS NULL;
+    -- Assign all existing user balances to the historical session
+    UPDATE "user_balances" SET "session_id" = '00000000-0000-0000-0000-000000000001'::UUID WHERE "session_id" IS NULL;
 
--- Generate SessionBalance snapshots for the historical session
-INSERT INTO "session_balances" ("id", "session_id", "user_id", "currency", "balance", "balance_status")
-SELECT
-    gen_random_uuid(),
-    '00000000-0000-0000-0000-000000000001'::UUID,
-    "user_id",
-    "currency",
-    "balance",
-    CASE
-        WHEN "balance" > 0 THEN 'POSITIVE'::"BalanceStatus"
-        WHEN "balance" < 0 THEN 'NEGATIVE'::"BalanceStatus"
-        ELSE 'ZERO'::"BalanceStatus"
-    END
-FROM "user_balances"
-WHERE "session_id" = '00000000-0000-0000-0000-000000000001'::UUID;
+    -- Generate SessionBalance snapshots for the historical session
+    INSERT INTO "session_balances" ("id", "session_id", "user_id", "currency", "balance", "balance_status")
+    SELECT
+        gen_random_uuid(),
+        '00000000-0000-0000-0000-000000000001'::UUID,
+        "user_id",
+        "currency",
+        "balance",
+        CASE
+            WHEN "balance" > 0 THEN 'POSITIVE'::"BalanceStatus"
+            WHEN "balance" < 0 THEN 'NEGATIVE'::"BalanceStatus"
+            ELSE 'ZERO'::"BalanceStatus"
+        END
+    FROM "user_balances"
+    WHERE "session_id" = '00000000-0000-0000-0000-000000000001'::UUID;
+  END IF;
+END $$;
 
--- Create one OPEN session for future work
-INSERT INTO "sessions" ("id", "status", "opened_at", "opened_by", "notes")
-VALUES (
-    gen_random_uuid(),
-    'OPEN',
-    NOW(),
-    (SELECT id FROM users WHERE role = 'Admin' LIMIT 1),
-    'Active session started after migration'
-);
+-- Create one OPEN session for future work (only if an Admin user exists)
+DO $$
+DECLARE
+  admin_id UUID;
+BEGIN
+  SELECT id INTO admin_id FROM users WHERE role = 'Admin' LIMIT 1;
+  IF admin_id IS NOT NULL THEN
+    INSERT INTO "sessions" ("id", "status", "opened_at", "opened_by", "notes")
+    VALUES (
+        gen_random_uuid(),
+        'OPEN',
+        NOW(),
+        admin_id,
+        'Active session started after migration'
+    );
+  END IF;
+END $$;
 
 -- Enforce NOT NULL on the columns now that existing records are populated
 ALTER TABLE "transactions" ALTER COLUMN "session_id" SET NOT NULL;

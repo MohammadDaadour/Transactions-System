@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Swal from "sweetalert2";
 import EditTransactionModal from "./EditTransactionModal";
 
@@ -26,12 +26,40 @@ interface TableProps {
 export default function DynamicLedgerTable({ transactions, showReversalControl, userRole }: TableProps) {
     const [editTarget, setEditTarget] = useState<TransactionRow | null>(null);
     const [localRows, setLocalRows] = useState(transactions);
+    const [searchQuery, setSearchQuery] = useState("");
 
-    // Keep localRows in sync when parent re-fetches (e.g. after navigation)
-    // Simple approach: on any outer transaction change, reset
-    if (localRows !== transactions && localRows.length === 0 && transactions.length > 0) {
+    // Keep localRows in sync when parent re-fetches (e.g. after navigation or filter changes)
+    useEffect(() => {
         setLocalRows(transactions);
-    }
+    }, [transactions]);
+
+    const filteredRows = useMemo(() => {
+        const query = searchQuery.trim().toLowerCase();
+        if (!query) return localRows;
+
+        return localRows.filter((tx) => {
+            const idMatch = tx.id.toLowerCase().includes(query);
+            const userMatch = tx.user?.username?.toLowerCase().includes(query) ?? false;
+            const creatorMatch = tx.creator?.username?.toLowerCase().includes(query) ?? false;
+            const notesMatch = tx.notes ? tx.notes.toLowerCase().includes(query) : false;
+            const amountMatch = tx.amount.toString().includes(query);
+            const currencyMatch = tx.currency.toLowerCase().includes(query);
+            const dateStr = new Date(tx.date).toLocaleDateString("ar-EG");
+            const dateIso = new Date(tx.date).toISOString().slice(0, 10);
+            const dateMatch = dateStr.includes(query) || dateIso.includes(query);
+            const typeLabel =
+                tx.type === "debit"
+                    ? "مدين لنا"
+                    : tx.type === "credit"
+                    ? "دائن علينا"
+                    : tx.type === "opening_balance"
+                    ? "رصيد افتتاحي"
+                    : tx.type;
+            const typeMatch = typeLabel.toLowerCase().includes(query) || tx.type.toLowerCase().includes(query);
+
+            return idMatch || userMatch || creatorMatch || notesMatch || amountMatch || currencyMatch || dateMatch || typeMatch;
+        });
+    }, [localRows, searchQuery]);
 
     async function handleDelete(tx: TransactionRow) {
         const result = await Swal.fire({
@@ -90,27 +118,87 @@ export default function DynamicLedgerTable({ transactions, showReversalControl, 
                 />
             )}
 
-            <div className="overflow-x-auto rounded-xl border border-hw-border bg-hw-surface">
-                <table className="w-full text-right text-sm text-hw-text-secondary">
-                    <thead className="bg-hw-bg text-xs font-semibold uppercase tracking-wider text-hw-text-secondary border-b border-hw-border">
-                        <tr>
-                            <th className="px-4 py-3">التاريخ</th>
-                            <th className="px-4 py-3">الرقم المرجعي</th>
-                            <th className="px-4 py-3">اسم الحساب</th>
-                            <th className="px-4 py-3">النوع</th>
-                            <th className="px-4 py-3 text-right">المبلغ</th>
-                            <th className="px-4 py-3">ملاحظات</th>
-                            <th className="px-4 py-3">المسؤول</th>
-                            {showActions && <th className="px-4 py-3 text-center">الإجراء</th>}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-hw-border font-normal">
-                        {localRows.length === 0 ? (
+            <div className="space-y-3">
+                {/* Search Bar */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="relative flex-1 max-w-md">
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-hw-text-muted">
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="بحث في العمليات (الرقم المرجعي، الحساب، المبلغ، الملاحظات...)"
+                            className="w-full rounded-lg border border-hw-border bg-hw-bg text-hw-text text-sm pr-9 pl-9 py-2 focus:outline-none focus:ring-1 focus:ring-hw-accent transition placeholder:text-hw-text-muted"
+                        />
+                        {searchQuery && (
+                            <button
+                                type="button"
+                                onClick={() => setSearchQuery("")}
+                                className="absolute inset-y-0 left-0 flex items-center pl-3 text-hw-text-muted hover:text-hw-text transition text-sm"
+                                title="مسح البحث"
+                            >
+                                ✕
+                            </button>
+                        )}
+                    </div>
+
+                    {searchQuery.trim() && (
+                        <div className="flex items-center gap-2 text-xs font-mono text-hw-text-secondary">
+                            <span>النتائج:</span>
+                            <span className="font-bold text-hw-accent">{filteredRows.length}</span>
+                            <span>من أصل {localRows.length}</span>
+                            <button
+                                onClick={() => setSearchQuery("")}
+                                className="mr-2 text-xs text-hw-accent hover:underline font-medium font-sans"
+                            >
+                                إلغاء التصفية
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                <div className="overflow-x-auto rounded-xl border border-hw-border bg-hw-surface">
+                    <table className="w-full text-right text-sm text-hw-text-secondary">
+                        <thead className="bg-hw-bg text-xs font-semibold uppercase tracking-wider text-hw-text-secondary border-b border-hw-border">
                             <tr>
-                                <td colSpan={colSpan} className="text-center py-8 text-hw-text-muted italic">لا يوجد قيود محاسبية.</td>
+                                <th className="px-4 py-3">التاريخ</th>
+                                <th className="px-4 py-3">الرقم المرجعي</th>
+                                <th className="px-4 py-3">اسم الحساب</th>
+                                <th className="px-4 py-3">النوع</th>
+                                <th className="px-4 py-3 text-right">المبلغ</th>
+                                <th className="px-4 py-3">ملاحظات</th>
+                                <th className="px-4 py-3">المسؤول</th>
+                                {showActions && <th className="px-4 py-3 text-center">الإجراء</th>}
                             </tr>
-                        ) : (
-                            localRows.map((tx) => {
+                        </thead>
+                        <tbody className="divide-y divide-hw-border font-normal">
+                            {localRows.length === 0 ? (
+                                <tr>
+                                    <td colSpan={colSpan} className="text-center py-8 text-hw-text-muted italic">لا يوجد قيود محاسبية.</td>
+                                </tr>
+                            ) : filteredRows.length === 0 ? (
+                                <tr>
+                                    <td colSpan={colSpan} className="text-center py-10 text-hw-text-muted">
+                                        <div className="flex flex-col items-center justify-center gap-2">
+                                            <svg className="h-8 w-8 text-hw-text-muted/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                            </svg>
+                                            <p className="text-sm">لا توجد عمليات مطابقة للبحث <span className="font-semibold text-hw-text">"{searchQuery}"</span></p>
+                                            <button
+                                                onClick={() => setSearchQuery("")}
+                                                className="mt-1 text-xs text-hw-accent hover:underline font-medium"
+                                            >
+                                                إعادة ضبط البحث
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ) : (
+                                filteredRows.map((tx) => {
                                 const isReversal = tx.notes?.includes("REVERSAL");
                                 const isOpeningBalance = tx.type === "opening_balance";
                                 const sessionOpen = tx.sessionStatus === "OPEN" || tx.sessionStatus == null;
@@ -167,6 +255,7 @@ export default function DynamicLedgerTable({ transactions, showReversalControl, 
                         )}
                     </tbody>
                 </table>
+            </div>
             </div>
         </>
     );

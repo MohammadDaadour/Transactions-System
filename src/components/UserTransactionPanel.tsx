@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Swal from "sweetalert2";
-import { reverseTransaction } from "../app/actions/reversals";
+import EditTransactionModal from "./EditTransactionModal";
 import { Pagination } from "../app/dashboard/sessions/components/Pagination";
 
 interface TransactionRow {
@@ -14,6 +14,8 @@ interface TransactionRow {
     notes: string | null;
     user: { username: string };
     creator: { username: string };
+    sessionId?: string | null;
+    sessionStatus?: string | null;
 }
 
 interface Props {
@@ -29,6 +31,7 @@ export function UserTransactionPanel({ userId, showReversalControl }: Props) {
     const [pageCount, setPageCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [fetched, setFetched] = useState(false);
+    const [editTarget, setEditTarget] = useState<TransactionRow | null>(null);
 
     const fetchTx = useCallback(async (p: number) => {
         setLoading(true);
@@ -45,38 +48,45 @@ export function UserTransactionPanel({ userId, showReversalControl }: Props) {
 
     useEffect(() => { fetchTx(txPage); }, [txPage, fetchTx]);
 
-    async function handleReversal(id: string) {
+    async function handleDelete(tx: TransactionRow) {
         const result = await Swal.fire({
-            title: 'تأكيد العملية',
-            text: 'هل تريد تأكيد مسح العملية؟',
-            icon: 'warning',
+            title: "حذف العملية",
+            html: `سيتم حذف هذه العملية وعكس أثرها على الرصيد.<br/><br/>
+                   <span class="text-sm text-amber-500 font-semibold">⚠ يمكن الاسترداد خلال ١٥ يوماً من سلة المحذوفات</span>`,
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonText: 'نعم',
-            cancelButtonText: 'إلغاء',
-            confirmButtonColor: '#90AB8B',
-            cancelButtonColor: '#1e293b'
+            confirmButtonText: "نعم، احذف",
+            cancelButtonText: "إلغاء",
+            confirmButtonColor: "#dc2626",
+            cancelButtonColor: "#1e293b",
         });
 
         if (!result.isConfirmed) return;
 
-        const response = await reverseTransaction(id, "");
+        const res = await fetch(`/api/transactions/${tx.id}`, { method: "DELETE" });
+        const data = await res.json();
 
-        if (response.success) {
+        if (!res.ok) {
             await Swal.fire({
-                title: 'تم بنجاح',
-                text: 'تمت تسوية بند الدفتر بنجاح.',
-                icon: 'success',
-                confirmButtonText: 'موافق'
+                title: "خطأ",
+                text: data.error ?? "حدث خطأ أثناء الحذف",
+                icon: "error",
+                confirmButtonText: "موافق",
             });
-            fetchTx(txPage); 
         } else {
             await Swal.fire({
-                title: 'خطأ',
-                text: `حدث خطأ: ${response.error}`,
-                icon: 'error',
-                confirmButtonText: 'موافق'
+                title: "تم الحذف",
+                text: "تم حذف العملية ونقلها إلى سلة المحذوفات.",
+                icon: "success",
+                confirmButtonText: "موافق",
             });
+            fetchTx(txPage);
         }
+    }
+
+    function handleEditSuccess() {
+        setEditTarget(null);
+        fetchTx(txPage);
     }
 
     if (!fetched && loading) {
@@ -90,11 +100,23 @@ export function UserTransactionPanel({ userId, showReversalControl }: Props) {
 
     return (
         <div className="space-y-4">
+            {editTarget && (
+                <EditTransactionModal
+                    transaction={{
+                        ...editTarget,
+                        date: new Date(editTarget.date),
+                    }}
+                    onClose={() => setEditTarget(null)}
+                    onSuccess={handleEditSuccess}
+                />
+            )}
+
             <div className="overflow-x-auto rounded-xl border border-hw-border bg-hw-surface">
                 <table className="w-full text-right text-sm text-hw-text-secondary">
                     <thead className="bg-hw-bg text-xs font-semibold uppercase tracking-wider text-hw-text-secondary border-b border-hw-border">
                         <tr>
                             <th className="px-4 py-3">التاريخ</th>
+                            <th className="px-4 py-3">الرقم المرجعي</th>
                             <th className="px-4 py-3">اسم الحساب</th>
                             <th className="px-4 py-3">النوع</th>
                             <th className="px-4 py-3 text-right">المبلغ</th>
@@ -107,21 +129,25 @@ export function UserTransactionPanel({ userId, showReversalControl }: Props) {
                         {loading && fetched ? (
                             Array.from({ length: TX_PER_PAGE }).map((_, i) => (
                                 <tr key={i} className="animate-pulse">
-                                    <td colSpan={showReversalControl ? 7 : 6} className="px-4 py-3">
+                                    <td colSpan={showReversalControl ? 8 : 7} className="px-4 py-3">
                                         <div className="h-4 rounded bg-hw-border/40 w-full" />
                                     </td>
                                 </tr>
                             ))
                         ) : transactions.length === 0 ? (
                             <tr>
-                                <td colSpan={showReversalControl ? 7 : 6} className="text-center py-8 text-hw-text-muted italic">لا يوجد قيود محاسبية.</td>
+                                <td colSpan={showReversalControl ? 8 : 7} className="text-center py-8 text-hw-text-muted italic">لا يوجد قيود محاسبية.</td>
                             </tr>
                         ) : (
                             transactions.map((tx) => {
                                 const isReversal = tx.notes?.includes("REVERSAL");
+                                const isOpeningBalance = tx.type === "opening_balance";
+                                const sessionOpen = tx.sessionStatus === "OPEN" || tx.sessionStatus == null;
+
                                 return (
                                     <tr key={tx.id} className={`hover:bg-hw-bg/50 transition ${isReversal ? "bg-hw-warning-bg text-hw-text-secondary" : ""}`}>
                                         <td className="px-4 py-3 font-mono whitespace-nowrap">{new Date(tx.date).toLocaleDateString("ar-EG")}</td>
+                                        <td className="px-4 py-3 font-mono whitespace-nowrap">{tx.id.slice(0, 8)}</td>
                                         <td className="px-4 py-3 font-medium text-hw-text">{tx.user.username}</td>
                                         <td className="px-4 py-3">
                                             <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium font-mono uppercase ${tx.type === "debit" ? "bg-hw-accent-muted text-gray-100" :
@@ -140,12 +166,27 @@ export function UserTransactionPanel({ userId, showReversalControl }: Props) {
                                         <td className="px-4 py-3 text-hw-text-secondary text-xs">{tx.creator.username}</td>
                                         {showReversalControl && (
                                             <td className="px-4 py-3 text-center">
-                                                {!isReversal ? (
-                                                    <button onClick={() => handleReversal(tx.id)} className="text-sm bg-hw-danger px-2 border border-hw-danger-muted text-hw-danger-muted hover:text-hw-danger-muted/80 font-medium underline transition">
-                                                        تراجع
-                                                    </button>
+                                                {isOpeningBalance ? (
+                                                    <span className="text-xs text-hw-text-muted font-mono" title="لا يمكن تعديل أو حذف رصيد افتتاحي">—</span>
+                                                ) : !sessionOpen ? (
+                                                    <span className="text-xs text-hw-text-muted font-mono" title="الجلسة مغلقة">مغلقة</span>
                                                 ) : (
-                                                    <span className="text-xs text-hw-warning font-mono uppercase font-semibold">تم التراجع</span>
+                                                    <div className="flex items-center justify-center gap-1.5">
+                                                        <button
+                                                            id={`edit-${tx.id}`}
+                                                            onClick={() => setEditTarget(tx)}
+                                                            className="px-2 py-1 text-xs rounded border border-hw-border text-hw-text-secondary hover:bg-hw-bg hover:text-hw-text transition font-medium"
+                                                        >
+                                                            تعديل
+                                                        </button>
+                                                        <button
+                                                            id={`delete-${tx.id}`}
+                                                            onClick={() => handleDelete(tx)}
+                                                            className="px-2 py-1 text-xs rounded border border-red-800 text-red-800 hover:bg-red-800/20 transition font-medium"
+                                                        >
+                                                            حذف
+                                                        </button>
+                                                    </div>
                                                 )}
                                             </td>
                                         )}

@@ -76,3 +76,8 @@ export type AuditLog = Prisma.AuditLogModel
  * 
  */
 export type TransferOrder = Prisma.TransferOrderModel
+/**
+ * Model DeletedTransaction
+ * 
+ */
+export type DeletedTransaction = Prisma.DeletedTransactionModel

@@ -390,7 +390,8 @@ export const ModelName = {
   Session: 'Session',
   SessionBalance: 'SessionBalance',
   AuditLog: 'AuditLog',
-  TransferOrder: 'TransferOrder'
+  TransferOrder: 'TransferOrder',
+  DeletedTransaction: 'DeletedTransaction'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userBalance" | "transaction" | "session" | "sessionBalance" | "auditLog" | "transferOrder"
+    modelProps: "user" | "userBalance" | "transaction" | "session" | "sessionBalance" | "auditLog" | "transferOrder" | "deletedTransaction"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -928,6 +929,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DeletedTransaction: {
+      payload: Prisma.$DeletedTransactionPayload<ExtArgs>
+      fields: Prisma.DeletedTransactionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DeletedTransactionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DeletedTransactionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload>
+        }
+        findFirst: {
+          args: Prisma.DeletedTransactionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DeletedTransactionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload>
+        }
+        findMany: {
+          args: Prisma.DeletedTransactionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload>[]
+        }
+        create: {
+          args: Prisma.DeletedTransactionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload>
+        }
+        createMany: {
+          args: Prisma.DeletedTransactionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DeletedTransactionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload>[]
+        }
+        delete: {
+          args: Prisma.DeletedTransactionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload>
+        }
+        update: {
+          args: Prisma.DeletedTransactionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload>
+        }
+        deleteMany: {
+          args: Prisma.DeletedTransactionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DeletedTransactionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DeletedTransactionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload>[]
+        }
+        upsert: {
+          args: Prisma.DeletedTransactionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeletedTransactionPayload>
+        }
+        aggregate: {
+          args: Prisma.DeletedTransactionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDeletedTransaction>
+        }
+        groupBy: {
+          args: Prisma.DeletedTransactionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeletedTransactionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DeletedTransactionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeletedTransactionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1063,6 +1138,25 @@ export const TransferOrderScalarFieldEnum = {
 } as const
 
 export type TransferOrderScalarFieldEnum = (typeof TransferOrderScalarFieldEnum)[keyof typeof TransferOrderScalarFieldEnum]
+
+
+export const DeletedTransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sessionId: 'sessionId',
+  type: 'type',
+  amount: 'amount',
+  currency: 'currency',
+  date: 'date',
+  notes: 'notes',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  purgeAt: 'purgeAt'
+} as const
+
+export type DeletedTransactionScalarFieldEnum = (typeof DeletedTransactionScalarFieldEnum)[keyof typeof DeletedTransactionScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1431,6 +1525,7 @@ export type GlobalOmitConfig = {
   sessionBalance?: Prisma.SessionBalanceOmit
   auditLog?: Prisma.AuditLogOmit
   transferOrder?: Prisma.TransferOrderOmit
+  deletedTransaction?: Prisma.DeletedTransactionOmit
 }
 
 /* Types for Logging */

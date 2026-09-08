@@ -93,6 +93,7 @@ export default async function TransactionsManagementPage({
                     <DynamicLedgerTable
                         transactions={transactions}
                         showReversalControl={role !== "Member"}
+                        userRole={role}
                     />
 
                     <PaginationControls

@@ -71,16 +71,20 @@ export async function getPaginatedTransactions(
                 createdAt: true,
                 date: true,
                 notes: true, // Included for structural table stability
+                sessionId: true,
+                session: {
+                    select: { status: true }
+                },
                 user: {
                     select: {
                         id: true,
-                        username: true, // Fixed database column name
+                        username: true,
                     }
                 },
                 creator: {
                     select: {
                         id: true,
-                        username: true, // Fixed database column name
+                        username: true,
                     }
                 }
             },
@@ -97,6 +101,8 @@ export async function getPaginatedTransactions(
             createdAt: tx.createdAt,
             date: tx.date,
             notes: tx.notes ?? "",
+            sessionId: tx.sessionId ?? null,
+            sessionStatus: tx.session?.status ?? null,
             user: {
                 id: tx.user.id,
                 username: tx.user.username ?? "",

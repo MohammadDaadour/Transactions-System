@@ -57,7 +57,8 @@ export const ModelName = {
   Session: 'Session',
   SessionBalance: 'SessionBalance',
   AuditLog: 'AuditLog',
-  TransferOrder: 'TransferOrder'
+  TransferOrder: 'TransferOrder',
+  DeletedTransaction: 'DeletedTransaction'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -172,6 +173,25 @@ export const TransferOrderScalarFieldEnum = {
 } as const
 
 export type TransferOrderScalarFieldEnum = (typeof TransferOrderScalarFieldEnum)[keyof typeof TransferOrderScalarFieldEnum]
+
+
+export const DeletedTransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sessionId: 'sessionId',
+  type: 'type',
+  amount: 'amount',
+  currency: 'currency',
+  date: 'date',
+  notes: 'notes',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  purgeAt: 'purgeAt'
+} as const
+
+export type DeletedTransactionScalarFieldEnum = (typeof DeletedTransactionScalarFieldEnum)[keyof typeof DeletedTransactionScalarFieldEnum]
 
 
 export const SortOrder = {

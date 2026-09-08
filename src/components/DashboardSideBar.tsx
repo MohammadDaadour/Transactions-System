@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { logoutAction } from "../app/actions/logout";
 import { usePathname } from "next/navigation";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 type Props = {
     username: string;
@@ -131,18 +132,31 @@ export default function DashboardSidebar({
                     </nav>
                 </div>
 
-                <form
-                    action={async () => {
-                        await logoutAction();
-                    }}
-                >
-                    <button
-                        type="submit"
-                        className="w-full text-left px-3 py-2 text-sm font-medium text-hw-danger bg-hw-danger-bg rounded-md transition"
+                <div className="space-y-2 pt-4 border-t border-hw-border">
+                    {role !== "Member" && (
+                        <Link
+                            href="/dashboard/transactions/recycle-bin"
+                            className={`${linkClass("/dashboard/transactions/recycle-bin")} flex items-center gap-2`}
+                            onClick={() => setOpen(false)}
+                        >
+                            <FaRegTrashCan className="text-base shrink-0" />
+                            <span className="font-semibold text-sm">سلة المحذوفات</span>
+                        </Link>
+                    )}
+
+                    <form
+                        action={async () => {
+                            await logoutAction();
+                        }}
                     >
-                        تسجيل الخروج
-                    </button>
-                </form>
+                        <button
+                            type="submit"
+                            className="w-full text-left px-3 py-2 text-sm font-medium text-hw-danger bg-hw-danger-bg rounded-md transition"
+                        >
+                            تسجيل الخروج
+                        </button>
+                    </form>
+                </div>
             </aside>
         </>
     );

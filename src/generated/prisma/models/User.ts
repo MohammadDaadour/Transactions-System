@@ -215,6 +215,7 @@ export type UserWhereInput = {
   sessionBalances?: Prisma.SessionBalanceListRelationFilter
   transferOrdersCreated?: Prisma.TransferOrderListRelationFilter
   transferOrdersTaken?: Prisma.TransferOrderListRelationFilter
+  deletedTransactions?: Prisma.DeletedTransactionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -235,6 +236,7 @@ export type UserOrderByWithRelationInput = {
   sessionBalances?: Prisma.SessionBalanceOrderByRelationAggregateInput
   transferOrdersCreated?: Prisma.TransferOrderOrderByRelationAggregateInput
   transferOrdersTaken?: Prisma.TransferOrderOrderByRelationAggregateInput
+  deletedTransactions?: Prisma.DeletedTransactionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -258,6 +260,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sessionBalances?: Prisma.SessionBalanceListRelationFilter
   transferOrdersCreated?: Prisma.TransferOrderListRelationFilter
   transferOrdersTaken?: Prisma.TransferOrderListRelationFilter
+  deletedTransactions?: Prisma.DeletedTransactionListRelationFilter
 }, "id" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -306,6 +309,7 @@ export type UserCreateInput = {
   sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -326,6 +330,7 @@ export type UserUncheckedCreateInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUpdateInput = {
@@ -346,6 +351,7 @@ export type UserUpdateInput = {
   sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -366,6 +372,7 @@ export type UserUncheckedUpdateInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -594,6 +601,20 @@ export type UserUpdateOneWithoutTransferOrdersTakenNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTransferOrdersTakenInput, Prisma.UserUpdateWithoutTransferOrdersTakenInput>, Prisma.UserUncheckedUpdateWithoutTransferOrdersTakenInput>
 }
 
+export type UserCreateNestedOneWithoutDeletedTransactionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedTransactionsInput, Prisma.UserUncheckedCreateWithoutDeletedTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedTransactionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutDeletedTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedTransactionsInput, Prisma.UserUncheckedCreateWithoutDeletedTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedTransactionsInput
+  upsert?: Prisma.UserUpsertWithoutDeletedTransactionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeletedTransactionsInput, Prisma.UserUpdateWithoutDeletedTransactionsInput>, Prisma.UserUncheckedUpdateWithoutDeletedTransactionsInput>
+}
+
 export type UserCreateWithoutBalancesInput = {
   id?: string
   username: string
@@ -611,6 +632,7 @@ export type UserCreateWithoutBalancesInput = {
   sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateWithoutBalancesInput = {
@@ -630,6 +652,7 @@ export type UserUncheckedCreateWithoutBalancesInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserCreateOrConnectWithoutBalancesInput = {
@@ -665,6 +688,7 @@ export type UserUpdateWithoutBalancesInput = {
   sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBalancesInput = {
@@ -684,6 +708,7 @@ export type UserUncheckedUpdateWithoutBalancesInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -703,6 +728,7 @@ export type UserCreateWithoutTransactionsInput = {
   sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -722,6 +748,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -746,6 +773,7 @@ export type UserCreateWithoutCreatedTransactionsInput = {
   sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTransactionsInput = {
@@ -765,6 +793,7 @@ export type UserUncheckedCreateWithoutCreatedTransactionsInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTransactionsInput = {
@@ -800,6 +829,7 @@ export type UserUpdateWithoutTransactionsInput = {
   sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -819,6 +849,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUpsertWithoutCreatedTransactionsInput = {
@@ -849,6 +880,7 @@ export type UserUpdateWithoutCreatedTransactionsInput = {
   sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTransactionsInput = {
@@ -868,6 +900,7 @@ export type UserUncheckedUpdateWithoutCreatedTransactionsInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserCreateWithoutSessionsOpenedInput = {
@@ -887,6 +920,7 @@ export type UserCreateWithoutSessionsOpenedInput = {
   sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsOpenedInput = {
@@ -906,6 +940,7 @@ export type UserUncheckedCreateWithoutSessionsOpenedInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsOpenedInput = {
@@ -930,6 +965,7 @@ export type UserCreateWithoutSessionsClosedInput = {
   sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsClosedInput = {
@@ -949,6 +985,7 @@ export type UserUncheckedCreateWithoutSessionsClosedInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsClosedInput = {
@@ -984,6 +1021,7 @@ export type UserUpdateWithoutSessionsOpenedInput = {
   sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsOpenedInput = {
@@ -1003,6 +1041,7 @@ export type UserUncheckedUpdateWithoutSessionsOpenedInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUpsertWithoutSessionsClosedInput = {
@@ -1033,6 +1072,7 @@ export type UserUpdateWithoutSessionsClosedInput = {
   sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsClosedInput = {
@@ -1052,6 +1092,7 @@ export type UserUncheckedUpdateWithoutSessionsClosedInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserCreateWithoutSessionBalancesInput = {
@@ -1071,6 +1112,7 @@ export type UserCreateWithoutSessionBalancesInput = {
   sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
   transferOrdersCreated?: Prisma.TransferOrderCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionBalancesInput = {
@@ -1090,6 +1132,7 @@ export type UserUncheckedCreateWithoutSessionBalancesInput = {
   sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionBalancesInput = {
@@ -1125,6 +1168,7 @@ export type UserUpdateWithoutSessionBalancesInput = {
   sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionBalancesInput = {
@@ -1144,6 +1188,7 @@ export type UserUncheckedUpdateWithoutSessionBalancesInput = {
   sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1163,6 +1208,7 @@ export type UserCreateWithoutAuditLogsInput = {
   sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1182,6 +1228,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutReceiverInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1217,6 +1264,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1236,6 +1284,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedUpdateManyWithoutReceiverNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserCreateWithoutTransferOrdersCreatedInput = {
@@ -1255,6 +1304,7 @@ export type UserCreateWithoutTransferOrdersCreatedInput = {
   sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
   sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
   transferOrdersTaken?: Prisma.TransferOrderCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateWithoutTransferOrdersCreatedInput = {
@@ -1274,6 +1324,7 @@ export type UserUncheckedCreateWithoutTransferOrdersCreatedInput = {
   sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
   sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutSenderInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserCreateOrConnectWithoutTransferOrdersCreatedInput = {
@@ -1298,6 +1349,7 @@ export type UserCreateWithoutTransferOrdersTakenInput = {
   sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
   sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderCreateNestedManyWithoutReceiverInput
+  deletedTransactions?: Prisma.DeletedTransactionCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateWithoutTransferOrdersTakenInput = {
@@ -1317,6 +1369,7 @@ export type UserUncheckedCreateWithoutTransferOrdersTakenInput = {
   sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
   sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutReceiverInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserCreateOrConnectWithoutTransferOrdersTakenInput = {
@@ -1352,6 +1405,7 @@ export type UserUpdateWithoutTransferOrdersCreatedInput = {
   sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
   sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransferOrdersCreatedInput = {
@@ -1371,6 +1425,7 @@ export type UserUncheckedUpdateWithoutTransferOrdersCreatedInput = {
   sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
   sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
   transferOrdersTaken?: Prisma.TransferOrderUncheckedUpdateManyWithoutSenderNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUpsertWithoutTransferOrdersTakenInput = {
@@ -1401,6 +1456,7 @@ export type UserUpdateWithoutTransferOrdersTakenInput = {
   sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
   sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUpdateManyWithoutReceiverNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransferOrdersTakenInput = {
@@ -1420,6 +1476,103 @@ export type UserUncheckedUpdateWithoutTransferOrdersTakenInput = {
   sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
   sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
   transferOrdersCreated?: Prisma.TransferOrderUncheckedUpdateManyWithoutReceiverNestedInput
+  deletedTransactions?: Prisma.DeletedTransactionUncheckedUpdateManyWithoutDeletedByUserNestedInput
+}
+
+export type UserCreateWithoutDeletedTransactionsInput = {
+  id?: string
+  username: string
+  password: string
+  role: $Enums.Role
+  type: $Enums.UserType
+  phone: string
+  isActive?: boolean
+  createdAt?: Date | string
+  balances?: Prisma.UserBalanceCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  createdTransactions?: Prisma.TransactionCreateNestedManyWithoutCreatorInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceCreateNestedManyWithoutUserInput
+  transferOrdersCreated?: Prisma.TransferOrderCreateNestedManyWithoutReceiverInput
+  transferOrdersTaken?: Prisma.TransferOrderCreateNestedManyWithoutSenderInput
+}
+
+export type UserUncheckedCreateWithoutDeletedTransactionsInput = {
+  id?: string
+  username: string
+  password: string
+  role: $Enums.Role
+  type: $Enums.UserType
+  phone: string
+  isActive?: boolean
+  createdAt?: Date | string
+  balances?: Prisma.UserBalanceUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  createdTransactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCreatorInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  sessionsOpened?: Prisma.SessionUncheckedCreateNestedManyWithoutOpenedByUserInput
+  sessionsClosed?: Prisma.SessionUncheckedCreateNestedManyWithoutClosedByUserInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedCreateNestedManyWithoutUserInput
+  transferOrdersCreated?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutReceiverInput
+  transferOrdersTaken?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutSenderInput
+}
+
+export type UserCreateOrConnectWithoutDeletedTransactionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedTransactionsInput, Prisma.UserUncheckedCreateWithoutDeletedTransactionsInput>
+}
+
+export type UserUpsertWithoutDeletedTransactionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDeletedTransactionsInput, Prisma.UserUncheckedUpdateWithoutDeletedTransactionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedTransactionsInput, Prisma.UserUncheckedCreateWithoutDeletedTransactionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDeletedTransactionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDeletedTransactionsInput, Prisma.UserUncheckedUpdateWithoutDeletedTransactionsInput>
+}
+
+export type UserUpdateWithoutDeletedTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  balances?: Prisma.UserBalanceUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  createdTransactions?: Prisma.TransactionUpdateManyWithoutCreatorNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUpdateManyWithoutUserNestedInput
+  transferOrdersCreated?: Prisma.TransferOrderUpdateManyWithoutReceiverNestedInput
+  transferOrdersTaken?: Prisma.TransferOrderUpdateManyWithoutSenderNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDeletedTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  balances?: Prisma.UserBalanceUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  createdTransactions?: Prisma.TransactionUncheckedUpdateManyWithoutCreatorNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  sessionsOpened?: Prisma.SessionUncheckedUpdateManyWithoutOpenedByUserNestedInput
+  sessionsClosed?: Prisma.SessionUncheckedUpdateManyWithoutClosedByUserNestedInput
+  sessionBalances?: Prisma.SessionBalanceUncheckedUpdateManyWithoutUserNestedInput
+  transferOrdersCreated?: Prisma.TransferOrderUncheckedUpdateManyWithoutReceiverNestedInput
+  transferOrdersTaken?: Prisma.TransferOrderUncheckedUpdateManyWithoutSenderNestedInput
 }
 
 
@@ -1437,6 +1590,7 @@ export type UserCountOutputType = {
   sessionBalances: number
   transferOrdersCreated: number
   transferOrdersTaken: number
+  deletedTransactions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1449,6 +1603,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sessionBalances?: boolean | UserCountOutputTypeCountSessionBalancesArgs
   transferOrdersCreated?: boolean | UserCountOutputTypeCountTransferOrdersCreatedArgs
   transferOrdersTaken?: boolean | UserCountOutputTypeCountTransferOrdersTakenArgs
+  deletedTransactions?: boolean | UserCountOutputTypeCountDeletedTransactionsArgs
 }
 
 /**
@@ -1524,6 +1679,13 @@ export type UserCountOutputTypeCountTransferOrdersTakenArgs<ExtArgs extends runt
   where?: Prisma.TransferOrderWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDeletedTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeletedTransactionWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1543,6 +1705,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sessionBalances?: boolean | Prisma.User$sessionBalancesArgs<ExtArgs>
   transferOrdersCreated?: boolean | Prisma.User$transferOrdersCreatedArgs<ExtArgs>
   transferOrdersTaken?: boolean | Prisma.User$transferOrdersTakenArgs<ExtArgs>
+  deletedTransactions?: boolean | Prisma.User$deletedTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1590,6 +1753,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sessionBalances?: boolean | Prisma.User$sessionBalancesArgs<ExtArgs>
   transferOrdersCreated?: boolean | Prisma.User$transferOrdersCreatedArgs<ExtArgs>
   transferOrdersTaken?: boolean | Prisma.User$transferOrdersTakenArgs<ExtArgs>
+  deletedTransactions?: boolean | Prisma.User$deletedTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1607,6 +1771,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessionBalances: Prisma.$SessionBalancePayload<ExtArgs>[]
     transferOrdersCreated: Prisma.$TransferOrderPayload<ExtArgs>[]
     transferOrdersTaken: Prisma.$TransferOrderPayload<ExtArgs>[]
+    deletedTransactions: Prisma.$DeletedTransactionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2020,6 +2185,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessionBalances<T extends Prisma.User$sessionBalancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionBalancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionBalancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transferOrdersCreated<T extends Prisma.User$transferOrdersCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transferOrdersCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transferOrdersTaken<T extends Prisma.User$transferOrdersTakenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transferOrdersTakenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deletedTransactions<T extends Prisma.User$deletedTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeletedTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2663,6 +2829,30 @@ export type User$transferOrdersTakenArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.TransferOrderScalarFieldEnum | Prisma.TransferOrderScalarFieldEnum[]
+}
+
+/**
+ * User.deletedTransactions
+ */
+export type User$deletedTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DeletedTransaction
+   */
+  select?: Prisma.DeletedTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DeletedTransaction
+   */
+  omit?: Prisma.DeletedTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeletedTransactionInclude<ExtArgs> | null
+  where?: Prisma.DeletedTransactionWhereInput
+  orderBy?: Prisma.DeletedTransactionOrderByWithRelationInput | Prisma.DeletedTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.DeletedTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeletedTransactionScalarFieldEnum | Prisma.DeletedTransactionScalarFieldEnum[]
 }
 
 /**

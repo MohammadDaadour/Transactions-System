@@ -73,7 +73,12 @@ export async function closeActiveSession(notes?: string) {
                 }
             });
 
-            // 6. Create a new OPEN session for future work
+            // 6. Purge any soft-deleted transactions belonging to this session
+            await tx.deletedTransaction.deleteMany({
+                where: { sessionId: closingSession.id }
+            });
+
+            // 7. Create a new OPEN session for future work
             await tx.session.create({
                 data: {
                     status: SessionStatus.OPEN,

@@ -88,6 +88,9 @@ model User {
   transferOrdersCreated TransferOrder[] @relation("TransferOrderReceiver")
   transferOrdersTaken   TransferOrder[] @relation("TransferOrderSender")
 
+  // Recycle-bin back-relation
+  deletedTransactions DeletedTransaction[] @relation("DeletedByUser")
+
   @@map("users")
 }
 
@@ -200,4 +203,29 @@ model TransferOrder {
   createdAt  DateTime         @default(now()) @map("created_at")
 
   @@map("transfer_orders")
+}
+
+// Recycle bin — stores soft-deleted transactions for up to 15 days before permanent purge.
+// userId, sessionId, and createdBy are plain UUID columns with NO Prisma FK relations because
+// the original Transaction row no longer exists while the row is in the bin.
+// deletedBy DOES have a FK to User because User rows always persist.
+model DeletedTransaction {
+  id        String          @id @db.Uuid
+  userId    String          @map("user_id") @db.Uuid
+  sessionId String?         @map("session_id") @db.Uuid
+  type      TransactionType
+  amount    Decimal         @db.Decimal(18, 4)
+  currency  Currency
+  date      DateTime        @db.Date
+  notes     String?
+  createdBy String          @map("created_by") @db.Uuid
+  createdAt DateTime        @map("created_at")
+
+  deletedAt DateTime        @default(now()) @map("deleted_at")
+  deletedBy String          @map("deleted_by") @db.Uuid
+  purgeAt   DateTime        @map("purge_at")
+
+  deletedByUser User        @relation("DeletedByUser", fields: [deletedBy], references: [id])
+
+  @@map("deleted_transactions")
 }

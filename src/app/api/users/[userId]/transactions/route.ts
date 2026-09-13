@@ -21,12 +21,18 @@ export async function GET(
     const searchParams = request.nextUrl.searchParams;
     const page = parseInt(searchParams.get("page") ?? "1");
     const pageSize = parseInt(searchParams.get("pageSize") ?? "10");
+    const search = searchParams.get("search") ?? undefined;
+    const dateFrom = searchParams.get("dateFrom") ?? undefined;
+    const dateTo = searchParams.get("dateTo") ?? undefined;
 
     try {
         const result = await getPaginatedTransactions(
             {
                 userId,
                 sessionId: "ALL", // Special flag we added to fetch across all sessions
+                search,
+                dateFrom,
+                dateTo,
             },
             page,
             pageSize

@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
-import { Currency, TransactionType } from "../generated/prisma/enums";
+import { Currency, TransactionType } from "../../generated/prisma/enums";
 
 interface User { id: string; username: string; }
 

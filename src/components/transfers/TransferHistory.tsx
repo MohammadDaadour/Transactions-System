@@ -59,20 +59,6 @@ const STATUS_CONFIG: Record<string, { label: string; bg: string; color: string; 
     },
   };
 
-// ---------------------------------------------------------------------------
-// Shared input style (mirrors ReceiverTracker)
-// ---------------------------------------------------------------------------
-const inputStyle: React.CSSProperties = {
-  padding: "0.55rem 0.8rem",
-  borderRadius: "0.5rem",
-  border: "1px solid var(--hw-border)",
-  background: "var(--hw-bg)",
-  color: "var(--hw-text)",
-  fontSize: "0.85rem",
-  fontFamily: "inherit",
-  outline: "none",
-  boxSizing: "border-box",
-};
 
 // ---------------------------------------------------------------------------
 // Main component
@@ -137,42 +123,20 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
   // Render
   // ---------------------------------------------------------------------------
   return (
-    <div style={{ direction: "rtl", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+    <div className="flex flex-col gap-6">
       {/* ── Filter bar ── */}
-      <section
-        style={{
-          background: "var(--hw-surface)",
-          border: "1px solid var(--hw-border)",
-          borderRadius: "1rem",
-          padding: "1.25rem 1.5rem",
-        }}
-      >
-        <h2
-          style={{
-            fontSize: "1rem",
-            fontWeight: 700,
-            color: "var(--hw-text-secondary)",
-            margin: "0 0 1rem",
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-          }}
-        >
-          🔍 تصفية النتائج
+      <section className="bg-hw-surface border border-hw-border rounded-2xl p-5 shadow-sm">
+        <h2 className="text-base font-bold text-hw-text-secondary mb-4 uppercase tracking-wider flex items-center gap-2">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+          </svg>
+          تصفية النتائج
         </h2>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-            gap: "0.75rem",
-            alignItems: "end",
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 items-end">
           {/* Search */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
-            <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--hw-text-secondary)" }}>
-              الاسم / رقم الهاتف
-            </label>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-semibold text-hw-text-secondary">الاسم / رقم الهاتف</label>
             <input
               id="history-search"
               type="text"
@@ -180,23 +144,21 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
               onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
               onKeyDown={(e) => e.key === "Enter" && handleApply()}
               placeholder="ابحث..."
-              style={{ ...inputStyle, width: "100%" }}
+              className="w-full bg-hw-bg border border-hw-border rounded-xl px-4 py-2.5 text-sm text-hw-text focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all"
             />
           </div>
 
           {/* Status — receivers only */}
           {userType === "receiver" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
-              <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--hw-text-secondary)" }}>
-                الحالة
-              </label>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-hw-text-secondary">الحالة</label>
               <select
                 id="history-status"
                 value={filters.status}
                 onChange={(e) =>
                   setFilters((f) => ({ ...f, status: e.target.value as Filters["status"] }))
                 }
-                style={{ ...inputStyle, width: "100%", cursor: "pointer" }}
+                className="w-full bg-hw-bg border border-hw-border rounded-xl px-4 py-2.5 text-sm text-hw-text cursor-pointer focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all"
               >
                 <option value="ALL">الكل</option>
                 <option value="DONE">تم التحويل</option>
@@ -206,15 +168,13 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
           )}
 
           {/* Currency */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
-            <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--hw-text-secondary)" }}>
-              نوع التحويل
-            </label>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-semibold text-hw-text-secondary">نوع التحويل</label>
             <select
               id="history-currency"
               value={filters.currency}
               onChange={(e) => setFilters((f) => ({ ...f, currency: e.target.value }))}
-              style={{ ...inputStyle, width: "100%", cursor: "pointer" }}
+              className="w-full bg-hw-bg border border-hw-border rounded-xl px-4 py-2.5 text-sm text-hw-text cursor-pointer focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all"
             >
               <option value="">الكل</option>
               {Object.entries(CURRENCY_LABELS).map(([key, label]) => (
@@ -226,51 +186,37 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
           </div>
 
           {/* Date from */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
-            <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--hw-text-secondary)" }}>
-              من تاريخ
-            </label>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-semibold text-hw-text-secondary">من تاريخ</label>
             <input
               id="history-from"
               type="date"
               value={filters.from}
               onChange={(e) => setFilters((f) => ({ ...f, from: e.target.value }))}
-              style={{ ...inputStyle, width: "100%", direction: "ltr" }}
+              className="w-full bg-hw-bg border border-hw-border rounded-xl px-4 py-2.5 text-sm text-hw-text focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all"
+              dir="ltr"
             />
           </div>
 
           {/* Date to */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
-            <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--hw-text-secondary)" }}>
-              إلى تاريخ
-            </label>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-semibold text-hw-text-secondary">إلى تاريخ</label>
             <input
               id="history-to"
               type="date"
               value={filters.to}
               onChange={(e) => setFilters((f) => ({ ...f, to: e.target.value }))}
-              style={{ ...inputStyle, width: "100%", direction: "ltr" }}
+              className="w-full bg-hw-bg border border-hw-border rounded-xl px-4 py-2.5 text-sm text-hw-text focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all"
+              dir="ltr"
             />
           </div>
 
           {/* Actions */}
-          <div style={{ display: "flex", gap: "0.5rem", alignItems: "flex-end" }}>
+          <div className="flex gap-2 items-center xl:col-span-1">
             <button
               id="history-apply"
               onClick={handleApply}
-              style={{
-                flex: 1,
-                padding: "0.55rem 1rem",
-                borderRadius: "0.5rem",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: 700,
-                fontSize: "0.85rem",
-                background: "var(--hw-accent-solid)",
-                color: "#fff",
-                fontFamily: "inherit",
-                transition: "background 0.2s",
-              }}
+              className="flex-1 py-2.5 px-4 rounded-xl font-bold text-sm bg-hw-accent text-white hover:bg-hw-accent-hover shadow-sm shadow-blue-500/20 active:scale-[0.98] transition-all"
             >
               بحث
             </button>
@@ -278,19 +224,7 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
               <button
                 id="history-clear"
                 onClick={handleClear}
-                style={{
-                  padding: "0.55rem 0.75rem",
-                  borderRadius: "0.5rem",
-                  border: "1px solid var(--hw-border)",
-                  cursor: "pointer",
-                  fontWeight: 600,
-                  fontSize: "0.8rem",
-                  background: "transparent",
-                  color: "var(--hw-text-secondary)",
-                  fontFamily: "inherit",
-                  transition: "background 0.2s",
-                  whiteSpace: "nowrap",
-                }}
+                className="py-2.5 px-3 rounded-xl font-semibold text-sm bg-hw-surface-alt text-hw-text hover:bg-hw-border border border-hw-border transition-colors whitespace-nowrap"
               >
                 مسح ✕
               </button>
@@ -303,15 +237,8 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
       <section>
         {/* Summary header */}
         {response && !loading && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "0.75rem",
-            }}
-          >
-            <p style={{ fontSize: "0.8rem", color: "var(--hw-text-secondary)", margin: 0 }}>
+          <div className="flex justify-between items-center mb-4 text-sm text-hw-text-secondary font-medium">
+            <p className="m-0">
               {response.total === 0
                 ? "لا توجد نتائج"
                 : `عرض ${(response.page - 1) * response.pageSize + 1}–${Math.min(
@@ -320,7 +247,7 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
                   )} من أصل ${response.total.toLocaleString("ar-EG")} طلب`}
             </p>
             {response.totalPages > 1 && (
-              <p style={{ fontSize: "0.8rem", color: "var(--hw-text-secondary)", margin: 0 }}>
+              <p className="m-0">
                 صفحة {response.page} من {response.totalPages}
               </p>
             )}
@@ -329,35 +256,17 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
 
         {/* Loading */}
         {loading ? (
-          <div style={{ display: "flex", justifyContent: "center", padding: "4rem" }}>
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                border: "3px solid var(--hw-border)",
-                borderTopColor: "var(--hw-accent-solid)",
-                borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
-              }}
-            />
+          <div className="flex justify-center py-16 text-hw-text-muted">
+            <div className="w-10 h-10 border-4 border-hw-border border-t-hw-accent rounded-full animate-spin" />
           </div>
         ) : !response || response.data.length === 0 ? (
           /* Empty state */
-          <div
-            style={{
-              textAlign: "center",
-              padding: "5rem 2rem",
-              color: "var(--hw-text-muted)",
-              background: "var(--hw-surface)",
-              borderRadius: "1rem",
-              border: "1px dashed var(--hw-border)",
-            }}
-          >
-            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📂</div>
-            <p style={{ fontSize: "1.1rem", fontWeight: 600, margin: "0 0 0.5rem" }}>
+          <div className="text-center py-16 px-8 text-hw-text-muted bg-hw-surface rounded-2xl border border-dashed border-hw-border">
+            <div className="text-5xl mb-4">📂</div>
+            <p className="text-lg font-bold text-hw-text m-0 mb-2">
               لا توجد طلبات في السجل
             </p>
-            <p style={{ fontSize: "0.875rem", color: "var(--hw-text-secondary)", margin: 0 }}>
+            <p className="text-sm m-0">
               {hasActiveFilters
                 ? "حاول تغيير معايير البحث أو امسح الفلاتر"
                 : "ستظهر الطلبات المكتملة والملغاة هنا"}
@@ -365,7 +274,7 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
           </div>
         ) : (
           /* Orders list */
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+          <div className="flex flex-col gap-3">
             {response.data.map((order) => (
               <HistoryRow key={order.id} order={order} userType={userType} />
             ))}
@@ -374,23 +283,18 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
 
         {/* Pagination */}
         {response && response.totalPages > 1 && !loading && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "0.5rem",
-              marginTop: "1.5rem",
-              flexWrap: "wrap",
-            }}
-          >
+          <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
             <button
               id="history-prev"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              style={paginationBtnStyle(page === 1)}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                page === 1
+                  ? "bg-transparent text-hw-text-muted cursor-not-allowed opacity-50"
+                  : "bg-hw-surface border border-hw-border text-hw-text hover:bg-hw-surface-alt"
+              }`}
             >
-              ← السابق
+              &rarr; السابق
             </button>
 
             {/* Page number pills */}
@@ -405,7 +309,7 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
                 item === "..." ? (
                   <span
                     key={`ellipsis-${idx}`}
-                    style={{ color: "var(--hw-text-secondary)", fontSize: "0.85rem", padding: "0 0.25rem" }}
+                    className="text-hw-text-secondary text-sm px-1"
                   >
                     …
                   </span>
@@ -414,7 +318,11 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
                     key={item}
                     id={`history-page-${item}`}
                     onClick={() => setPage(item as number)}
-                    style={paginationBtnStyle(false, item === page)}
+                    className={`w-10 h-10 flex items-center justify-center rounded-xl text-sm font-bold transition-all ${
+                      item === page
+                        ? "bg-hw-accent text-white shadow-sm shadow-blue-500/20 border border-hw-accent"
+                        : "bg-hw-surface border border-hw-border text-hw-text hover:bg-hw-surface-alt"
+                    }`}
                   >
                     {item}
                   </button>
@@ -425,46 +333,19 @@ export default function TransferHistory({ userType }: { userType: "sender" | "re
               id="history-next"
               onClick={() => setPage((p) => Math.min(response.totalPages, p + 1))}
               disabled={page === response.totalPages}
-              style={paginationBtnStyle(page === response.totalPages)}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                page === response.totalPages
+                  ? "bg-transparent text-hw-text-muted cursor-not-allowed opacity-50"
+                  : "bg-hw-surface border border-hw-border text-hw-text hover:bg-hw-surface-alt"
+              }`}
             >
-              التالي →
+              التالي &larr;
             </button>
           </div>
         )}
       </section>
-
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
     </div>
   );
-}
-
-// ---------------------------------------------------------------------------
-// Pagination button style helper
-// ---------------------------------------------------------------------------
-function paginationBtnStyle(disabled: boolean, active = false): React.CSSProperties {
-  return {
-    padding: "0.45rem 0.9rem",
-    borderRadius: "0.5rem",
-    border: active
-      ? "1px solid var(--hw-accent-solid)"
-      : "1px solid var(--hw-border)",
-    background: active
-      ? "var(--hw-accent-solid)"
-      : disabled
-      ? "transparent"
-      : "var(--hw-surface)",
-    color: active ? "#fff" : disabled ? "var(--hw-text-muted)" : "var(--hw-text)",
-    cursor: disabled ? "not-allowed" : "pointer",
-    fontWeight: active ? 700 : 500,
-    fontSize: "0.85rem",
-    fontFamily: "inherit",
-    transition: "all 0.15s",
-    opacity: disabled ? 0.45 : 1,
-  };
-}
-
 // ---------------------------------------------------------------------------
 // Single history row
 // ---------------------------------------------------------------------------
@@ -479,97 +360,56 @@ function HistoryRow({
   const amount = typeof order.amount === "string" ? parseFloat(order.amount) : order.amount;
 
   return (
-    <div
-      style={{
-        background: "var(--hw-surface)",
-        border: "1px solid var(--hw-border)",
-        borderRadius: "0.875rem",
-        padding: "1rem 1.25rem",
-        display: "flex",
-        alignItems: "center",
-        gap: "1rem",
-        transition: "box-shadow 0.2s, transform 0.15s",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 16px rgba(0,0,0,0.1)";
-        (e.currentTarget as HTMLDivElement).style.transform = "translateY(-1px)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-        (e.currentTarget as HTMLDivElement).style.transform = "none";
-      }}
-    >
+    <div className="bg-hw-surface border border-hw-border rounded-xl p-4 flex flex-col md:flex-row md:items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
       {/* Status badge */}
       <span
         style={{
-          flexShrink: 0,
-          padding: "0.3rem 0.75rem",
-          borderRadius: "999px",
-          fontSize: "0.72rem",
-          fontWeight: 700,
           background: status.bg,
           color: status.color,
-          border: `1px solid ${status.border}`,
-          whiteSpace: "nowrap",
+          borderColor: status.border,
         }}
+        className="shrink-0 px-3 py-1 rounded-full text-[11px] font-bold border whitespace-nowrap w-fit"
       >
         {status.label}
       </span>
 
       {/* Main info */}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ fontWeight: 700, margin: "0 0 0.15rem", fontSize: "0.95rem", color: "var(--hw-text)" }}>
-          {order.name}
-        </p>
-        <div
-          style={{
-            display: "flex",
-            gap: "1rem",
-            fontSize: "0.78rem",
-            color: "var(--hw-text-secondary)",
-            flexWrap: "wrap",
-          }}
-        >
-          <span>{CURRENCY_LABELS[order.currency] ?? order.currency}</span>
-          <span style={{ fontFamily: "monospace", direction: "ltr" }}>{order.number}</span>
-          {/* Show the counterpart user */}
+      <div className="flex-1 min-w-0">
+        <p className="font-bold text-hw-text text-base m-0 mb-1">{order.name}</p>
+        <div className="flex flex-wrap gap-4 text-xs font-medium text-hw-text-secondary">
+          <span className="bg-hw-bg px-2 py-0.5 rounded border border-hw-border">
+            {CURRENCY_LABELS[order.currency] ?? order.currency}
+          </span>
+          <span className="font-mono bg-hw-bg px-2 py-0.5 rounded border border-hw-border" dir="ltr">
+            {order.number}
+          </span>
           {userType === "sender" && order.receiver && (
-            <span>المستورد: {order.receiver.username}</span>
+            <span className="text-hw-accent bg-hw-accent-muted px-2 py-0.5 rounded border border-hw-accent/20">
+              المستورد: {order.receiver.username}
+            </span>
           )}
           {userType === "receiver" && order.sender && (
-            <span>المورد: {order.sender.username}</span>
+            <span className="text-hw-accent bg-hw-accent-muted px-2 py-0.5 rounded border border-hw-accent/20">
+              المورد: {order.sender.username}
+            </span>
           )}
           {userType === "receiver" && !order.sender && order.status === "CANCELLED" && (
-            <span style={{ color: "var(--hw-text-muted)" }}>لم يُحجز</span>
+            <span className="text-hw-text-muted bg-hw-surface-alt px-2 py-0.5 rounded border border-hw-border">
+              لم يُحجز
+            </span>
           )}
         </div>
       </div>
 
       {/* Amount + date */}
-      <div style={{ flexShrink: 0, textAlign: "left" }}>
-        <p
-          style={{
-            fontWeight: 800,
-            fontSize: "1.1rem",
-            color: "var(--hw-accent-solid)",
-            margin: "0 0 0.25rem",
-            direction: "ltr",
-          }}
-        >
+      <div className="text-left shrink-0">
+        <p className="font-bold text-xl text-hw-accent m-0 font-mono">
           {amount.toLocaleString("en-US")}
         </p>
-        <p
-          style={{
-            fontSize: "0.7rem",
-            color: "var(--hw-text-muted)",
-            margin: 0,
-            direction: "ltr",
-            textAlign: "right",
-          }}
-        >
+        <p className="text-[11px] font-mono text-hw-text-muted mt-1 m-0 text-right">
           {new Date(order.createdAt).toLocaleDateString("ar-EG")}
         </p>
       </div>
     </div>
   );
-}
+}}

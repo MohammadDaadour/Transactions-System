@@ -41,37 +41,18 @@ let toastId = 0;
 
 function ToastContainer({ toasts, remove }: { toasts: Toast[]; remove: (id: number) => void }) {
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: "1.5rem",
-        right: "1.5rem",
-        zIndex: 9999,
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.5rem",
-      }}
-    >
+    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-2">
       {toasts.map((t) => (
         <div
           key={t.id}
-          style={{
-            padding: "0.75rem 1.25rem",
-            borderRadius: "0.5rem",
-            background:
-              t.type === "error"
-                ? "#7f1d1d"
-                : t.type === "success"
-                ? "#14532d"
-                : "#1e3a5f",
-            color: "#f1f5f9",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
-            fontSize: "0.875rem",
-            cursor: "pointer",
-            maxWidth: "320px",
-            direction: "rtl",
-          }}
           onClick={() => remove(t.id)}
+          className={`px-5 py-3 rounded-xl text-sm shadow-lg shadow-black/20 cursor-pointer max-w-[320px] transition-all transform hover:-translate-y-0.5 ${
+            t.type === "error"
+              ? "bg-red-900 text-red-50 border border-red-800"
+              : t.type === "success"
+              ? "bg-green-900 text-green-50 border border-green-800"
+              : "bg-hw-sidebar text-white border border-hw-sidebar-border"
+          }`}
         >
           {t.message}
         </div>
@@ -225,110 +206,33 @@ export default function SenderQueue() {
   // Render
   // ---------------------------------------------------------------------------
   return (
-    <div style={{ direction: "rtl" }}>
+    <div>
       <ToastContainer toasts={toasts} remove={removeToast} />
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "1.5rem",
-        }}
-      >
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <h2
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: 700,
-              color: "var(--hw-accent)",
-              margin: 0,
-            }}
-          >
-            قائمة طلبات التحويل
-          </h2>
-          <p
-            style={{
-              fontSize: "0.875rem",
-              color: "var(--hw-text-muted)",
-              marginTop: "0.25rem",
-            }}
-          >
-            الطلبات المتاحة للحجز — تتحدث تلقائيًا
-          </p>
+          <h2 className="text-xl font-bold text-hw-text m-0">قائمة طلبات التحويل</h2>
+          <p className="text-sm text-hw-text-secondary mt-1">الطلبات المتاحة للحجز — تتحدث تلقائيًا</p>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            fontSize: "0.75rem",
-            color: "var(--hw-text-muted)",
-          }}
-        >
-          <span
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: "#22c55e",
-              display: "inline-block",
-              boxShadow: "0 0 0 2px rgba(34,197,94,0.3)",
-              animation: "pulse 2s infinite",
-            }}
-          />
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-hw-success-muted border border-hw-success-border text-xs font-semibold text-green-700">
+          <span className="w-2 h-2 rounded-full bg-hw-success animate-pulse" />
           مباشر
         </div>
       </div>
 
       {loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            padding: "4rem",
-            color: "var(--hw-text-muted)",
-          }}
-        >
-          <div
-            style={{
-              width: 40,
-              height: 40,
-              border: "3px solid var(--hw-border)",
-              borderTopColor: "var(--hw-accent-solid)",
-              borderRadius: "50%",
-              animation: "spin 0.8s linear infinite",
-            }}
-          />
+        <div className="flex justify-center py-16 text-hw-text-muted">
+          <div className="w-10 h-10 border-4 border-hw-border border-t-hw-accent rounded-full animate-spin" />
         </div>
       ) : orders.length === 0 ? (
-        <div
-          style={{
-            textAlign: "center",
-            padding: "5rem 2rem",
-            color: "var(--hw-text)",
-            background: "var(--hw-surface)",
-            borderRadius: "1rem",
-            border: "1px dashed var(--hw-border)",
-          }}
-        >
-          <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📭</div>
-          <p style={{ fontSize: "1.125rem", fontWeight: 500 }}>
-            لا توجد طلبات تحويل متاحة حاليًا
-          </p>
-          <p style={{ fontSize: "0.875rem", marginTop: "0.5rem" }}>
-            ستظهر الطلبات الجديدة هنا فور إرسالها
-          </p>
+        <div className="text-center py-20 px-8 text-hw-text bg-hw-surface rounded-2xl border border-dashed border-hw-border">
+          <div className="text-5xl mb-4">📭</div>
+          <p className="text-lg font-medium">لا توجد طلبات تحويل متاحة حاليًا</p>
+          <p className="text-sm text-hw-text-secondary mt-2">ستظهر الطلبات الجديدة هنا فور إرسالها</p>
         </div>
       ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: "1rem",
-          }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {orders.map((order) => (
             <OrderCard
               key={order.id}
@@ -339,15 +243,6 @@ export default function SenderQueue() {
           ))}
         </div>
       )}
-
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        @keyframes slideIn {
-          from { opacity: 0; transform: translateY(-8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   );
 }
@@ -370,89 +265,34 @@ function OrderCard({
       : order.amount;
 
   return (
-    <div
-      style={{
-        background: "var(--hw-surface)",
-        border: "1px solid var(--hw-border)",
-        borderRadius: "0.875rem",
-        padding: "1.25rem",
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.75rem",
-        animation: "slideIn 0.25s ease",
-        transition: "box-shadow 0.2s, transform 0.15s",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow =
-          "0 8px 24px rgba(0,0,0,0.15)";
-        (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-        (e.currentTarget as HTMLDivElement).style.transform = "none";
-      }}
-    >
+    <div className="bg-hw-surface border border-hw-border rounded-2xl p-5 flex flex-col gap-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
       {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+      <div className="flex justify-between items-start">
         <div>
-          <p style={{ fontWeight: 700, fontSize: "1rem", margin: 0, color: "var(--hw-text)" }}>
-            {order.name}
-          </p>
-          <p style={{ fontSize: "0.75rem", color: "var(--hw-text)", margin: "0.2rem 0 0" }}>
-            {order.receiver?.username ?? "—"}
-          </p>
+          <p className="font-bold text-base text-hw-text m-0">{order.name}</p>
+          <p className="text-xs text-hw-text-secondary mt-1">{order.receiver?.username ?? "—"}</p>
         </div>
-        <span
-          style={{
-            padding: "0.2rem 0.6rem",
-            borderRadius: "999px",
-            fontSize: "0.7rem",
-            fontWeight: 600,
-            background: "rgba(251, 191, 36, 0.15)",
-            color: "#513606ff",
-            border: "1px solid #513606ff",
-          }}
-        >
+        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
           قيد الانتظار
         </span>
       </div>
 
       {/* Amount + Currency */}
-      <div
-        style={{
-          background: "rgba(0,0,0,0.08)",
-          borderRadius: "0.5rem",
-          padding: "0.75rem 1rem",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <span style={{ fontSize: "1.375rem", fontWeight: 800, color: "var(--hw-accent)" }}>
-          {amount.toLocaleString("en-US")}
-        </span>
-        <span
-          style={{
-            fontSize: "0.8rem",
-            fontWeight: 600,
-            color: "var(--hw-text-secondary)",
-            textAlign: "left",
-          }}
-        >
+      <div className="bg-hw-bg rounded-xl px-4 py-3 flex justify-between items-center border border-hw-border/50">
+        <span className="text-2xl font-bold text-hw-accent font-mono">{amount.toLocaleString("en-US")}</span>
+        <span className="text-xs font-semibold text-hw-text-secondary bg-hw-surface px-2 py-1 rounded border border-hw-border">
           {CURRENCY_LABELS[order.currency] ?? order.currency}
         </span>
       </div>
 
       {/* Phone number */}
-      <div style={{ fontSize: "0.875rem", color: "var(--hw-text-secondary)" }}>
-        <span style={{ color: "var(--hw-text)" }}>رقم الهاتف: </span>
-        <span style={{ fontFamily: "monospace", fontWeight: 600, direction: "ltr", display: "inline-block" }}>
-          {order.number}
-        </span>
+      <div className="text-sm text-hw-text-secondary flex justify-between items-center bg-hw-surface-alt px-3 py-2 rounded-lg">
+        <span className="text-xs font-semibold">رقم الهاتف</span>
+        <span className="font-mono font-bold text-hw-text" dir="ltr">{order.number}</span>
       </div>
 
       {/* Timestamp */}
-      <p style={{ fontSize: "0.7rem", color: "var(--hw-text)", margin: 0 }}>
+      <p className="text-[11px] font-mono text-hw-text-muted m-0 text-center">
         {new Date(order.createdAt).toLocaleString("ar-EG")}
       </p>
 
@@ -461,38 +301,11 @@ function OrderCard({
         id={`claim-${order.id}`}
         disabled={claiming}
         onClick={() => onClaim(order)}
-        style={{
-          marginTop: "0.25rem",
-          padding: "0.65rem 1rem",
-          borderRadius: "0.5rem",
-          border: "none",
-          cursor: claiming ? "not-allowed" : "pointer",
-          fontWeight: 700,
-          fontSize: "0.9rem",
-          background: claiming
-            ? "var(--hw-disabled-bg)"
-            : "var(--hw-accent-solid)",
-          color: claiming ? "var(--hw-disabled-text)" : "#fff",
-          transition: "background 0.2s, transform 0.1s",
-          fontFamily: "inherit",
-        }}
-        onMouseEnter={(e) => {
-          if (!claiming)
-            (e.currentTarget as HTMLButtonElement).style.background =
-              "var(--hw-accent-solid-hover)";
-        }}
-        onMouseLeave={(e) => {
-          if (!claiming)
-            (e.currentTarget as HTMLButtonElement).style.background =
-              "var(--hw-accent-solid)";
-        }}
-        onMouseDown={(e) => {
-          if (!claiming)
-            (e.currentTarget as HTMLButtonElement).style.transform = "scale(0.97)";
-        }}
-        onMouseUp={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
-        }}
+        className={`mt-1 py-3 px-4 rounded-xl font-bold text-sm transition-all ${
+          claiming 
+            ? "bg-hw-disabled-bg text-hw-disabled-text cursor-not-allowed shadow-none" 
+            : "bg-hw-accent text-white hover:bg-hw-accent-hover active:scale-[0.98] shadow-sm shadow-blue-500/20"
+        }`}
       >
         {claiming ? "جارى الحجز..." : "حجز الطلب"}
       </button>

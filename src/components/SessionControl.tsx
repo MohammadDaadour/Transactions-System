@@ -61,25 +61,25 @@ export default function SessionControl({ activeSession, isAdmin }: SessionContro
     });
 
     return (
-        <div className="rounded-xl border border-hw-border bg-hw-surface p-5 space-y-4">
+        <div className="rounded-xl border border-hw-border bg-hw-surface p-5 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <span className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-hw-success animate-pulse" />
                     <h3 className="text-sm font-semibold text-hw-text">الجلسة المحاسبية الحالية</h3>
                 </div>
-                <span className="px-2 py-0.5 rounded text-xs font-semibold bg-hw-accent-muted text-gray-100 uppercase">
+                <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-hw-success-muted text-green-700 border border-hw-success-border">
                     نشطة
                 </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-xs">
+            <div className="grid grid-cols-2 gap-4 bg-hw-bg rounded-lg p-3">
                 <div>
-                    <span className="text-hw-text-secondary block">تاريخ البدء</span>
-                    <span className="font-mono font-medium text-hw-text text-sm">{formattedDate}</span>
+                    <span className="text-xs text-hw-text-secondary block mb-0.5">تاريخ البدء</span>
+                    <span className="font-mono font-semibold text-hw-text text-sm">{formattedDate}</span>
                 </div>
                 <div>
-                    <span className="text-hw-text-secondary block">بواسطة</span>
-                    <span className="font-medium text-hw-text text-sm">{activeSession.openedByUser.username}</span>
+                    <span className="text-xs text-hw-text-secondary block mb-0.5">بواسطة</span>
+                    <span className="font-semibold text-hw-text text-sm">{activeSession.openedByUser.username}</span>
                 </div>
             </div>
 
@@ -87,7 +87,7 @@ export default function SessionControl({ activeSession, isAdmin }: SessionContro
                 <button
                     onClick={handleCloseSession}
                     disabled={loading}
-                    className="w-full py-2 px-4 rounded-md font-medium text-sm transition text-white bg-red-800 hover:bg-red-950 disabled:bg-hw-disabled-bg disabled:text-hw-disabled-text"
+                    className="w-full py-2.5 px-4 rounded-xl font-semibold text-sm transition-all text-white bg-red-600 hover:bg-red-700 shadow-sm shadow-red-500/20 disabled:bg-hw-disabled-bg disabled:text-hw-disabled-text disabled:shadow-none disabled:cursor-not-allowed"
                 >
                     {loading ? "جار إغلاق الجلسة وترحيل الأرصدة..." : "إغلاق الجلسة المحاسبية وترحيل الأرصدة"}
                 </button>

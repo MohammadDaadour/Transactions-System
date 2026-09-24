@@ -74,6 +74,12 @@ export function UserTransactionPanel({ userId, showReversalControl }: Props) {
 
     useEffect(() => { fetchTx(txPage, searchQuery, dateFrom, dateTo); }, [txPage, searchQuery, dateFrom, dateTo, fetchTx]);
 
+    useEffect(() => {
+        const onTransactionAdded = () => fetchTx(txPage, searchQuery, dateFrom, dateTo);
+        window.addEventListener("transaction-added", onTransactionAdded);
+        return () => window.removeEventListener("transaction-added", onTransactionAdded);
+    }, [fetchTx, txPage, searchQuery, dateFrom, dateTo]);
+
     function handleClearSearch() {
         setSearchInput("");
         setSearchQuery("");
@@ -304,11 +310,11 @@ export function UserTransactionPanel({ userId, showReversalControl }: Props) {
 
                                 return (
                                     <tr key={tx.id} className={`hover:bg-hw-bg/50 transition ${isReversal ? "bg-hw-warning-bg text-hw-text-secondary" : ""}`}>
-                                        <td className="px-4 py-3 font-mono whitespace-nowrap">{new Date(tx.date).toLocaleDateString("ar-EG")}</td>
+                                        <td className="px-4 py-3 font-mono whitespace-nowrap">{new Date(tx.date).toLocaleString("ar-EG", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
                                         <td className="px-4 py-3 font-mono whitespace-nowrap">{tx.id.slice(0, 8)}</td>
                                         <td className="px-4 py-3 font-medium text-hw-text">{tx.user.username}</td>
                                         <td className="px-4 py-3">
-                                            <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium font-mono uppercase ${tx.type === "debit" ? "bg-hw-accent-muted text-gray-100" :
+                                            <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium font-mono uppercase ${tx.type === "debit" ? "bg-hw-accent-muted text-green-700" :
                                                 tx.type === "credit" ? "bg-hw-danger-muted text-hw-danger" : "bg-hw-info-muted text-hw-info"
                                                 }`}>
                                                 {tx.type === "debit" ? "\u0645\u062f\u064a\u0646 \u0644\u0646\u0627" : tx.type === "credit" ? "\u062f\u0627\u0626\u0646 \u0639\u0644\u064a\u0646\u0627" : tx.type === "opening_balance" ? "\u0631\u0635\u064a\u062f \u0627\u0641\u062a\u062a\u0627\u062d\u064a" : tx.type}

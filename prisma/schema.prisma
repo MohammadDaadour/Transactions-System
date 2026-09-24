@@ -117,7 +117,7 @@ model Transaction {
   type       TransactionType
   amount     Decimal         @db.Decimal(18, 4)
   currency   Currency
-  date       DateTime        @db.Date
+  date       DateTime
   notes      String?
   createdBy  String          @map("created_by") @db.Uuid
   createdAt  DateTime        @default(now()) @map("created_at")
@@ -216,7 +216,7 @@ model DeletedTransaction {
   type      TransactionType
   amount    Decimal         @db.Decimal(18, 4)
   currency  Currency
-  date      DateTime        @db.Date
+  date      DateTime
   notes     String?
   createdBy String          @map("created_by") @db.Uuid
   createdAt DateTime        @map("created_at")

@@ -93,7 +93,7 @@ export default async function UserDashboardView({ params }: { params: Promise<{ 
                                             <span className="ml-2">{currencyIcons[currency]}</span>
                                             {currency} رصيد الحساب
                                         </p>
-                                        <p className={`text-2xl font-mono font-bold mt-2 ${balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
+                                        <p className={`text-2xl font-mono font-bold mt-2 ${balance >= 0 ? "text-hw-success" : "text-hw-danger"}`}>
                                             {balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                                         </p>
                                     </div>

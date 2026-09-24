@@ -44,7 +44,7 @@ export default function DynamicLedgerTable({ transactions, showReversalControl, 
             const notesMatch = tx.notes ? tx.notes.toLowerCase().includes(query) : false;
             const amountMatch = tx.amount.toString().includes(query);
             const currencyMatch = tx.currency.toLowerCase().includes(query);
-            const dateStr = new Date(tx.date).toLocaleDateString("ar-EG");
+            const dateStr = new Date(tx.date).toLocaleString("ar-EG", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
             const dateIso = new Date(tx.date).toISOString().slice(0, 10);
             const dateMatch = dateStr.includes(query) || dateIso.includes(query);
             const typeLabel =
@@ -205,11 +205,11 @@ export default function DynamicLedgerTable({ transactions, showReversalControl, 
 
                                 return (
                                     <tr key={tx.id} className={`hover:bg-hw-bg/50 transition ${isReversal ? "bg-hw-warning-bg text-hw-text-secondary" : ""}`}>
-                                        <td className="px-4 py-3 font-mono whitespace-nowrap">{new Date(tx.date).toLocaleDateString("ar-EG")}</td>
+                                        <td className="px-4 py-3 font-mono whitespace-nowrap">{new Date(tx.date).toLocaleString("ar-EG", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
                                         <td className="px-4 py-3 font-mono whitespace-nowrap">{tx.id.slice(0, 8)}</td>
                                         <td className="px-4 py-3 font-medium text-hw-text">{tx.user.username}</td>
                                         <td className="px-4 py-3">
-                                            <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium font-mono uppercase ${tx.type === "debit" ? "bg-hw-accent-muted text-gray-100" :
+                                            <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium font-mono uppercase ${tx.type === "debit" ? "bg-hw-accent-muted text-green-800" :
                                                 tx.type === "credit" ? "bg-hw-danger-muted text-hw-danger" : "bg-hw-info-muted text-hw-info"
                                                 }`}>
                                                 {tx.type === "debit" ? "مدين لنا" : tx.type === "credit" ? "دائن علينا" : tx.type === "opening_balance" ? "رصيد افتتاحي" : tx.type}

@@ -61,16 +61,14 @@ export default async function TransactionsManagementPage({
         <div className="space-y-6">
             <div className="flex flex-col justify-between gap-4 border-b border-hw-border pb-5 sm:flex-row sm:items-center">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight">عمليات الدفتر</h2>
-                    <p className="text-sm text-hw-text-secondary">
+                    <h2 className="text-2xl font-bold tracking-tight text-hw-text">عمليات الدفتر</h2>
+                    <p className="text-sm text-hw-text-secondary mt-0.5">
                         تسجيل يدوي، تحقق من القيود، وتصحيحات النظام.
                     </p>
                 </div>
-                <div className="flex items-center gap-2 rounded-lg bg-hw-bg px-3 py-1.5 border border-hw-border self-start">
-                    <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-xs font-mono font-semibold text-hw-text-secondary">
-                        وضع المشغل المباشر
-                    </span>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-hw-success-muted border border-hw-success-border text-xs font-semibold text-green-700 self-start">
+                    <span className="w-2 h-2 rounded-full bg-hw-success animate-pulse" />
+                    <span>وضع المشغل المباشر</span>
                 </div>
             </div>
 
@@ -106,10 +104,10 @@ export default async function TransactionsManagementPage({
 
                 {role != "Member" && (
                     <div className="space-y-4 xl:sticky xl:top-6">
-                        <h3 className="text-xs font-semibold uppercase tracking-wider text-hw-text-secondary">
+                        <h3 className="text-sm font-semibold uppercase tracking-widest text-hw-text-secondary">
                             إضافة قيد يدوي
                         </h3>
-                        <div className="rounded-xl border border-hw-border bg-hw-surface p-6">
+                        <div className="rounded-xl border border-hw-border bg-hw-surface p-6 shadow-sm">
                             <ManualTransactionForm
                                 users={activeUsers}
                                 allowOpeningBalance={role === "Admin"}

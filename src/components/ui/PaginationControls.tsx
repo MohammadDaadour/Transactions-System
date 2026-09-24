@@ -34,14 +34,14 @@ export default function PaginationControls({ currentPage, pageCount, total, page
                 <button
                     onClick={() => go(1)}
                     disabled={currentPage === 1}
-                    className="px-2 py-1 rounded border border-hw-border bg-hw-surface hover:bg-hw-bg disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs"
+                    className="px-2.5 py-1.5 rounded-lg border border-hw-border bg-hw-surface hover:bg-hw-surface-alt disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs transition-colors"
                 >
                     «
                 </button>
                 <button
                     onClick={() => go(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="px-2 py-1 rounded border border-hw-border bg-hw-surface hover:bg-hw-bg disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs"
+                    className="px-2.5 py-1.5 rounded-lg border border-hw-border bg-hw-surface hover:bg-hw-surface-alt disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs transition-colors"
                 >
                     ‹
                 </button>
@@ -52,10 +52,10 @@ export default function PaginationControls({ currentPage, pageCount, total, page
                         <button
                             key={p}
                             onClick={() => go(p)}
-                            className={`px-2.5 py-1 rounded border font-mono text-xs transition ${
+                            className={`px-3 py-1.5 rounded-lg border font-mono text-xs transition-all ${
                                 p === currentPage
-                                    ? "border-hw-accent bg-hw-accent text-hw-bg font-bold"
-                                    : "border-hw-border bg-hw-surface hover:bg-hw-bg"
+                                    ? "border-hw-accent bg-hw-accent text-white font-bold shadow-sm shadow-blue-500/20"
+                                    : "border-hw-border bg-hw-surface hover:bg-hw-surface-alt"
                             }`}
                         >
                             {p}
@@ -65,14 +65,14 @@ export default function PaginationControls({ currentPage, pageCount, total, page
                 <button
                     onClick={() => go(currentPage + 1)}
                     disabled={currentPage === pageCount}
-                    className="px-2 py-1 rounded border border-hw-border bg-hw-surface hover:bg-hw-bg disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs"
+                    className="px-2.5 py-1.5 rounded-lg border border-hw-border bg-hw-surface hover:bg-hw-surface-alt disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs transition-colors"
                 >
                     ›
                 </button>
                 <button
                     onClick={() => go(pageCount)}
                     disabled={currentPage === pageCount}
-                    className="px-2 py-1 rounded border border-hw-border bg-hw-surface hover:bg-hw-bg disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs"
+                    className="px-2.5 py-1.5 rounded-lg border border-hw-border bg-hw-surface hover:bg-hw-surface-alt disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs transition-colors"
                 >
                     »
                 </button>

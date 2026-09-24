@@ -132,7 +132,7 @@ export default function DynamicLedgerTable({ transactions, showReversalControl, 
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="بحث في العمليات (الرقم المرجعي، الحساب، المبلغ، الملاحظات...)"
-                            className="w-full rounded-lg border border-hw-border bg-hw-bg text-hw-text text-sm pr-9 pl-9 py-2 focus:outline-none focus:ring-1 focus:ring-hw-accent transition placeholder:text-hw-text-muted"
+                            className="w-full rounded-xl border border-hw-border bg-hw-bg text-hw-text text-sm pr-9 pl-9 py-2.5 focus:outline-none focus:ring-2 focus:ring-hw-accent/20 focus:border-hw-accent transition-all placeholder:text-hw-text-muted"
                         />
                         {searchQuery && (
                             <button
@@ -161,9 +161,9 @@ export default function DynamicLedgerTable({ transactions, showReversalControl, 
                     )}
                 </div>
 
-                <div className="overflow-x-auto rounded-xl border border-hw-border bg-hw-surface">
+                <div className="overflow-x-auto rounded-xl border border-hw-border bg-hw-surface shadow-sm">
                     <table className="w-full text-right text-sm text-hw-text-secondary">
-                        <thead className="bg-hw-bg text-xs font-semibold uppercase tracking-wider text-hw-text-secondary border-b border-hw-border">
+                        <thead className="bg-hw-surface-alt text-xs font-semibold uppercase tracking-wider text-hw-text-secondary border-b border-hw-border">
                             <tr>
                                 <th className="px-4 py-3">التاريخ</th>
                                 <th className="px-4 py-3">الرقم المرجعي</th>
@@ -205,13 +205,17 @@ export default function DynamicLedgerTable({ transactions, showReversalControl, 
 
                                 return (
                                     <tr key={tx.id} className={`hover:bg-hw-bg/50 transition ${isReversal ? "bg-hw-warning-bg text-hw-text-secondary" : ""}`}>
-                                        <td className="px-4 py-3 font-mono whitespace-nowrap">{new Date(tx.date).toLocaleDateString("ar-EG")}</td>
+                                        <td className="px-4 py-3 font-mono whitespace-nowrap">{new Date(tx.date).toLocaleString("ar-EG", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
                                         <td className="px-4 py-3 font-mono whitespace-nowrap">{tx.id.slice(0, 8)}</td>
                                         <td className="px-4 py-3 font-medium text-hw-text">{tx.user.username}</td>
                                         <td className="px-4 py-3">
-                                            <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium font-mono uppercase ${tx.type === "debit" ? "bg-hw-accent-muted text-gray-100" :
-                                                tx.type === "credit" ? "bg-hw-danger-muted text-hw-danger" : "bg-hw-info-muted text-hw-info"
-                                                }`}>
+                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                                                tx.type === "debit"
+                                                    ? "bg-hw-success-muted text-green-700 border-hw-success-border"
+                                                    : tx.type === "credit"
+                                                    ? "bg-hw-danger-muted text-red-700 border-hw-danger-border"
+                                                    : "bg-hw-info-muted text-sky-700 border-sky-200"
+                                            }`}>
                                                 {tx.type === "debit" ? "مدين لنا" : tx.type === "credit" ? "دائن علينا" : tx.type === "opening_balance" ? "رصيد افتتاحي" : tx.type}
                                             </span>
                                         </td>
@@ -234,14 +238,14 @@ export default function DynamicLedgerTable({ transactions, showReversalControl, 
                                                         <button
                                                             id={`edit-${tx.id}`}
                                                             onClick={() => setEditTarget(tx)}
-                                                            className="px-2 py-1 text-xs rounded border border-hw-border text-hw-text-secondary hover:bg-hw-bg hover:text-hw-text transition font-medium"
+                                                            className="px-2.5 py-1 text-xs rounded-lg border border-hw-border bg-hw-surface-alt text-hw-text-secondary hover:bg-hw-border hover:text-hw-text transition font-medium"
                                                         >
                                                             تعديل
                                                         </button>
                                                         <button
                                                             id={`delete-${tx.id}`}
                                                             onClick={() => handleDelete(tx)}
-                                                            className="px-2 py-1 text-xs rounded border border-red-800 text-red-800 hover:bg-red-800/20 transition font-medium"
+                                                            className="px-2.5 py-1 text-xs rounded-lg border border-hw-danger-border text-red-600 hover:bg-hw-danger-muted transition font-medium"
                                                         >
                                                             حذف
                                                         </button>

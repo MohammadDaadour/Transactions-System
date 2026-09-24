@@ -77,19 +77,12 @@ export default function SenderClaimedOrders() {
   if (orders.length === 0) return null;
 
   return (
-    <section style={{ direction: "rtl" }}>
-      <h2
-        style={{
-          fontSize: "1.25rem",
-          fontWeight: 700,
-          color: "var(--hw-accent)",
-          margin: "0 0 1rem",
-        }}
-      >
+    <section>
+      <h2 className="text-xl font-bold text-hw-text mb-4">
         طلباتك المحجوزة
       </h2>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+      <div className="flex flex-col gap-3">
         {orders.map((order) => {
           const amount =
             typeof order.amount === "string"
@@ -100,63 +93,33 @@ export default function SenderClaimedOrders() {
           return (
             <div
               key={order.id}
-              style={{
-                background: "var(--hw-surface)",
-                border: "1px solid rgba(56,189,248,0.3)",
-                borderRadius: "0.875rem",
-                padding: "1rem 1.25rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-              }}
+              className="bg-hw-surface border border-sky-300/30 rounded-2xl p-4 flex flex-col md:flex-row md:items-center gap-4 shadow-sm hover:shadow-md transition-shadow"
             >
-              <span
-                style={{
-                  flexShrink: 0,
-                  padding: "0.3rem 0.75rem",
-                  borderRadius: "999px",
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                  background: "rgba(56,189,248,0.12)",
-                  color: "#124054ff",
-                  border: "1px solid #124054ff",
-                }}
-              >
+              <span className="shrink-0 px-3 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-900 border border-sky-200 whitespace-nowrap w-fit">
                 محجوز
               </span>
 
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontWeight: 700, margin: "0 0 0.15rem", fontSize: "0.95rem" }}>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-base text-hw-text m-0 mb-1">
                   {order.name}
                 </p>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "1rem",
-                    fontSize: "0.8rem",
-                    color: "var(--hw-text)",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <span>{CURRENCY_LABELS[order.currency] ?? order.currency}</span>
-                  <span style={{ fontFamily: "monospace", direction: "ltr" }}>
+                <div className="flex flex-wrap gap-4 text-xs font-medium text-hw-text-secondary">
+                  <span className="bg-hw-bg px-2 py-0.5 rounded border border-hw-border">
+                    {CURRENCY_LABELS[order.currency] ?? order.currency}
+                  </span>
+                  <span className="font-mono bg-hw-bg px-2 py-0.5 rounded border border-hw-border" dir="ltr">
                     {order.number}
                   </span>
                   {order.receiver && (
-                    <span>المرسِل: {order.receiver.username}</span>
+                    <span className="text-hw-accent bg-hw-accent-muted px-2 py-0.5 rounded border border-hw-accent/20">
+                      المرسِل: {order.receiver.username}
+                    </span>
                   )}
                 </div>
               </div>
 
-              <div style={{ flexShrink: 0, textAlign: "left" }}>
-                <p
-                  style={{
-                    fontWeight: 800,
-                    fontSize: "1.1rem",
-                    color: "var(--hw-accent)",
-                    margin: "0 0 0.5rem",
-                  }}
-                >
+              <div className="text-left shrink-0">
+                <p className="font-bold text-xl text-hw-accent m-0 mb-2 font-mono">
                   {amount.toLocaleString("en-US")}
                 </p>
 
@@ -164,21 +127,11 @@ export default function SenderClaimedOrders() {
                   id={`done-${order.id}`}
                   disabled={marking}
                   onClick={() => handleMarkDone(order)}
-                  style={{
-                    padding: "0.4rem 0.85rem",
-                    borderRadius: "0.4rem",
-                    border: "none",
-                    cursor: marking ? "not-allowed" : "pointer",
-                    fontWeight: 700,
-                    fontSize: "0.8rem",
-                    background: marking
-                      ? "var(--hw-disabled-bg)"
-                      : "var(--hw-accent-solid)",
-                    color: marking ? "var(--hw-disabled-text)" : "#fff",
-                    transition: "background 0.2s",
-                    fontFamily: "inherit",
-                    whiteSpace: "nowrap",
-                  }}
+                  className={`py-2 px-3.5 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
+                    marking
+                      ? "bg-hw-disabled-bg text-hw-disabled-text cursor-not-allowed shadow-none"
+                      : "bg-hw-accent text-white hover:bg-hw-accent-hover active:scale-[0.98] shadow-sm shadow-blue-500/20"
+                  }`}
                 >
                   {marking ? "..." : "تم التحويل ✓"}
                 </button>

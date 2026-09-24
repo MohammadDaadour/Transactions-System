@@ -16,27 +16,12 @@ export default async function TransfersPage() {
   const { type, id: userId } = session.user;
 
   return (
-    <div>
-      <div style={{ marginBottom: "2rem" }}>
-        <h1
-          style={{
-            fontSize: "1.75rem",
-            fontWeight: 800,
-            color: "var(--hw-accent)",
-            margin: 0,
-            direction: "rtl",
-          }}
-        >
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold text-hw-text">
           {type === "sender" ? "قائمة طلبات التحويل" : "إدارة طلبات التحويل"}
         </h1>
-        <p
-          style={{
-            fontSize: "0.9rem",
-            color: "var(--hw-text-muted)",
-            marginTop: "0.25rem",
-            direction: "rtl",
-          }}
-        >
+        <p className="text-sm text-hw-text-secondary mt-1">
           {type === "sender"
             ? "احجز الطلبات المتاحة وأتممها — تتحدث القائمة تلقائيًا"
             : "أرسل طلبات التحويل وتابع حالتها مباشرة"}
@@ -44,7 +29,7 @@ export default async function TransfersPage() {
       </div>
 
       {type === "sender" ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+        <div className="flex flex-col gap-8">
           <SenderQueue />
           <SenderClaimedOrders />
         </div>

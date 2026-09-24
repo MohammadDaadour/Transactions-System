@@ -157,7 +157,7 @@ function UserTableSection({
                                 <BalanceCell balances={u.balances} />
                             </td>
                             <td className="px-4 py-3 text-hw-text-secondary font-mono text-xs">{u.phone}</td>
-                            <td className="px-4 py-3 text-white text-xs font-mono">
+                            <td className="px-4 py-3 text-gray-700 text-xs font-mono">
                                 {new Date(u.createdAt).toLocaleDateString("ar-EG")}
                             </td>
                             <td className="px-4 py-3">
@@ -173,7 +173,7 @@ function UserTableSection({
                                     {u.role !== "Admin" && (
                                         <button
                                             onClick={() => onEdit(u)}
-                                            className="text-white hover:text-hw-accent-hover focus:outline-none bg-hw-surface-alt/30 hover:bg-hw-surface-alt/50 px-2 py-1 rounded text-xs font-medium transition-colors cursor-pointer"
+                                            className="text-hw-success hover:text-hw-accent-hover focus:outline-none bg-hw-surface-alt/30 hover:bg-hw-surface-alt/50 px-2 py-1 rounded text-xs font-medium transition-colors cursor-pointer"
                                         >
                                             تعديل
                                         </button>
@@ -227,7 +227,7 @@ function RoleBadge({ role }: { role: string }) {
     const styles: Record<string, string> = {
         Admin: "bg-[var(--hw-role-admin-bg)] text-[var(--hw-role-admin-text)] border-[var(--hw-role-admin-border)]",
         Mod: "bg-[var(--hw-role-mod-bg)] text-[var(--hw-role-mod-text)] border-[var(--hw-role-mod-border)]",
-        Member: "bg-hw-surface-alt/60 text-white border-hw-border-subtle/50",
+        Member: "bg-hw-surface-alt/60 text-gray-600 border-hw-border-subtle/50",
     };
     return (
         <span className={`inline-block px-2 py-0.5 text-xs font-mono font-medium rounded border ${styles[role] ?? styles.Member}`}>

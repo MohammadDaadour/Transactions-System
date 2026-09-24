@@ -14,27 +14,12 @@ export default async function TransferHistoryPage() {
   const userType = session.user.type as "sender" | "receiver";
 
   return (
-    <div>
-      <div style={{ marginBottom: "2rem" }}>
-        <h1
-          style={{
-            fontSize: "1.75rem",
-            fontWeight: 800,
-            color: "var(--hw-accent)",
-            margin: 0,
-            direction: "rtl",
-          }}
-        >
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold text-hw-text">
           سجل التحويلات
         </h1>
-        <p
-          style={{
-            fontSize: "0.9rem",
-            color: "var(--hw-text-muted)",
-            marginTop: "0.25rem",
-            direction: "rtl",
-          }}
-        >
+        <p className="text-sm text-hw-text-secondary mt-1">
           {userType === "sender"
             ? "جميع طلبات التحويل التي أتممتها"
             : "جميع طلباتك المكتملة والملغاة"}

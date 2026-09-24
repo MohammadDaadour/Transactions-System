@@ -35,7 +35,7 @@ export default function TransactionFilterBar({ users, showUserFilter, userId, ag
             update("userId", userId ?? "");
         }, []);
     }
-    const selectClass = "w-full rounded-lg border border-hw-border bg-hw-bg text-hw-text text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-hw-accent";
+    const selectClass = "w-full rounded-xl border border-hw-border bg-hw-bg text-hw-text text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-hw-accent/20 focus:border-hw-accent transition-all";
 
     return (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">

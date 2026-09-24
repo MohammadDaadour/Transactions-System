@@ -54,7 +54,7 @@ export default function ManualTransactionForm({ users, allowOpeningBalance, pres
             ) : (
                 <div>
                     <label className="block text-xs font-medium text-hw-text-secondary mb-1">الحساب المستهدف</label>
-                    <select name="userId" required defaultValue={preselectedUserId} className="w-full bg-hw-bg border border-hw-border rounded-md p-2 text-sm text-hw-text focus:border-hw-accent focus:outline-none">
+                    <select name="userId" required defaultValue={preselectedUserId} className="w-full bg-hw-bg border border-hw-border rounded-xl p-2.5 text-sm text-hw-text focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all">
                         <option value="">-- اختر الحساب --</option>
                         {users.map((u) => (
                             <option key={u.id} value={u.id}>{u.username}</option>
@@ -66,7 +66,7 @@ export default function ManualTransactionForm({ users, allowOpeningBalance, pres
             <div className="grid grid-cols-2 gap-4">
                 <div>
                     <label className="block text-xs font-medium text-hw-text-secondary mb-1">نوع المعاملة</label>
-                    <select name="type" required className="w-full bg-hw-bg border border-hw-border rounded-md p-2 text-sm text-hw-text focus:border-hw-accent focus:outline-none">
+                    <select name="type" required className="w-full bg-hw-bg border border-hw-border rounded-xl p-2.5 text-sm text-hw-text focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all">
                         <option value="debit">Debit (مدين لنا)</option>
                         <option value="credit">Credit (دائن علينا)</option>
                         {allowOpeningBalance && <option value="opening_balance">Opening Balance (رصيد افتتاحي)</option>}
@@ -74,7 +74,7 @@ export default function ManualTransactionForm({ users, allowOpeningBalance, pres
                 </div>
                 <div>
                     <label className="block text-xs font-medium text-hw-text-secondary mb-1">العملة</label>
-                    <select name="currency" required className="w-full bg-hw-bg border border-hw-border rounded-md p-2 text-sm text-hw-text focus:border-hw-accent focus:outline-none">
+                    <select name="currency" required className="w-full bg-hw-bg border border-hw-border rounded-xl p-2.5 text-sm text-hw-text focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all">
                         <option value="USD">USD</option>
                         <option value="AED">AED</option>
                         <option value="EGP">EGP</option>
@@ -86,17 +86,17 @@ export default function ManualTransactionForm({ users, allowOpeningBalance, pres
             <div className="grid grid-cols-2 gap-4">
                 <div>
                     <label className="block text-xs font-medium text-hw-text-secondary mb-1">المبلغ الخام</label>
-                    <input name="amount" type="number" step="0.0001" min="0.0001" required placeholder="0.00" className="w-full bg-hw-bg border border-hw-border rounded-md p-2 text-sm text-hw-text font-mono focus:border-hw-accent focus:outline-none" />
+                    <input name="amount" type="number" step="0.0001" min="0.0001" required placeholder="0.00" className="w-full bg-hw-bg border border-hw-border rounded-xl p-2.5 text-sm text-hw-text font-mono focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all" />
                 </div>
                 <div>
                     <label className="block text-xs font-medium text-hw-text-secondary mb-1">تاريخ التنفيذ</label>
-                    <input name="date" type="date" required defaultValue={new Date().toISOString().split('T')[0]} className="w-full bg-hw-bg border border-hw-border rounded-md p-2 text-sm text-hw-text focus:border-hw-accent focus:outline-none" />
+                    <input name="date" type="date" required defaultValue={new Date().toISOString().split('T')[0]} className="w-full bg-hw-bg border border-hw-border rounded-xl p-2.5 text-sm text-hw-text focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all" />
                 </div>
             </div>
 
             <div>
                 <label className="block text-xs font-medium text-hw-text-secondary mb-1">ملاحظات الدفتر / المراجع</label>
-                <textarea name="notes" rows={2} placeholder="..." className="w-full bg-hw-bg border border-hw-border rounded-md p-2 text-sm text-hw-text focus:border-hw-accent focus:outline-none resize-none"></textarea>
+                <textarea name="notes" rows={2} placeholder="..." className="w-full bg-hw-bg border border-hw-border rounded-xl p-2.5 text-sm text-hw-text focus:border-hw-accent focus:ring-2 focus:ring-hw-accent/20 focus:outline-none transition-all resize-none"></textarea>
             </div>
 
             {message && (
@@ -105,7 +105,7 @@ export default function ManualTransactionForm({ users, allowOpeningBalance, pres
                 </div>
             )}
 
-            <button type="submit" disabled={loading} className="w-full py-2 px-4 rounded-md font-medium text-sm transition text-hw-surface bg-hw-accent hover:bg-hw-accent-hover disabled:bg-hw-disabled-bg disabled:text-hw-disabled-text">
+            <button type="submit" disabled={loading} className="w-full py-2.5 px-4 rounded-xl font-semibold text-sm transition-all text-white bg-hw-accent hover:bg-hw-accent-hover shadow-sm shadow-blue-500/20 disabled:bg-hw-disabled-bg disabled:text-hw-disabled-text disabled:shadow-none disabled:cursor-not-allowed">
                 {loading ? "جار تسجيل المعالجة..." : "سجل المعاملة"}
             </button>
         </form>

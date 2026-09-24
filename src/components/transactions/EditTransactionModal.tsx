@@ -67,7 +67,7 @@ export default function EditTransactionModal({ transaction, onClose, onSuccess }
                     <h2 className="text-lg font-bold text-hw-text">تعديل العملية</h2>
                     <button
                         onClick={onClose}
-                        className="text-hw-text-muted hover:text-hw-text transition text-xl leading-none"
+                        className="w-8 h-8 flex items-center justify-center rounded-lg text-hw-text-muted hover:bg-hw-surface-alt hover:text-hw-text transition-colors"
                         aria-label="إغلاق"
                     >
                         ✕
@@ -92,7 +92,7 @@ export default function EditTransactionModal({ transaction, onClose, onSuccess }
                             <select
                                 value={type}
                                 onChange={(e) => setType(e.target.value)}
-                                className="w-full rounded-lg border border-hw-border bg-hw-bg px-3 py-2 text-sm text-hw-text focus:outline-none"
+                                className="w-full rounded-xl border border-hw-border bg-hw-bg px-4 py-2.5 text-sm text-hw-text focus:outline-none focus:ring-2 focus:ring-hw-accent/20 focus:border-hw-accent transition-all"
                             >
                                 {TYPE_OPTIONS.map((o) => (
                                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -110,7 +110,7 @@ export default function EditTransactionModal({ transaction, onClose, onSuccess }
                             min="0.01"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                            className="w-full rounded-lg border border-hw-border bg-hw-bg px-3 py-2 text-sm text-hw-text focus:outline-none"
+                            className="w-full rounded-xl border border-hw-border bg-hw-bg px-4 py-2.5 text-sm text-hw-text font-mono focus:outline-none focus:ring-2 focus:ring-hw-accent/20 focus:border-hw-accent transition-all"
                             required
                         />
                     </div>
@@ -121,7 +121,7 @@ export default function EditTransactionModal({ transaction, onClose, onSuccess }
                         <select
                             value={currency}
                             onChange={(e) => setCurrency(e.target.value)}
-                            className="w-full rounded-lg border border-hw-border bg-hw-bg px-3 py-2 text-sm text-hw-text focus:outline-none"
+                            className="w-full rounded-xl border border-hw-border bg-hw-bg px-4 py-2.5 text-sm text-hw-text focus:outline-none focus:ring-2 focus:ring-hw-accent/20 focus:border-hw-accent transition-all"
                         >
                             {CURRENCY_OPTIONS.map((c) => (
                                 <option key={c} value={c}>{c}</option>
@@ -136,7 +136,7 @@ export default function EditTransactionModal({ transaction, onClose, onSuccess }
                             type="date"
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
-                            className="w-full rounded-lg border border-hw-border bg-hw-bg px-3 py-2 text-sm text-hw-text focus:outline-none"
+                            className="w-full rounded-xl border border-hw-border bg-hw-bg px-4 py-2.5 text-sm text-hw-text focus:outline-none focus:ring-2 focus:ring-hw-accent/20 focus:border-hw-accent transition-all"
                             required
                         />
                     </div>
@@ -148,7 +148,7 @@ export default function EditTransactionModal({ transaction, onClose, onSuccess }
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                             rows={3}
-                            className="w-full rounded-lg border border-hw-border bg-hw-bg px-3 py-2 text-sm text-hw-text focus:outline-none resize-none"
+                            className="w-full rounded-xl border border-hw-border bg-hw-bg px-4 py-2.5 text-sm text-hw-text focus:outline-none focus:ring-2 focus:ring-hw-accent/20 focus:border-hw-accent transition-all resize-none"
                         />
                     </div>
 
@@ -157,14 +157,14 @@ export default function EditTransactionModal({ transaction, onClose, onSuccess }
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 rounded-lg text-sm font-medium text-hw-text-secondary border border-hw-border hover:bg-hw-bg transition"
+                            className="px-5 py-2.5 rounded-xl text-sm font-semibold text-hw-text-secondary hover:bg-hw-surface-alt transition-colors"
                         >
                             إلغاء
                         </button>
                         <button
                             type="submit"
                             disabled={loading || transaction.type === "opening_balance"}
-                            className="px-4 py-2 rounded-lg text-sm font-semibold bg-hw-accent-solid text-white hover:bg-hw-accent-solid-hover transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-hw-accent text-white hover:bg-hw-accent-hover shadow-sm shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
                         >
                             {loading ? "جارٍ الحفظ…" : "حفظ التغييرات"}
                         </button>

@@ -8,6 +8,8 @@ import DynamicLedgerTable from "../../components/DynamicLedgerTable";
 import { UserTransactionPanel } from "../../components/UserTransactionPanel";
 import SessionControl from "../../components/SessionControl";
 import Link from "next/link";
+import Image from "next/image";
+import heroImage from "../../../utils/hero.png";
 
 const currencyIcons: Record<Currency, React.ReactNode> = {
     USD: <svg width="48" height="48" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" fill="#6cde07" r="16" /><path d="M22.5 19.154c0 2.57-2.086 4.276-5.166 4.533V26h-2.11v-2.336A11.495 11.495 0 019.5 21.35l1.552-2.126c1.383 1.075 2.692 1.776 4.269 2.01v-4.58c-3.541-.888-5.19-2.173-5.19-4.813 0-2.523 2.061-4.252 5.093-4.486V6h2.11v1.402a9.49 9.49 0 014.56 1.776l-1.359 2.196c-1.067-.771-2.158-1.262-3.298-1.495v4.439c3.687.888 5.263 2.313 5.263 4.836zm-7.18-5.327V9.715c-1.527.117-2.327.935-2.327 1.963 0 .98.46 1.612 2.328 2.15zm4.318 5.49c0-1.05-.51-1.681-2.401-2.219v4.23c1.528-.118 2.401-.889 2.401-2.01z" fill="#ffffff" /></svg>,
@@ -120,14 +122,47 @@ export default async function DashboardOverview() {
 
     return (
         <div className="space-y-8">
-            <div>
-                <h2 className="text-3xl font-bold tracking-tight">نظرة عامة</h2>
-                <p className="text-hw-text-secondary font-bold">عرض تشغيلي مباشر ومراقبة الدفتر</p>
+
+            {/* Hero Image */}
+            <div className="w-full relative overflow-hidden rounded-xl">
+                <Image
+                    src={heroImage}
+                    alt="Hero"
+                    className="w-full object-cover max-h-[260px] sm:max-h-[340px] md:max-h-[420px] lg:max-h-[500px] xl:max-h-[560px]"
+                    priority
+                />
+                {/* Overlay */}
+                <div dir="rtl" className="absolute inset-y-0 right-0 w-1/2 flex flex-col justify-center items-start text-right px-6 sm:px-10 md:px-14 lg:px-20 gap-2 sm:gap-3 md:gap-4">
+                    <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight drop-shadow-lg">
+                        حوالاتك المالية
+                    </h1>
+                    <h2 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-white drop-shadow-md">
+                        أسهل .. أسرع .. أكثر أمانا
+                    </h2>
+                    <p className="text-xs sm:text-sm md:text-base text-white/90 drop-shadow max-w-[260px] sm:max-w-sm md:max-w-md">
+                        آلاف الحوالات يتم تنفيذها يوميا بأسعار تنافسية و سرعة عالية
+                    </p>
+                    <a href="#overview" className="mt-1 sm:mt-2 px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 bg-hw-success text-hw-sidebar text-xs sm:text-sm md:text-base font-semibold rounded-lg cursor-pointer shadow-lg hover:opacity-90 transition-opacity">
+                        تفاصيل أكثر
+                    </a>
+                </div>
+            </div>
+
+            {/* Page Header */}
+            <div id="overview" className="flex items-center justify-between">
+                <div>
+                    <h2 className="text-2xl font-bold tracking-tight text-hw-text">نظرة عامة</h2>
+                    <p className="text-sm text-hw-text-secondary mt-0.5">عرض تشغيلي مباشر ومراقبة الدفتر</p>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-hw-success-muted border border-hw-success-border text-xs font-semibold text-green-700">
+                    <span className="w-2 h-2 rounded-full bg-hw-success animate-pulse" />
+                    مباشر
+                </div>
             </div>
 
             {role !== "Member" ? (
                 <div>
-                    <h3 className="text-xs font-semibold uppercase text-bold tracking-wider text-hw-text-secondary mb-3">إجمالي صافي السيولة </h3>
+                    <h3 className="text-xs font-semibold uppercase tracking-widest text-hw-text-secondary mb-3">إجمالي صافي السيولة</h3>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                         {Object.values(Currency).map((currency) => {
                             const netPosition = globalBalancesMap.get(currency) || 0;
@@ -135,21 +170,21 @@ export default async function DashboardOverview() {
                             const users = totalPerCurrencyUsers.get(currency) ?? [];
 
                             return (
-                                <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5 space-y-3">
-                                    <p className="text-sm font-medium text-hw-text-secondary flex items-center">
-                                        <span className="ml-2">{currencyIcons[currency]}</span>
-                                        <span className="inline-block mb-2">{currency} رصيد الحساب</span>
-                                    </p>
-                                    <p className={`text-2xl font-mono font-bold ${inverted >= 0 ? "text-hw-accent" : "text-red-800"}`}>
+                                <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5 space-y-3 shadow-sm hover:shadow-md transition-shadow">
+                                    <div className="flex items-center gap-2">
+                                        <span className="shrink-0">{currencyIcons[currency]}</span>
+                                        <span className="text-sm font-medium text-hw-text-secondary">{currency} رصيد الحساب</span>
+                                    </div>
+                                    <p className={`text-2xl font-mono font-bold ${inverted >= 0 ? "text-hw-success" : "text-hw-danger"}`}>
                                         {inverted.toLocaleString('en-US', { minimumFractionDigits: 0 })}
                                     </p>
                                     {users.filter((u) => u.balance !== 0).length > 0 && (
-                                        <div className="border-t border-hw-border/50 pt-3 space-y-1.5">
+                                        <div className="border-t border-hw-border pt-3 space-y-1">
                                             {users.filter((u) => u.balance !== 0).map((u) => (
                                                 <Link key={u.username} href={`/dashboard/users/${u.id}`}>
-                                                    <div className="flex justify-between items-center text-xs hover:bg-hw-accent/50 rounded-lg p-2">
-                                                        <span className="font-mono text-hw-text text-lg">{u.username}</span>
-                                                        <span className={`font-mono font-medium text-lg ${u.balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
+                                                    <div className="flex justify-between items-center text-xs hover:bg-hw-surface-alt rounded-lg px-2 py-1.5 transition-colors">
+                                                        <span className="font-mono text-hw-text font-medium">{u.username}</span>
+                                                        <span className={`font-mono font-bold ${u.balance >= 0 ? "text-hw-success" : "text-hw-danger"}`}>
                                                             {u.balance.toLocaleString('en-US', { minimumFractionDigits: 0 })}
                                                         </span>
                                                     </div>
@@ -203,20 +238,20 @@ export default async function DashboardOverview() {
                                     if (total === 0 && users.length === 0) return null;
 
                                     return (
-                                        <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5 space-y-3">
-                                            <p className="text-sm font-medium text-hw-text-secondary flex items-center">
-                                                <span className="ml-2">{currencyIcons[currency]}</span>
-                                                <span className="inline-block mb-2">{currency} إجمالي</span>
-                                            </p>
-                                            <p className={`text-2xl font-mono font-bold ${total >= 0 ? "text-hw-accent" : "text-red-800"}`}>
+                                        <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5 space-y-3 shadow-sm hover:shadow-md transition-shadow">
+                                            <div className="flex items-center gap-2">
+                                                <span className="shrink-0">{currencyIcons[currency]}</span>
+                                                <span className="text-sm font-medium text-hw-text-secondary">{currency} إجمالي</span>
+                                            </div>
+                                            <p className={`text-2xl font-mono font-bold ${total >= 0 ? "text-hw-success" : "text-hw-danger"}`}>
                                                 {total.toLocaleString('en-US', { minimumFractionDigits: 0 })}
                                             </p>
                                             {users.length > 0 && (
-                                                <div className="border-t border-hw-border/50 pt-3 space-y-1.5">
+                                                <div className="border-t border-hw-border pt-3 space-y-1">
                                                     {users.map((u) => (
-                                                        <div key={u.username} className="flex justify-between items-center text-xs">
-                                                            <span className="font-mono text-hw-text text-lg">{u.username}</span>
-                                                            <span className={`font-mono font-medium text-lg ${u.balance >= 0 ? "text-hw-accent" : "text-red-800"}`}>
+                                                        <div key={u.username} className="flex justify-between items-center px-2 py-1">
+                                                            <span className="font-mono text-hw-text text-sm font-medium">{u.username}</span>
+                                                            <span className={`font-mono font-bold text-sm ${u.balance >= 0 ? "text-hw-success" : "text-hw-danger"}`}>
                                                                 {u.balance.toLocaleString('en-US', { minimumFractionDigits: 0 })}
                                                             </span>
                                                         </div>
@@ -236,12 +271,12 @@ export default async function DashboardOverview() {
                                     .map((currency) => {
                                         const balance = totalUserBalancesMap.get(currency) || 0;
                                         return (
-                                            <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5">
-                                                <p className="text-sm font-medium text-hw-text-secondary flex items-center">
-                                                    <span className="ml-2">{currencyIcons[currency]}</span>
-                                                    {currency} إجمالي
-                                                </p>
-                                                <p className="text-2xl font-mono font-bold mt-2 text-hw-text">
+                                            <div key={currency} className="rounded-xl border border-hw-border bg-hw-surface p-5 shadow-sm">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <span className="shrink-0">{currencyIcons[currency]}</span>
+                                                    <span className="text-sm font-medium text-hw-text-secondary">{currency} إجمالي</span>
+                                                </div>
+                                                <p className={`text-2xl font-mono font-bold ${balance >= 0 ? "text-hw-success" : "text-hw-danger"}`}>
                                                     {balance.toLocaleString('en-US', { minimumFractionDigits: 0 })}
                                                 </p>
                                             </div>
@@ -253,21 +288,36 @@ export default async function DashboardOverview() {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
-                <div className="rounded-xl border border-hw-border bg-hw-surface p-5">
-                    <p className="text-sm font-medium text-hw-text-secondary">
-                        <span className="mr-2">👤</span>
-                        معلومات الحساب
-                    </p>
-                    <p className="text-xl font-mono font-bold mt-2 text-hw-text">
-                        اسم الحساب : {session.user.name}
-                    </p>
-                    <p className="text-xl font-mono font-bold mt-2 text-hw-text">
-                        {role === "Admin" ? "رتبة الحساب: أدمن" : role === "Mod" ? "رتبة الحساب: مشرف" : ""}
-                    </p>
-                    <p className="text-xl font-mono font-bold mt-2 text-hw-text">
-                        نوع الحساب: {session.user.type === "sender" ? "مورد" : "مستورد"}
-                    </p>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                <div className="rounded-xl border border-hw-border bg-hw-surface p-5 shadow-sm space-y-3">
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="w-8 h-8 rounded-lg bg-hw-accent-muted flex items-center justify-center">
+                            <svg className="w-4 h-4 text-hw-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
+                        </div>
+                        <h3 className="text-sm font-semibold text-hw-text">معلومات الحساب</h3>
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between text-sm">
+                            <span className="text-hw-text-secondary">اسم الحساب</span>
+                            <span className="font-mono font-semibold text-hw-text">{session.user.name}</span>
+                        </div>
+                        {role !== "Member" && (
+                            <div className="flex items-center justify-between text-sm">
+                                <span className="text-hw-text-secondary">الرتبة</span>
+                                <span className={`inline-block px-2 py-0.5 text-xs font-semibold rounded-md border ${
+                                    role === "Admin"
+                                        ? "bg-[var(--hw-role-admin-bg)] text-[var(--hw-role-admin-text)] border-[var(--hw-role-admin-border)]"
+                                        : "bg-[var(--hw-role-mod-bg)] text-[var(--hw-role-mod-text)] border-[var(--hw-role-mod-border)]"
+                                }`}>{role === "Admin" ? "أدمن" : "مشرف"}</span>
+                            </div>
+                        )}
+                        <div className="flex items-center justify-between text-sm">
+                            <span className="text-hw-text-secondary">النوع</span>
+                            <span className="font-medium text-hw-text">{session.user.type === "sender" ? "مورد" : "مستورد"}</span>
+                        </div>
+                    </div>
                 </div>
 
                 {activeSession && (
@@ -291,8 +341,8 @@ export default async function DashboardOverview() {
 
             <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
                 <div className={role !== "Member" ? "xl:col-span-2 space-y-4" : "xl:col-span-3 space-y-4"}>
-                    <h3 className="text-lg font-medium text-hw-text">سجل التحويلات</h3>
-                    <div className="overflow-y-auto max-h-[400px]">
+                    <h3 className="text-sm font-semibold uppercase tracking-widest text-hw-text-secondary">آخر العمليات</h3>
+                    <div className="overflow-y-auto max-h-[420px] rounded-xl border border-hw-border">
                         {role === "Member" ? (
                             <UserTransactionPanel
                                 userId={currentUserId}
@@ -309,8 +359,8 @@ export default async function DashboardOverview() {
 
                 {role !== "Member" && (
                     <div className="space-y-4">
-                        <h3 className="text-lg font-medium text-hw-text">أضف تحويلة</h3>
-                        <div className="rounded-xl border border-hw-border bg-hw-surface p-6">
+                        <h3 className="text-sm font-semibold uppercase tracking-widest text-hw-text-secondary">إضافة قيد</h3>
+                        <div className="rounded-xl border border-hw-border bg-hw-surface p-6 shadow-sm">
                             <ManualTransactionForm
                                 users={activeUsers}
                                 allowOpeningBalance={role === "Admin"}

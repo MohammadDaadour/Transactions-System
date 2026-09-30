@@ -118,8 +118,8 @@ export default function ManualTransactionForm({ users, allowOpeningBalance, pres
 
         // Build audit note
         const auditNote = isSameCurrency
-            ? `[auto-converted: ${parsedAmount} ${fromCurrency} ÷ 1 = ${roundedConverted.toFixed(4)} ${toCurrency}]`
-            : `[auto-converted: ${parsedAmount} ${fromCurrency} ÷ ${effectiveRate} = ${roundedConverted.toFixed(4)} ${toCurrency}]`;
+            ? `[${parsedAmount} ${fromCurrency} ÷ 1 = ${roundedConverted.toFixed(4)} ${toCurrency}]`
+            : `[${parsedAmount} ${fromCurrency} ÷ ${effectiveRate} = ${roundedConverted.toFixed(4)} ${toCurrency}]`;
 
         const combinedNotes = userNotes.trim()
             ? `${auditNote}\n${userNotes.trim()}`

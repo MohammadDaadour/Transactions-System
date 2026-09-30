@@ -221,7 +221,7 @@ export default function DynamicLedgerTable({ transactions, showReversalControl, 
                                                 maximumFractionDigits: 2,
                                             })} <span className="text-xs text-hw-text-muted font-normal">{tx.currency}</span>
                                         </td>
-                                        <td className="px-4 py-3 max-w-xs truncate text-xs" title={tx.notes || ""}>{tx.notes || "—"}</td>
+                                        <td dir="ltr" className="px-4 py-3 max-w-xs truncate text-xs" title={tx.notes || ""}>{tx.notes || "—"}</td>
                                         <td className="px-4 py-3 text-hw-text-secondary text-xs">{tx.creator.username}</td>
                                         {showActions && (
                                             <td className="px-4 py-3 text-center">

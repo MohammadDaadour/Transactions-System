@@ -125,12 +125,23 @@ export default function ManualTransactionForm({ users, allowOpeningBalance, pres
             ? `${auditNote}\n${userNotes.trim()}`
             : auditNote;
 
+        // datetime-local gives "YYYY-MM-DDTHH:mm" with no timezone info.
+        // Append the browser's UTC offset so the server stores the correct UTC time
+        // regardless of where the production server runs (e.g. Vercel on UTC).
+        const rawDate = formData.get("date") as string;
+        const tzOffset = new Date().getTimezoneOffset(); // minutes behind UTC (negative for UTC+)
+        const sign = tzOffset <= 0 ? "+" : "-";
+        const absOffset = Math.abs(tzOffset);
+        const tzHours = String(Math.floor(absOffset / 60)).padStart(2, "0");
+        const tzMins = String(absOffset % 60).padStart(2, "0");
+        const dateWithTz = `${rawDate}:00${sign}${tzHours}:${tzMins}`;
+
         const payload = {
             userId: formData.get("userId") as string,
             type: formData.get("type") as TransactionType,
             amount: roundedConverted,
             currency: toCurrency,
-            date: formData.get("date") as string,
+            date: dateWithTz,
             notes: combinedNotes,
         };
 

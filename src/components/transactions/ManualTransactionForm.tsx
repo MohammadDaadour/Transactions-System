@@ -27,12 +27,22 @@ export default function ManualTransactionForm({ users, allowOpeningBalance, pres
 
         const formData = new FormData(event.currentTarget);
 
+        // Append the browser's UTC offset to the datetime-local value so the
+        // production server (UTC) stores the correct time.
+        const rawDate = formData.get("date") as string;
+        const tzOffset = new Date().getTimezoneOffset();
+        const sign = tzOffset <= 0 ? "+" : "-";
+        const absOffset = Math.abs(tzOffset);
+        const tzHours = String(Math.floor(absOffset / 60)).padStart(2, "0");
+        const tzMins = String(absOffset % 60).padStart(2, "0");
+        const dateWithTz = `${rawDate}:00${sign}${tzHours}:${tzMins}`;
+
         const payload = {
             userId: formData.get("userId") as string,
             type: formData.get("type") as TransactionType,
             amount: parseFloat(formData.get("amount") as string),
             currency: formData.get("currency") as Currency,
-            date: formData.get("date") as string,
+            date: dateWithTz,
             notes: formData.get("notes") as string,
         };
 

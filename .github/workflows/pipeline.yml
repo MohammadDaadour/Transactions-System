@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:["master"]
+    branches: ["master"]
   
   # Allows manual running from the actions tab
   workflow_dispatch:  

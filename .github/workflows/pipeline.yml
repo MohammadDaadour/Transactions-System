@@ -52,7 +52,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          
+
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
@@ -73,5 +73,5 @@ jobs:
             sudo docker stop tl-container || true
             sudo docker rm tl-container || true
         
-            sudo docker run -d -p 3001:3000 --name tl-container --env-file /path/to/your/.env --restart unless-stopped mohammadhamdi/transactional-ledger:1.0
+            sudo docker run -d -p 3002:3000 --name tl-container --env-file /path/to/your/.env --restart unless-stopped mohammadhamdi/transactional-ledger:1.0
             sudo docker image prune -f    

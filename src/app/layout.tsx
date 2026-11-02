@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hawala System",
-  description: "Hawala Ledger System",
+  title: "Transactional ledger",
+  description: "Transactional Ledger System",
 };
 
 export default function RootLayout({

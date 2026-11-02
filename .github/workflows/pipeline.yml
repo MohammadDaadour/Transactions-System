@@ -1,0 +1,71 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:["master"]
+  
+  # Allows manual running from the actions tab
+  workflow_dispatch:  
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+    
+      - name: Detect package manager
+        id: detect-package-manager
+        run: |
+          echo "manager=npm" >> $GITHUB_OUTPUT
+          echo "command=ci" >> $GITHUB_OUTPUT
+          echo "runner=npx --no-install" >> $GITHUB_OUTPUT
+          exit 0
+    
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: ${{ steps.detect-package-manager.outputs.manager }}  
+    
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-     
+    
+      - name: Install dependencies
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+    
+      - name: Build with Next.js
+        run: ${{ steps.detect-package-manager.outputs.runner }} prisma generate && ${{ steps.detect-package-manager.outputs.runner }} next build
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: mohammadhamdi/transactional-ledger:1.0
+          file: ./Dockerfile
+
+      - name: Deploy to VPS 
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            sudo docker pull mohammadhamdi/transactional-ledger:1.0
+        
+            sudo docker stop tl-container || true
+            sudo docker rm tl-container || true
+        
+            sudo docker run -d -p 3001:3000 --name tl-container --env-file /path/to/your/.env --restart unless-stopped mohammadhamdi/transactional-ledger:1.0
+            sudo docker image prune -f    

@@ -6,25 +6,26 @@
 
 ##  Architectural Overview & System Design
 
+```
 [ Client / Web App ]
-│
-▼
+        │
+        ▼
 [ NGINX Reverse Proxy + Certbot SSL / WAF ]
-│
-▼
-[ Linux VPS ---> Docker Engine ]
-└── [ Next.js App Container ] (Standalone / Production Mode)
-│
-▼ (Secure Connection via SSL)
-[ Neon Serverless PostgreSQL (Cloud-Hosted ACID Ledger) ]
-│
-▲
+        │
+        ▼
+[ Linux VPS ──► Docker Engine ]
+    └── [ Next.js App Container ] (Standalone / Production Mode)
+        │
+        ▼ (Secure Connection via SSL)
+[ Neon Serverless PostgreSQL ]
+        │
+        ▲
 [ Automated GitHub Actions CI/CD Pipeline ] ──► [ Push to Master ]
-
+```
 
 ---
 
-## 🛠️ DevOps & Infrastructure Stack
+## DevOps & Infrastructure Stack
 
 This project is built with a heavy emphasis on **Infrastructure Automation**, **Zero-Downtime Container Deployments**, and **Cloud-Native Persistence**:
 
@@ -35,18 +36,18 @@ This project is built with a heavy emphasis on **Infrastructure Automation**, **
 
 ---
 
-## ⚙️ CI/CD Deployment Pipeline (`.github/workflows/deploy.yml`)
+## CI/CD Deployment Pipeline (`.github/workflows/deploy.yml`)
 
 The deployment pipeline is fully automated. Upon pushing to the main branch, the workflow executes the following phases:
 
-1.  **Checkout & Setup:** Pulls the latest source code on a secure runner.
-2.  **Build & Test:** Runs type-checking, compiles code, and prepares assets.
-3.  **SSH Remote Deployment:** Securely connects to the target Linux VPS via SSH.
-4.  **Container Rolling Update:** Pulls the latest code/image, runs database migrations safely against Neon, and performs a graceful container restart with zero downtime.
+1. **Checkout & Setup:** Pulls the latest source code on a secure runner.
+2. **Build & Compile:** Runs type-checking, compiles the Next.js assets, and prepares the production build.
+3. **SSH Remote Deployment:** Securely connects to the target Linux VPS via SSH.
+4. **Container Rolling Update:** Pulls the latest Docker image, executes deployment commands, and performs a graceful container restart with zero downtime.
 
 ---
 
-## 🔒 Security & Reliability Engineering
+## Security & Reliability Engineering
 
 *   **Atomic Transactions:** Enforces strict database-level isolation and managed transactions to guarantee that all debit, credit, and ledger entries happen atomically (all-or-nothing), preventing financial discrepancies.
 *   **Environment Segregation:** All sensitive credentials (Neon DB connection strings, JWT secrets, API keys) are strictly injected via environment variables (`.env`) and excluded from version control.
@@ -54,7 +55,7 @@ The deployment pipeline is fully automated. Upon pushing to the main branch, the
 
 ---
 
-## 🚀 Getting Started & Local Development
+## Getting Started & Local Development
 
 ### Prerequisites
 *   Docker & Docker Compose installed on your machine.
